@@ -1,0 +1,25 @@
+# Imports.
+
+import(methods)
+import(copula)
+
+
+# Classes and generics.
+
+exportClasses(Vine, RVine, CVine, DVine)
+exportClasses(fitVine, fitVineML)
+
+exportMethods(h)
+exportMethods(hinverse)
+
+exportMethods(dvine)
+exportMethods(pvine)
+exportMethods(rvine)
+exportMethods(pitVine)
+
+
+# Exported functions.
+
+export(fitVine, fitCVine, fitDVine)
+export(parameters, parameters<-)
+export(gofVine)

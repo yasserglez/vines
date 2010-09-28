@@ -1,0 +1,16 @@
+Type: Package
+Encoding: UTF-8
+Package: vines
+Title: Multivariate dependence modeling with vines
+Version: 0.0.1
+Date: 2010-09-28
+Author: Yasser González Fernández <ygonzalezfernandez@gmail.com> and
+    Marta Rosa Soto Ortiz <mrosa@icmf.inf.cu>
+Maintainer: Yasser González Fernández <ygonzalezfernandez@gmail.com>
+Description:
+License: GPL (>= 3)
+LazyLoad: yes
+Depends: methods, copula
+Enhances: copula
+Collate: h.R hinverse.R Vines.R parameters.R iterVine.R fitVine.R fitVineML.R 
+    pitVine.R gofVine.R dvine.R pvine.R rvine.R
