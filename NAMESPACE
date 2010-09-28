@@ -21,5 +21,5 @@ exportMethods(pitVine)
 # Exported functions.
 
 export(fitVine, fitCVine, fitDVine)
-export(parameters, parameters<-)
+export(parameters, "parameters<-")
 export(gofVine)
