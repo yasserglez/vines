@@ -60,6 +60,7 @@ setMethod("h", "normalCopula", hNormalCopula)
 
 hClaytonCopula <- function (copula, x, v) {
   theta <- copula@parameters
+  v[v == 0] <- .Machine$double.eps
   r <- v^(-theta-1) * (x^(-theta) + v^(-theta) - 1) ^ (-1 - 1/theta)
   return(r)
 }
@@ -69,6 +70,7 @@ setMethod("h", "claytonCopula", hClaytonCopula)
 
 hGumbelCopula <- function (copula, x, v) {
   theta <- copula@parameters
+  v[v == 0] <- .Machine$double.eps
   r <- pcopula(copula, cbind(x, v)) * 1/v * (-log(v)) ^ (theta-1) * 
       ((-log(x))^theta + (-log(v))^theta) ^ (1/theta-1)
   return(r)

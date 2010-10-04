@@ -59,6 +59,7 @@ setMethod("hinverse", "normalCopula", hinverseNormalCopula)
 
 hinverseClaytonCopula <- function (copula, u, v) {
   theta <- copula@parameters
+  v[v == 0] <- .Machine$double.eps
   r <- ((u * v^(theta+1)) ^ (-theta/(theta+1)) + 1 - v^(-theta)) ^ (-1/theta)
   return(r)
 }

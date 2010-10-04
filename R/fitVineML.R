@@ -42,20 +42,28 @@ preGofCopula <- function (copula, x, y) {
   if (is(copula, "tCopula")) {
     fixedBefore <- copula@df.fixed 
     if (!fixedBefore) {
-      # The gofCopula method requires the dof parameter to be fixed. We 
-      # estimate and fix this parameters before running the GoF test.
-      fitResult <- fitCopula(tCopula(0), cbind(x, y), method = "ml", 
-          start = c(0, 4), estimate.variance = FALSE)
-      rho <- fitResult@copula@parameters[1]
-      df <- fitResult@copula@parameters[2]
+      # The gofCopula method requires the degrees-of-freedom parameter to be fixed, 
+      # so it is estimated here and fixed before running the goodness-of-fit test. 
+      # rho is calculated via Kendall's tau and the degrees-of-freedom is 
+      # estimated by maximum likelihood with rho fixed. This follows the 
+      # procedure sugested in S. Demarta and A. McNeil (2005). The t copula and 
+      # related copulas. International Statistical Review 73, 111-129.
+      rho <- calibKendallsTau(copula, cor(x, y, method = "kendall"))
+      L <- function (df) loglikCopula(c(rho, df), cbind(x, y), copula)
+      df <- optim(copula@parameters[2], L, method = "BFGS", 
+          control = list(fnscale = -1))$par
       copula <- tCopula(rho, df = df, df.fixed = TRUE)
     }
     attr(copula, "df.fixed.before") <- fixedBefore
-    copula
-  } else {
-    # Return the copula without modifications.
-    copula
+  } else if (is(copula, "claytonCopula")) {
+    # Lower bound of the bivariate Clayton copula in the copula package differs
+    # with Appendix B.3 of Aas, K., Czado, C., Frigessi, A. and Bakken, H. 
+    # Pair-copula constructions of multiple dependence. Insurance Mathematics 
+    # and Economics, 2007, Vol. 44, pp. 182-198.
+    copula@param.lowbnd <- 0
   }
+
+  copula
 }
 
 
@@ -71,18 +79,16 @@ postGofCopula <- function (copula, x, y) {
       copula <- tCopula(rho, df = df, df.fixed = FALSE)
     }
     attr(copula, "df.fixed.before") <- NULL
-    copula
-  } else {
-    # Return the copula without modifications.
-    copula
   }
+
+  copula
 }
 
 
-fitVineML <- function (type, data, trees = ncol(data) - 1, copulas = list(), 
-    corTestMethod = "kendall", corTestSigLevel = 0.05, 
-    gofCopulaIters = 1000, gofCopulaMethod = "mpl", gofCopulaSimul = "mult", 
-    optimMethod = "Nelder-Mead", optimControl = list()) {
+fitVineML <- function (type, data, trees = ncol(data) - 1, copulas = list(),
+    corTestMethod = "kendall", corTestSigLevel = 0.1,
+    gofCopulaIters = 1000, gofCopulaMethod = "mpl", gofCopulaSimul = "mult",
+    optimMethod = "BFGS", optimControl = list()) {
   
   if (is.null(corTestMethod)) corTestMethod <- ""
   if (is.null(optimMethod)) optimMethod <- ""
@@ -93,7 +99,7 @@ fitVineML <- function (type, data, trees = ncol(data) - 1, copulas = list(),
     selectedCopula <- NULL
     # Test for association. The Independence copula will be used if there
     # is not enough evidence of association between the variables.
-    if (corTestMethod != "") {
+    if (nzchar(corTestMethod)) {
       testResult <- cor.test(x, y, method = corTestMethod)
       if (testResult$p.value > corTestSigLevel) {
         selectedCopula <- indepCopula()
@@ -104,8 +110,8 @@ fitVineML <- function (type, data, trees = ncol(data) - 1, copulas = list(),
       if (length(copulas) == 1) {
         # Only one candidate copula? Goodness-of-fit not needed.
         copula <- preGofCopula(copulas[[1]], x, y)
-        fitResult <- fitCopula(copula, cbind(x, y), method = gofCopulaMethod,
-            optim.method = "Nelder-Mead", estimate.variance = FALSE)
+        fitResult <- fitCopula(copula, cbind(x, y), 
+            method = gofCopulaMethod, estimate.variance = FALSE)
         selectedCopula <- new(class(copula), copula,
             parameters = fitResult@estimate)
         selectedCopula <- postGofCopula(selectedCopula, x, y)
@@ -115,8 +121,7 @@ fitVineML <- function (type, data, trees = ncol(data) - 1, copulas = list(),
         for (copula in copulas) {
           copula <- preGofCopula(copula, x, y)
           gofResult <- gofCopula(copula, cbind(x, y), N = gofCopulaIters,
-              optim.method = "Nelder-Mead", method = gofCopulaMethod, 
-              simulation = gofCopulaSimul)
+              method = gofCopulaMethod, simulation = gofCopulaSimul)
           if (gofResult$pvalue > pvalue) {
             pvalue <- gofResult$pvalue
             selectedCopula <- new(class(copula), copula, 
@@ -137,23 +142,23 @@ fitVineML <- function (type, data, trees = ncol(data) - 1, copulas = list(),
 
   # Starting values for the parameters of the copulas in the PCC following the 
   # sequential estimation procedure described in section 7 of Aas, K., 
-  # Czado, C., Frigessi, A. & Bakken, H. Pair-copula constructions of multiple
+  # Czado, C., Frigessi, A. and Bakken, H. Pair-copula constructions of multiple
   # dependence. Insurance Mathematics and Economics, 2007, Vol. 44, pp. 182-198.
   vine <- new(type, dimension = ncol(data), trees = trees,
-      copulas = matrix(list(), ncol(data), ncol(data)))
+      copulas = matrix(list(), ncol(data) - 1, ncol(data) - 1))
   iterResult <- iterVine(vine, data, fit = selectCopula)
   vine <- iterResult$vine
   startParams <- parameters(vine)
   
-  if (optimMethod != "" && length(startParams) > 0) {
+  if (nzchar(optimMethod) && length(startParams) > 0) {
     # Execute the optimization method.
     if (optimMethod == "L-BFGS-B") {
       lower <- unlist(lapply(vine@copulas, 
             function (x) if (is.null(x)) numeric(0) else 
-                x@param.lowbnd + (.Machine$double.eps ^ 0.15)))
+                x@param.lowbnd + .Machine$double.eps^0.5))
       upper <- unlist(lapply(vine@copulas, 
             function (x) if (is.null(x)) numeric(0) else 
-                x@param.upbnd - (.Machine$double.eps ^ 0.15)))
+                x@param.upbnd - .Machine$double.eps^0.5))
     } else {
       lower <- -Inf
       upper <- Inf
@@ -167,7 +172,7 @@ fitVineML <- function (type, data, trees = ncol(data) - 1, copulas = list(),
     optimResult <- optim(startParams, L, lower = lower, upper = upper,
         method = optimMethod, control = optimControl,
         vine = vine, data = data)
-    
+
     parameters(vine) <- optimResult$par
 
     fit <- new("fitVineML", vine = vine,
