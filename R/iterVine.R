@@ -25,7 +25,7 @@ setGeneric("iterVine",
         eval = function (vine, i, j, x, y) NULL) {
       if (vine@trees == 0) {
         # Vine without trees, nothing to iterate for.
-        return(list(vine = vine, evals = list()))
+        list(vine = vine, evals = list())
       } else {
         standardGeneric("iterVine")
       }
@@ -69,7 +69,7 @@ iterCVine <- function (vine, data, fit, eval) {
     }
   }
 
-  return(list(vine = vine, evals = evals))
+  list(vine = vine, evals = evals)
 }
 
 setMethod("iterVine", "CVine", iterCVine)
@@ -126,7 +126,7 @@ iterDVine <- function (vine, data, fit, eval) {
     v[ , j+1, 2*d-2*j-2] <- h(vine@copulas[[j, d-j]], v[ , j, 2*d-2*j], v[ , j, 2*d-2*j-1])
   }
 
-  return(list(vine = vine, evals = evals))
+  list(vine = vine, evals = evals)
 }
 
 setMethod("iterVine", "DVine", iterDVine)

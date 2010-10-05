@@ -36,14 +36,14 @@ hCopula <- function (copula, x, v) {
   assign("x", x, envir = e)
   assign("v", v, envir = e)
   r <- numericDeriv(quote(pcopula(copula, cbind(x, v))), c("v"), e)
-  return(diag(attr(r, "gradient")))
+  diag(attr(r, "gradient"))
 }
 
 setMethod("h", "copula", hCopula)
 
 
 hIndepCopula <- function (copula, x, v) {
-  return(x)
+  x
 }
 
 setMethod("h", "indepCopula", hIndepCopula)
@@ -51,8 +51,7 @@ setMethod("h", "indepCopula", hIndepCopula)
 
 hNormalCopula <- function (copula, x, v) {
   rho <- copula@parameters
-  r <- pnorm((qnorm(x) - rho*qnorm(v)) / sqrt(1 - rho^2))
-  return(r)
+  pnorm((qnorm(x) - rho*qnorm(v)) / sqrt(1 - rho^2))
 }
 
 setMethod("h", "normalCopula", hNormalCopula)
@@ -61,8 +60,7 @@ setMethod("h", "normalCopula", hNormalCopula)
 hClaytonCopula <- function (copula, x, v) {
   theta <- copula@parameters
   v[v == 0] <- .Machine$double.eps
-  r <- v^(-theta-1) * (x^(-theta) + v^(-theta) - 1) ^ (-1 - 1/theta)
-  return(r)
+  v^(-theta-1) * (x^(-theta) + v^(-theta) - 1) ^ (-1 - 1/theta)
 }
 
 setMethod("h", "claytonCopula", hClaytonCopula)
@@ -71,9 +69,8 @@ setMethod("h", "claytonCopula", hClaytonCopula)
 hGumbelCopula <- function (copula, x, v) {
   theta <- copula@parameters
   v[v == 0] <- .Machine$double.eps
-  r <- pcopula(copula, cbind(x, v)) * 1/v * (-log(v)) ^ (theta-1) * 
+  pcopula(copula, cbind(x, v)) * 1/v * (-log(v)) ^ (theta-1) * 
       ((-log(x))^theta + (-log(v))^theta) ^ (1/theta-1)
-  return(r)
 }
 
 setMethod("h", "gumbelCopula", hGumbelCopula)
@@ -84,8 +81,7 @@ hTCopula <- function (copula, x, v) {
   df <- if (copula@df.fixed) copula@df else copula@parameters[2]
   q <- (qt(x, df) - rho*qt(v, df)) / 
       sqrt(((df + qt(v, df)^2) * (1 - rho^2)) / (df+1))
-  r <- pt(q, df+1)
-  return(r)
+  pt(q, df+1)
 }
 
 setMethod("h", "tCopula", hTCopula)

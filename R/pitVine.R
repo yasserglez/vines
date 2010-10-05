@@ -17,12 +17,7 @@
 setGeneric("pitVine",
     function (vine, u)  {
       if (is.vector(u)) u <- matrix(u, nrow = 1)
-      if (vine@trees == 0) {
-        # Vine without trees, Independent vine.
-        return(u)
-      } else {
-        standardGeneric("pitVine")
-      }
+      if (vine@trees == 0) u else standardGeneric("pitVine")
     },
     signature = "vine")
 
@@ -43,7 +38,7 @@ pitCVine <- function (vine, u) {
     }
   }
   
-  return(z)
+  z
 }
 
 setMethod("pitVine", "CVine", pitCVine)
@@ -87,7 +82,7 @@ pitDVine <- function (vine, u) {
     }
   }
 
-  return(z)
+  z
 }
 
 setMethod("pitVine", "DVine", pitDVine)

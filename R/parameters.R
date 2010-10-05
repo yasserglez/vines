@@ -23,7 +23,7 @@
 
 parameters <- function (vine) {
   f <- function (x) if (is.null(x)) numeric(0) else x@parameters
-  return(unlist(lapply(vine@copulas, f)))
+  unlist(lapply(vine@copulas, f))
 }
 
 
@@ -39,5 +39,5 @@ parameters <- function (vine) {
       }
     }
   }
-  return(vine)
+  vine
 }

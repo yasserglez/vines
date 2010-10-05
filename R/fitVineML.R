@@ -33,7 +33,7 @@ logLikVine <- function (vine, data) {
     loglikCopula(copula@parameters, cbind(x, y), copula)
   }
   iterResult <- iterVine(vine, data, eval = L)
-  return(sum(unlist(iterResult$evals)))
+  sum(unlist(iterResult$evals))
 }
 
 
@@ -137,7 +137,7 @@ fitVineML <- function (type, data, trees = ncol(data) - 1, copulas = list(),
       selectedCopula <- indepCopula()
     }
     
-    return(selectedCopula)
+    selectedCopula
   }
 
   # Starting values for the parameters of the copulas in the PCC following the 
@@ -191,5 +191,5 @@ fitVineML <- function (type, data, trees = ncol(data) - 1, copulas = list(),
         finalLogLik = logLikVine(vine, data))
   }
 
-  return(fit)
+  fit
 }

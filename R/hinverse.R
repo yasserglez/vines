@@ -32,17 +32,19 @@ setGeneric("hinverse",
 
 hinverseCopula <- function (copula, u, v) {
   # Last resort is to evaluate the inverse of the h-function numerically.
-  f <- function (x, u, v) h(copula, x, v) - u
-  r <- sapply(seq(along = u), 
-      function (i) uniroot(f, c(0, 1), u = u[i], v = v[i])$root)
-  return(r)
+  f <- function (x, u, v) h(copula, x, v) - u 
+  sapply(seq(along = u), function (i) {
+        if (u[i] <= .Machine$double.eps^0.5) 0
+        else if (1 - u[i] <= .Machine$double.eps^0.5) 1
+        else uniroot(f, c(0, 1), u = u[i], v = v[i])$root
+      })
 }
 
 setMethod("hinverse", "copula", hinverseCopula)
 
 
 hinverseIndepCopula <- function (copula, u, v) {
-  return(u)
+  u
 }
 
 setMethod("hinverse", "indepCopula", hinverseIndepCopula)
@@ -50,8 +52,7 @@ setMethod("hinverse", "indepCopula", hinverseIndepCopula)
 
 hinverseNormalCopula <- function (copula, u, v) {
   rho <- copula@parameters
-  r <- pnorm(qnorm(u) * sqrt(1 - rho^2) + rho*qnorm(v))
-  return(r)
+  pnorm(qnorm(u) * sqrt(1 - rho^2) + rho*qnorm(v))
 }
 
 setMethod("hinverse", "normalCopula", hinverseNormalCopula)
@@ -60,8 +61,7 @@ setMethod("hinverse", "normalCopula", hinverseNormalCopula)
 hinverseClaytonCopula <- function (copula, u, v) {
   theta <- copula@parameters
   v[v == 0] <- .Machine$double.eps
-  r <- ((u * v^(theta+1)) ^ (-theta/(theta+1)) + 1 - v^(-theta)) ^ (-1/theta)
-  return(r)
+  ((u * v^(theta+1)) ^ (-theta/(theta+1)) + 1 - v^(-theta)) ^ (-1/theta)
 }
 
 setMethod("hinverse", "claytonCopula", hinverseClaytonCopula)
@@ -73,8 +73,7 @@ hinverseTCopula <- function (copula, u, v) {
   q <- qt(u, df+1) * 
       sqrt(((df + qt(v, df)^2) * (1 - rho^2)) / (df+1)) + 
       rho*qt(v, df)
-  r <- pt(q, df)
-  return(r)
+  pt(q, df)
 }
 
 setMethod("hinverse", "tCopula", hinverseTCopula)

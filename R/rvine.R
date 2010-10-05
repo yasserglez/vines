@@ -19,7 +19,7 @@ setGeneric("rvine",
       if (vine@trees == 0) {
         # Vine without trees, Independent vine.
         d <- vine@dimension
-        return(matrix(runif(n * d), n, d))
+        matrix(runif(n * d), n, d)
       } else {
         standardGeneric("rvine")
       }
@@ -62,7 +62,7 @@ rCVine <- function (vine, n) {
     }
   }
 
-  return(result)
+  result
 }
 
 setMethod("rvine", "CVine", rCVine)
@@ -118,7 +118,7 @@ rDVine <- function (vine, n) {
     }
   }
 
-  return(result)
+  result
 }
 
 setMethod("rvine", "DVine", rDVine)

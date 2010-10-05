@@ -19,7 +19,7 @@ setGeneric("dvine",
       if (is.vector(u)) u <- matrix(u, nrow = 1)
       if (vine@trees == 0) {
         # Vine without trees, calculate the product of the margins.
-        return(apply(u, 1, prod))
+        apply(u, 1, prod)
       } else {
         standardGeneric("dvine")
       }
@@ -35,7 +35,7 @@ dCVineDVine <- function (vine, u) {
   iterResult <- iterVine(vine, u, eval = copulaDensity)
   copulasProd <- apply(matrix(unlist(iterResult$evals), nrow(u)), 1, prod)
   marginsProd <- apply(u, 1, prod)
-  return(copulasProd * marginsProd)
+  copulasProd * marginsProd
 }
 
 setMethod("dvine", "CVine", dCVineDVine)
