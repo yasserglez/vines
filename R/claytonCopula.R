@@ -19,9 +19,22 @@
 # Bakken, H. Pair-copula constructions of multiple dependence. Insurance 
 # Mathematics and Economics, 2007, Vol. 44, pp. 182-198.
 
-calibKendallsTauClaytonCopula <- function(copula, tau) {
-  max(2 * tau / (1 - tau), copula@param.lowbnd + .Machine$double.eps^0.5)
+calibKendallsTauClaytonCopula <- function (copula, tau) {
+  max(copula:::calibKendallsTauClaytonCopula(copula, tau), 
+      copula@param.lowbnd + .Machine$double.eps^0.5)
 }
 
-setMethod("calibKendallsTau", signature("claytonCopula"), 
-    calibKendallsTauClaytonCopula)
+
+calibSpearmansRhoClaytonCopula <- function (copula, rho) {
+  max(copula:::calibSpearmansRhoClaytonCopula(copula, rho), 
+      copula@param.lowbnd + .Machine$double.eps^0.5)
+}
+
+
+.onLoad <- function (libname, pkgname) {
+  setMethod("calibKendallsTau", signature("claytonCopula"), 
+      calibKendallsTauClaytonCopula)
+  
+  setMethod("calibSpearmansRho", signature("claytonCopula"),
+      calibSpearmansRhoClaytonCopula)  
+}

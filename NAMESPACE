@@ -9,8 +9,8 @@ import(copula)
 exportClasses(Vine, RVine, CVine, DVine)
 exportClasses(fitVine, fitVineML)
 
-exportMethods(h)
-exportMethods(hinverse)
+exportMethods(h, hinverse)
+exportMethods(calibKendallsTau, calibSpearmansRho)
 
 exportMethods(dvine)
 exportMethods(pvine)
