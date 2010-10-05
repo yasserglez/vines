@@ -22,13 +22,16 @@ setClass("fitVine",
 
 fitVine <- function (type, data, method = "ml", ...) {
   if (type %in% c("CVine", "DVine") && method == "ml") {
-    fit <- fitVineML(type, data, ...)
+    fitVineML(type, data, ...)
   } else {
     stop(paste("invalid", sQuote(method), "fit method for", type))
   }
-  return(fit)
 }
 
-fitCVine <- function (data, method, ...) fitVine("CVine", data, method, ...)
+fitCVine <- function (data, method = "ml", ...) {
+  fitVine("CVine", data, method, ...)
+}
 
-fitDVine <- function (data, method, ...) fitVine("DVine", data, method, ...)
+fitDVine <- function (data, method = "ml", ...) {
+  fitVine("DVine", data, method, ...)
+}

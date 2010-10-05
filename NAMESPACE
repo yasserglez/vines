@@ -21,5 +21,6 @@ exportMethods(pitVine)
 # Exported functions.
 
 export(fitVine, fitCVine, fitDVine)
+export(orderingVine, orderingCVine, orderingDVine)
 export(parameters, "parameters<-")
 export(gofVine)

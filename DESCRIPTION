@@ -13,4 +13,5 @@ LazyLoad: yes
 Depends: methods, copula
 Enhances: copula
 Collate: h.R hinverse.R calibKendallsTau.R Vines.R parameters.R iterVine.R 
-    fitVine.R fitVineML.R pitVine.R gofVine.R dvine.R pvine.R rvine.R
+    fitVine.R fitVineML.R orderingVine.R pitVine.R gofVine.R dvine.R 
+    pvine.R rvine.R
