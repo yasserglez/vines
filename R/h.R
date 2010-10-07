@@ -19,6 +19,12 @@ setGeneric("h",
       if (copula@dimension != 2) {
         stop("h-functions only defined for bivariate copulas")
       }
+      # Avoid numerical problems at the boundary of the interval.
+      eps <- .Machine$double.eps^0.5
+      x[x < eps] <- eps
+      x[(1 - x) < eps] <- 1 - eps
+      v[v < eps] <- eps
+      v[(1 - v) < eps] <- 1 - eps      
       standardGeneric("h")
     },
     signature = "copula")
@@ -59,7 +65,6 @@ setMethod("h", "normalCopula", hNormalCopula)
 
 hClaytonCopula <- function (copula, x, v) {
   theta <- copula@parameters
-  v[v == 0] <- .Machine$double.eps
   v^(-theta-1) * (x^(-theta) + v^(-theta) - 1) ^ (-1 - 1/theta)
 }
 
@@ -68,7 +73,6 @@ setMethod("h", "claytonCopula", hClaytonCopula)
 
 hGumbelCopula <- function (copula, x, v) {
   theta <- copula@parameters
-  v[v == 0] <- .Machine$double.eps
   pcopula(copula, cbind(x, v)) * 1/v * (-log(v)) ^ (theta-1) * 
       ((-log(x))^theta + (-log(v))^theta) ^ (1/theta-1)
 }

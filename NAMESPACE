@@ -2,6 +2,7 @@
 
 import(methods)
 import(copula)
+import(rootSolve)
 
 
 # Classes and generic functions.
