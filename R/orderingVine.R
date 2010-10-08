@@ -16,14 +16,33 @@
 
 orderingVineGreedy <- function (type, data, according = "kendall") {
   if (according %in% c("pearson", "kendall", "spearman")) {
+    # Calculate the value of the given measure of dependence between each
+    # pair of variables and couple the variables with the largest modular values.
     values <- abs(cor(data, method = according))
     diag(values) <- -Inf
+  } else if (according %in% c("df")) {
+    # Fit bivariate t copulas to each pair of variables and copule the variables
+    # with the smaller degrees of freedom.
+    values <- matrix(-Inf, ncol(data), ncol(data))
+    for (i in seq(length = ncol(data))) {
+      for (j in seq(length = max(i - 1, 0))) {
+        x <- data[ , i]
+        y <- data[ , j]
+        copula <- tCopula(0)
+        rho <- calibKendallsTau(copula, cor(x, y, method = "kendall"))
+        L <- function (df) loglikCopula(c(rho, df), cbind(x, y), copula)
+        df <- optim(copula@parameters[2], L, method = "BFGS",
+            control = list(fnscale = -1))$par
+        values[i, j] <- -df
+        values[j, i] <- -df
+      }
+    }
   } else {
     stop('invalid argument of the according argument')
   }
-  
+
   # Try to couple the pairs with the maximum value in the values matrix, 
-  
+
   n <- ncol(data)
   k <- which.max(values)
   i <- row(values)[k]
