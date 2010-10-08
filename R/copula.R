@@ -24,10 +24,20 @@ calibKendallsTauClaytonCopula <- function (copula, tau) {
       copula@param.lowbnd + .Machine$double.eps^0.5)
 }
 
-
 calibSpearmansRhoClaytonCopula <- function (copula, rho) {
   max(copula:::calibSpearmansRhoClaytonCopula(copula, rho), 
       copula@param.lowbnd + .Machine$double.eps^0.5)
+}
+
+
+# Do not warn fitting the Gumbel copula to data with negative dependence.
+
+calibKendallsTauGumbelCopula <- function(copula, tau) {
+  suppressWarnings(copula:::calibKendallsTauGumbelCopula(copula, tau))
+}
+
+calibSpearmansRhoGumbelCopula <- function(copula, rho) {
+  suppressWarnings(copula:::calibSpearmansRhoGumbelCopula(copula, rho))
 }
 
 
@@ -36,5 +46,11 @@ calibSpearmansRhoClaytonCopula <- function (copula, rho) {
       calibKendallsTauClaytonCopula)
   
   setMethod("calibSpearmansRho", signature("claytonCopula"),
-      calibSpearmansRhoClaytonCopula)  
+      calibSpearmansRhoClaytonCopula)
+  
+  setMethod("calibKendallsTau", signature("gumbelCopula"), 
+      calibKendallsTauGumbelCopula)
+  
+  setMethod("calibSpearmansRho", signature("gumbelCopula"), 
+      calibSpearmansRhoGumbelCopula)
 }
