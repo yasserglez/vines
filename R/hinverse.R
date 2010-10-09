@@ -22,9 +22,9 @@ setGeneric("hinverse",
       # Avoid numerical problems at the boundary of the interval.
       eps <- .Machine$double.eps^0.5
       u[u < eps] <- eps
-      u[(1 - u) < eps] <- 1 - eps
+      u[abs(1 - u) < eps] <- 1 - eps
       v[v < eps] <- eps
-      v[(1 - v) < eps] <- 1 - eps
+      v[abs(1 - v) < eps] <- 1 - eps
       standardGeneric("hinverse")
     },
     signature = "copula")
@@ -38,16 +38,9 @@ setGeneric("hinverse",
 
 hinverseCopula <- function (copula, u, v) {
   # Last resort is to evaluate the inverse of the h-function numerically.
-  f <- function (x, u, v) h(copula, x, v) - u
-  root <- function (u, v) {
-    eps <- .Machine$double.eps^0.5
-    if (u == eps || u == 1 - eps) u
-    else {
-      # Choose one of the roots in the interval.
-      sample(uniroot.all(f, lower = eps, upper = 1 - eps, u = u, v = v), 1)
-    }
-  }
-  sapply(seq(along = u), function (i) root(u[i], v[i]))
+  f <- function (x, u, v) abs(h(copula, x, v) - u)
+  zero <- function (i) optimize(f, c(0, 1), u = u[i], v = v[i])$minimum
+  sapply(seq(along = u), zero)
 }
 
 setMethod("hinverse", "copula", hinverseCopula)
