@@ -50,9 +50,16 @@ preGofCopula <- function (copula, x, y) {
       # related copulas. International Statistical Review 73, 111-129.
       rho <- calibKendallsTau(copula, cor(x, y, method = "kendall"))
       L <- function (df) loglikCopula(c(rho, df), cbind(x, y), copula)
-      df <- optim(copula@parameters[2], L, method = "BFGS", 
-          control = list(fnscale = -1))$par
-      copula <- tCopula(rho, df = df, df.fixed = TRUE)
+      # If BFSG gives an error, try Nelder-Mead. Sometimes BFSG gives a 
+      # "non-finite finite differences" error but Nelder-Mead runs OK.
+      for (method in c("BFGS", "Nelder-Mead")) {
+        expr <- quote(optim(copula@parameters[2], L, method = method,
+                control = list(fnscale = -1)))
+        optimResult <- try(suppressWarnings(eval(expr)), silent = TRUE)
+        if (!inherits(optimResult, "try-error")) break
+      }
+      if (inherits(optimResult, "try-error")) stop(optimResult)
+      copula <- tCopula(rho, df = optimResult$par, df.fixed = TRUE)
     }
     attr(copula, "df.fixed.before") <- fixedBefore
   } else if (is(copula, "claytonCopula")) {
@@ -88,7 +95,7 @@ postGofCopula <- function (copula, x, y) {
 fitVineML <- function (type, data, trees = ncol(data) - 1, copulas = list(),
     corTestMethod = "kendall", corTestSigLevel = 0.1,
     gofCopulaIters = 1000, gofCopulaMethod = "mpl", gofCopulaSimul = "mult",
-    optimMethod = "BFGS", optimControl = list()) {
+    optimMethod = "Nelder-Mead", optimControl = list()) {
   
   if (is.null(corTestMethod)) corTestMethod <- ""
   if (is.null(optimMethod)) optimMethod <- ""
@@ -110,8 +117,16 @@ fitVineML <- function (type, data, trees = ncol(data) - 1, copulas = list(),
       if (length(copulas) == 1) {
         # Only one candidate copula? Goodness-of-fit not needed.
         copula <- preGofCopula(copulas[[1]], x, y)
-        fitResult <- fitCopula(copula, cbind(x, y), 
-            method = gofCopulaMethod, estimate.variance = FALSE)
+        # If BFSG gives an error, try Nelder-Mead. Sometimes BFSG gives a 
+        # "non-finite finite differences" error but Nelder-Mead runs OK.
+        for (method in c("BFGS", "Nelder-Mead")) {         
+          expr <- quote(fitCopula(copula, cbind(x, y), 
+                  method = gofCopulaMethod, optim.method = method,
+                  estimate.variance = FALSE))
+          fitResult <- try(suppressWarnings(eval(expr)), silent = TRUE)
+          if (!inherits(fitResult, "try-error")) break
+        }
+        if (inherits(fitResult, "try-error")) stop(fitResult)
         selectedCopula <- new(class(copula), copula,
             parameters = fitResult@estimate)
         selectedCopula <- postGofCopula(selectedCopula, x, y)
@@ -120,8 +135,16 @@ fitVineML <- function (type, data, trees = ncol(data) - 1, copulas = list(),
         pvalue <- -Inf
         for (copula in copulas) {
           copula <- preGofCopula(copula, x, y)
-          gofResult <- gofCopula(copula, cbind(x, y), N = gofCopulaIters,
-              method = gofCopulaMethod, simulation = gofCopulaSimul)
+          # If BFSG gives an error, try Nelder-Mead. Sometimes BFSG gives a 
+          # "non-finite finite differences" error but Nelder-Mead runs OK.
+          for (method in c("BFGS", "Nelder-Mead")) {
+            expr <- quote(gofCopula(copula, cbind(x, y), N = gofCopulaIters,
+                    method = gofCopulaMethod, simulation = gofCopulaSimul,
+                    optim.method = method))
+            gofResult <- try(suppressWarnings(eval(expr)), silent = TRUE)
+            if (!inherits(gofResult, "try-error")) break
+          }
+          if (inherits(gofResult, "try-error")) stop(gofResult)
           if (gofResult$pvalue > pvalue) {
             pvalue <- gofResult$pvalue
             selectedCopula <- new(class(copula), copula, 
@@ -152,26 +175,33 @@ fitVineML <- function (type, data, trees = ncol(data) - 1, copulas = list(),
   
   if (nzchar(optimMethod) && length(startParams) > 0) {
     # Execute the optimization method.
+    lowerParams <- unlist(lapply(vine@copulas,
+          function (x) if (is.null(x)) numeric(0) else x@param.lowbnd))
+    upperParams <- unlist(lapply(vine@copulas, 
+          function (x) if (is.null(x)) numeric(0) else x@param.upbnd))
+
     if (optimMethod == "L-BFGS-B") {
-      lower <- unlist(lapply(vine@copulas, 
-            function (x) if (is.null(x)) numeric(0) else 
-                x@param.lowbnd + .Machine$double.eps^0.5))
-      upper <- unlist(lapply(vine@copulas, 
-            function (x) if (is.null(x)) numeric(0) else 
-                x@param.upbnd - .Machine$double.eps^0.5))
+      lower <- lowerParams
+      upper <- upperParams
     } else {
-      lower <- -Inf
-      upper <- Inf
+      eps <- .Machine$double.eps^0.5
+      lower <- -Inf + eps
+      upper <- Inf - eps
+    }
+    
+    L <- function (x, vine, data, lowerParams, upperParams) {
+      if (all(x >= lowerParams) && all(x <= upperParams)) {
+        parameters(vine) <- x
+        logLikVine(vine, data)
+      } else {
+        return(NA)
+      }
     }
 
-    L <- function (x, vine, data) {
-      parameters(vine) <- x
-      logLikVine(vine, data) 
-    }
     optimControl <- c(optimControl, fnscale = -1)
     optimResult <- optim(startParams, L, lower = lower, upper = upper,
-        method = optimMethod, control = optimControl,
-        vine = vine, data = data)
+        method = optimMethod, control = optimControl, vine = vine, data = data, 
+        lowerParams = lowerParams, upperParams = upperParams)
 
     parameters(vine) <- optimResult$par
 
