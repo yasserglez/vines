@@ -20,12 +20,15 @@ setGeneric("hinverse",
         stop("inverse of h-functions only defined for bivariate copulas")
       }
       # Avoid numerical problems at the boundary of the interval.
-      eps <- .Machine$double.eps^0.5
+      eps <- .Machine$double.neg.eps
       u[u < eps] <- eps
-      u[abs(1 - u) < eps] <- 1 - eps
+      u[u > 1 - eps] <- 1 - eps
       v[v < eps] <- eps
-      v[abs(1 - v) < eps] <- 1 - eps
-      standardGeneric("hinverse")
+      v[v > 1 - eps] <- 1 - eps
+      r <- standardGeneric("hinverse")
+      r[r < eps] <- eps
+      r[r > 1 - eps] <- 1 - eps
+      r
     },
     signature = "copula")
 
