@@ -1,4 +1,4 @@
-# vines: GNU R package for multivariate dependence modeling with vines
+# vines: R package for multivariate dependence modeling with vines
 # Copyright (C) 2010 Yasser González Fernández <ygonzalezfernandez@gmail.com>
 #
 # This program is free software: you can redistribute it and/or modify it under

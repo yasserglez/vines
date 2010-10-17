@@ -1,13 +1,15 @@
-# Imports.
+# Imports
 
 import(methods)
 import(copula)
+import(ADGofTest)
 
 
-# Classes and generic functions.
+# Classes and generic functions
 
 exportClasses(Vine, RVine, CVine, DVine)
 exportClasses(fitVine, fitVineML)
+exportClasses(gofVine)
 
 exportMethods(h, hinverse)
 exportMethods(calibKendallsTau, calibSpearmansRho)
@@ -17,8 +19,10 @@ exportMethods(pvine)
 exportMethods(rvine)
 exportMethods(pitVine)
 
+exportMethods(show, summary)
 
-# Exported functions.
+
+# Exported functions
 
 export(fitVine, fitCVine, fitDVine)
 export(orderingVine, orderingCVine, orderingDVine)

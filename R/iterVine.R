@@ -1,4 +1,4 @@
-# vines: GNU R package for multivariate dependence modeling with vines
+# vines: R package for multivariate dependence modeling with vines
 # Copyright (C) 2010 Yasser González Fernández <ygonzalezfernandez@gmail.com>
 #
 # This program is free software: you can redistribute it and/or modify it under
@@ -45,13 +45,13 @@ iterCVine <- function (vine, data, fit, eval) {
   
   # This implementation includes an optimization to avoid evaluating the 
   # h-functions beyond the last tree of the vine that represents dependence 
-  # (given by the trees slot of the vine) because the h-function of the 
+  # (given by the trees slot of the vine) because the h-functions of the 
   # Independence copula always return the value of its first argument.
-  
+
   evals <- list()
   d <- vine@dimension
   v <- array(NA, c(nrow(data), d - 1, d))
-  
+
   for (i in seq(length = d)) {
     v[ , 1, i] <- data[ , i]
   }
@@ -87,7 +87,7 @@ iterDVine <- function (vine, data, fit, eval) {
   
   # This implementation includes an optimization to avoid evaluating he 
   # h-functions beyond the last tree of the vine that represents dependence 
-  # (given by the trees slot of the vine) because the h-function of the 
+  # (given by the trees slot of the vine) because the h-functions of the 
   # Independence copula always return the value of its first argument.  
   
   evals <- list()

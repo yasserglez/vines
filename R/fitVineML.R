@@ -1,4 +1,4 @@
-# vines: GNU R package for multivariate dependence modeling with vines
+# vines: R package for multivariate dependence modeling with vines
 # Copyright (C) 2010 Yasser González Fernández <ygonzalezfernandez@gmail.com>
 #
 # This program is free software: you can redistribute it and/or modify it under
@@ -159,7 +159,7 @@ fitVineML <- function (type, data, trees = ncol(data) - 1, copulas = list(),
     if (is.null(selectedCopula)) {
       selectedCopula <- indepCopula()
     }
-    
+
     selectedCopula
   }
 
@@ -184,9 +184,8 @@ fitVineML <- function (type, data, trees = ncol(data) - 1, copulas = list(),
       lower <- lowerParams
       upper <- upperParams
     } else {
-      eps <- .Machine$double.eps^0.5
-      lower <- -Inf + eps
-      upper <- Inf - eps
+      lower <- -Inf
+      upper <- Inf
     }
     
     L <- function (x, vine, data, lowerParams, upperParams) {
@@ -194,7 +193,7 @@ fitVineML <- function (type, data, trees = ncol(data) - 1, copulas = list(),
         parameters(vine) <- x
         logLikVine(vine, data)
       } else {
-        return(NA)
+        NA
       }
     }
 

@@ -1,4 +1,4 @@
-# vines: GNU R package for multivariate dependence modeling with vines
+# vines: R package for multivariate dependence modeling with vines
 # Copyright (C) 2010 Yasser González Fernández <ygonzalezfernandez@gmail.com>
 #
 # This program is free software: you can redistribute it and/or modify it under
@@ -14,6 +14,44 @@
 # You should have received a copy of the GNU General Public License along with 
 # this program. If not, see <http://www.gnu.org/licenses/>.
 
-gofVine <- function (vine, data, method = "pit", ...) {
+setClass("gofVine",
+    representation = representation(
+        method = "character",
+        pvalue = "numeric",
+        statistic = "numeric"))
+
+
+showGofVine <- function (object) {
+  cat("Result of a goodness-of-fit test for vines\n")
+  cat("Method:", object@method, "\n")
+  cat("Statistic:", object@statistic, "with p-value", object@pvalue, "\n")
+}
+
+setMethod("show", "gofVine", showGofVine)
+
+
+gofVinePIT <- function (vine, data, statistic = "breymann") {
   Z <- pitVine(vine, data)
+
+  if (statistic == "breymann") {
+    n <- ncol(Z)
+    S <- rowSums(qnorm(Z) ^ 2)
+    adResult <- ad.test(S, pchisq, df = n)
+    new("gofVine",
+        method = "PIT and the Breymann et al. (2003) statistic",
+        pvalue = adResult$p.value,
+        statistic = adResult$statistic)
+  } else {
+    stop(paste("invalid", sQuote(statistic), 
+            "statistic for goodness-of-fit method based on the PIT"))
+  }
+}
+
+
+gofVine <- function (vine, data, method = "pit", ...) {
+  if (method == "pit") {
+    gofVinePIT(vine, data, ...)
+  } else {
+    stop(paste("invalid", sQuote(method), "goodness-of-fit method"))
+  }
 }
