@@ -23,6 +23,13 @@ setGeneric("pvine",
 
 
 pCVineDVine <- function (vine, u) {
+  pdf <- function (x) dvine(vine, x)
+  lowerLimit <- rep(0, vine@dimension)
+  cdf <- function (x) {
+    integral <- adaptIntegrate(pdf, lowerLimit, x, tol = 1e-2)$integral
+    min(max(0, integral), 1)
+  }
+  apply(u, 1, cdf)
 }
 
 setMethod("pvine", "CVine", pCVineDVine)
