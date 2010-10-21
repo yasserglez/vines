@@ -42,16 +42,15 @@ preGofCopula <- function (copula, x, y) {
   if (is(copula, "tCopula")) {
     fixedBefore <- copula@df.fixed 
     if (!fixedBefore) {
-      # The gofCopula method requires the degrees-of-freedom parameter to be fixed, 
-      # so it is estimated here and fixed before running the goodness-of-fit test. 
-      # rho is calculated via Kendall's tau and the degrees-of-freedom is 
-      # estimated by maximum likelihood with rho fixed. This follows the 
-      # procedure sugested in S. Demarta and A. McNeil (2005). The t copula and 
-      # related copulas. International Statistical Review 73, 111-129.
+      # The gofCopula method requires the degrees-of-freedom parameter to be 
+      # fixed, it is estimated here and fixed before running the goodness-of-fit 
+      # test. rho is calculated via Kendall's tau and the degrees-of-freedom is 
+      # estimated by maximum likelihood with rho fixed. This follows the
+      # procedure sugested in S. Demarta and A. McNeil (2005). The t copula
+      # and related copulas. International Statistical Review 73, 111-129.
       rho <- calibKendallsTau(copula, cor(x, y, method = "kendall"))
       L <- function (df) loglikCopula(c(rho, df), cbind(x, y), copula)
-      # If BFSG gives an error, try Nelder-Mead. Sometimes BFSG gives a 
-      # "non-finite finite differences" error but Nelder-Mead runs OK.
+      # If BFSG gives an error, try Nelder-Mead.
       for (method in c("BFGS", "Nelder-Mead")) {
         expr <- quote(optim(copula@parameters[2], L, method = method,
                 control = list(fnscale = -1)))
@@ -117,8 +116,7 @@ fitVineML <- function (type, data, trees = ncol(data) - 1, copulas = list(),
       if (length(copulas) == 1) {
         # Only one candidate copula? Goodness-of-fit not needed.
         copula <- preGofCopula(copulas[[1]], x, y)
-        # If BFSG gives an error, try Nelder-Mead. Sometimes BFSG gives a 
-        # "non-finite finite differences" error but Nelder-Mead runs OK.
+        # If BFSG gives an error, try Nelder-Mead.
         for (method in c("BFGS", "Nelder-Mead")) {         
           expr <- quote(fitCopula(copula, cbind(x, y), 
                   method = gofCopulaMethod, optim.method = method,
@@ -135,8 +133,7 @@ fitVineML <- function (type, data, trees = ncol(data) - 1, copulas = list(),
         pvalue <- -Inf
         for (copula in copulas) {
           copula <- preGofCopula(copula, x, y)
-          # If BFSG gives an error, try Nelder-Mead. Sometimes BFSG gives a 
-          # "non-finite finite differences" error but Nelder-Mead runs OK.
+          # If BFSG gives an error, try Nelder-Mead.
           for (method in c("BFGS", "Nelder-Mead")) {
             expr <- quote(gofCopula(copula, cbind(x, y), N = gofCopulaIters,
                     method = gofCopulaMethod, simulation = gofCopulaSimul,
@@ -144,12 +141,19 @@ fitVineML <- function (type, data, trees = ncol(data) - 1, copulas = list(),
             gofResult <- try(suppressWarnings(eval(expr)), silent = TRUE)
             if (!inherits(gofResult, "try-error")) break
           }
-          if (inherits(gofResult, "try-error")) stop(gofResult)
-          if (gofResult$pvalue > pvalue) {
-            pvalue <- gofResult$pvalue
-            selectedCopula <- new(class(copula), copula, 
-                parameters = gofResult$parameters)
-            selectedCopula <- postGofCopula(selectedCopula, x, y)
+          if (inherits(gofResult, "try-error")) {
+            # Error executing the goodness-of-fit test for this copula.
+            # Print a warning and try to continue with other copulas.
+            warning(gofResult)
+          } else {
+            # Goodness-of-fit finished without errors. 
+            # Is this copula better than the currently selected?
+            if (gofResult$pvalue > pvalue) {
+              pvalue <- gofResult$pvalue
+              selectedCopula <- new(class(copula), copula,
+                  parameters = gofResult$parameters)
+              selectedCopula <- postGofCopula(selectedCopula, x, y)
+            }
           }
         }
       }
