@@ -95,10 +95,6 @@ fitVineML <- function (type, data, trees = ncol(data) - 1, copulas = list(),
     corTestMethod = "kendall", corTestSigLevel = 0.1,
     gofCopulaIters = 1000, gofCopulaMethod = "mpl", gofCopulaSimul = "mult",
     optimMethod = "Nelder-Mead", optimControl = list()) {
-  
-  if (is.null(corTestMethod)) corTestMethod <- ""
-  if (is.null(optimMethod)) optimMethod <- ""
-
   # Function called by iterVine to select the bivariate copula that better 
   # fits the bivariate data from the given list of copulas.
   selectCopula <- function (vine, i, j, x, y) {
