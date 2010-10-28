@@ -15,35 +15,23 @@
 # this program. If not, see <http://www.gnu.org/licenses/>.
 
 setGeneric("hinverse", 
-    function (copula, u, v) {
-      if (copula@dimension != 2) {
-        stop("inverse of h-functions only defined for bivariate copulas")
-      }
-      # Avoid numerical problems at the boundary of the interval.
-      eps <- .Machine$double.neg.eps
-      u[u < eps] <- eps
-      u[u > 1 - eps] <- 1 - eps
-      v[v < eps] <- eps
-      v[v > 1 - eps] <- 1 - eps
-      r <- standardGeneric("hinverse")
-      r[r < eps] <- eps
-      r[r > 1 - eps] <- 1 - eps
-      r
-    },
+    function (copula, u, v) standardGeneric("hinverse"),
     signature = "copula")
-
-
-# For the expression for the Gaussian, Student's t, Clayton and Gumbel copulas
-# see Aas, K., Czado, C., Frigessi, A. & Bakken, H. Pair-copula constructions 
-# of multiple dependence. Insurance Mathematics and Economics, 2007, Vol. 44, 
-# pp. 182-198.
 
 
 hinverseCopula <- function (copula, u, v) {
   # Last resort is to evaluate the inverse of the h-function numerically.
+  zero <- .Machine$double.eps
+  one <- 1 - .Machine$double.neg.eps
+
+  u[u < zero] <- zero; u[u > one] <- one
+  v[v < zero] <- zero; v[v > one] <- one
+  
   f <- function (x, u, v) abs(h(copula, x, v) - u)
-  zero <- function (i) optimize(f, c(0, 1), u = u[i], v = v[i])$minimum
-  sapply(seq(along = u), zero)
+  z <- function (i) optimize(f, c(zero, one), tol = 0.01, u = u[i], v = v[i])$minimum
+  r <- sapply(seq(along = u), z)
+
+  r
 }
 
 setMethod("hinverse", "copula", hinverseCopula)
@@ -56,29 +44,71 @@ hinverseIndepCopula <- function (copula, u, v) {
 setMethod("hinverse", "indepCopula", hinverseIndepCopula)
 
 
+# See Aas, K., Czado, C., Frigessi, A. & Bakken, H. Pair-copula constructions 
+# of multiple dependence. Insurance Mathematics and Economics, 2009, Vol. 44, 
+# pp. 182-198 for the expression for the Gaussian, Student's t, Clayton and 
+# Gumbel copulas.
+
 hinverseNormalCopula <- function (copula, u, v) {
+  zero <- .Machine$double.eps
+  one <- 1 - .Machine$double.neg.eps
+  
+  u[u < zero] <- zero; u[u > one] <- one
+  v[v < zero] <- zero; v[v > one] <- one 
+  
   rho <- copula@parameters
-  pnorm(qnorm(u) * sqrt(1 - rho^2) + rho*qnorm(v))
+  rho[rho == -1] <- -1 + .Machine$double.eps
+  rho[rho == 1] <- 1 - .Machine$double.neg.eps
+  
+  r <- pnorm(qnorm(u) * sqrt(1 - rho^2) + rho*qnorm(v))
+  
+  r[r < zero] <- zero
+  r[r > one] <- one
+
+  r
 }
 
 setMethod("hinverse", "normalCopula", hinverseNormalCopula)
 
 
-hinverseClaytonCopula <- function (copula, u, v) {
-  theta <- copula@parameters
-  ((u * v^(theta+1)) ^ (-theta/(theta+1)) + 1 - v^(-theta)) ^ (-1/theta)
-}
-
-setMethod("hinverse", "claytonCopula", hinverseClaytonCopula)
-
-
 hinverseTCopula <- function (copula, u, v) {
+  zero <- .Machine$double.eps
+  one <- 1 - .Machine$double.neg.eps
+  
+  u[u < zero] <- zero; u[u > one] <- one
+  v[v < zero] <- zero; v[v > one] <- one
+
   rho <- copula@parameters[1]
+  rho[rho == -1] <- -1 + .Machine$double.eps
+  rho[rho == 1] <- 1 - .Machine$double.neg.eps
   df <- if (copula@df.fixed) copula@df else copula@parameters[2]
-  q <- qt(u, df+1) * 
-      sqrt(((df + qt(v, df)^2) * (1 - rho^2)) / (df+1)) + 
-      rho*qt(v, df)
-  pt(q, df)
+
+  r <- pt(qt(u, df+1) * sqrt(((df + qt(v, df)^2) * (1 - rho^2)) / (df+1)) + rho*qt(v, df), df)
+  
+  r[r < zero] <- zero
+  r[r > one] <- one
+  
+  r  
 }
 
 setMethod("hinverse", "tCopula", hinverseTCopula)
+
+
+hinverseClaytonCopula <- function (copula, u, v) {
+  zero <- .Machine$double.eps^0.15
+  one <- 1 - .Machine$double.neg.eps^0.15
+  
+  u[u < zero] <- zero; u[u > one] <- one
+  v[v < zero] <- zero; v[v > one] <- one
+
+  theta <- min(copula@parameters, 100)
+
+  r <- ((u * v^(theta+1)) ^ (-theta/(theta+1)) + 1 - v^(-theta)) ^ (-1/theta)
+  
+  r[r < zero] <- zero
+  r[r > one] <- one
+  
+  r
+}
+
+setMethod("hinverse", "claytonCopula", hinverseClaytonCopula)

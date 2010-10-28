@@ -15,37 +15,28 @@
 # this program. If not, see <http://www.gnu.org/licenses/>.
 
 setGeneric("h", 
-    function (copula, x, v) {
-      if (copula@dimension != 2) {
-        stop("h-functions only defined for bivariate copulas")
-      }
-      # Avoid numerical problems at the boundary of the interval.
-      eps <- .Machine$double.neg.eps
-      x[x < eps] <- eps
-      x[x > 1 - eps] <- 1 - eps
-      v[v < eps] <- eps
-      v[v > 1 - eps] <- 1 - eps
-      r <- standardGeneric("h")
-      r[r < eps] <- eps
-      r[r > 1 - eps] <- 1 - eps
-      r
-    },
+    function (copula, x, v) standardGeneric("h"),
     signature = "copula")
-
-
-# For the expression for the Gaussian, Student's t, Clayton and Gumbel copulas
-# see Aas, K., Czado, C., Frigessi, A. & Bakken, H. Pair-copula constructions 
-# of multiple dependence. Insurance Mathematics and Economics, 2007, Vol. 44, 
-# pp. 182-198.
 
 
 hCopula <- function (copula, x, v) {
   # Last resort is to evaluate the h-function numerically.
+  zero <- .Machine$double.eps
+  one <- 1 - .Machine$double.neg.eps
+  
+  x[x < zero] <- zero; x[x > one] <- one
+  v[v < zero] <- zero; v[v > one] <- one    
+  
   e <- new.env()
   assign("x", x, envir = e)
   assign("v", v, envir = e)
-  r <- numericDeriv(quote(pcopula(copula, cbind(x, v))), c("v"), e)
-  diag(attr(r, "gradient"))
+  d <- numericDeriv(quote(pcopula(copula, cbind(x, v))), c("v"), e)
+  r <- diag(attr(d, "gradient"))
+  
+  r[x <= zero | r < zero] <- zero
+  r[x >= one | r > one] <- one
+
+  r
 }
 
 setMethod("h", "copula", hCopula)
@@ -58,37 +49,92 @@ hIndepCopula <- function (copula, x, v) {
 setMethod("h", "indepCopula", hIndepCopula)
 
 
+# See Aas, K., Czado, C., Frigessi, A. & Bakken, H. Pair-copula constructions 
+# of multiple dependence. Insurance Mathematics and Economics, 2009, Vol. 44, 
+# pp. 182-198 for the expression for the Gaussian, Student's t, Clayton and 
+# Gumbel copulas.
+
 hNormalCopula <- function (copula, x, v) {
+  zero <- .Machine$double.eps
+  one <- 1 - .Machine$double.neg.eps
+
+  x[x < zero] <- zero; x[x > one] <- one
+  v[v < zero] <- zero; v[v > one] <- one  
+
   rho <- copula@parameters
-  pnorm((qnorm(x) - rho*qnorm(v)) / sqrt(1 - rho^2))
+  rho[rho == -1] <- -1 + .Machine$double.eps
+  rho[rho == 1] <- 1 - .Machine$double.neg.eps
+
+  r <- pnorm((qnorm(x) - rho*qnorm(v)) / sqrt(1 - rho^2))
+
+  r[x <= zero | r < zero] <- zero
+  r[x >= one | r > one] <- one
+
+  r  
 }
 
 setMethod("h", "normalCopula", hNormalCopula)
 
 
+hTCopula <- function (copula, x, v) {
+  zero <- .Machine$double.eps
+  one <- 1 - .Machine$double.neg.eps
+
+  x[x < zero] <- zero; x[x > one] <- one
+  v[v < zero] <- zero; v[v > one] <- one    
+
+  rho <- copula@parameters[1]
+  rho[rho == -1] <- -1 + .Machine$double.eps
+  rho[rho == 1] <- 1 - .Machine$double.neg.eps  
+  df <- if (copula@df.fixed) copula@df else copula@parameters[2]
+
+  r <- pt((qt(x, df) - rho*qt(v, df)) / sqrt(((df + qt(v, df)^2) * (1 - rho^2)) / (df+1)), df+1)
+
+  r[x <= zero | r < zero] <- zero
+  r[x >= one | r > one] <- one
+  
+  r
+}
+
+setMethod("h", "tCopula", hTCopula)
+
+
 hClaytonCopula <- function (copula, x, v) {
-  theta <- copula@parameters
-  v^(-theta-1) * (x^(-theta) + v^(-theta) - 1) ^ (-1 - 1/theta)
+  zero <- .Machine$double.eps^0.15
+  one <- 1 - .Machine$double.neg.eps^0.15
+
+  x[x < zero] <- zero; x[x > one] <- one
+  v[v < zero] <- zero; v[v > one] <- one  
+
+  theta <- min(copula@parameters, 100)
+
+  r <- v^(-theta-1) * (x^(-theta) + v^(-theta) - 1) ^ (-1 - 1/theta)
+
+  r[x <= zero | r < zero] <- zero
+  r[x >= one | r > one] <- one
+
+  r
 }
 
 setMethod("h", "claytonCopula", hClaytonCopula)
 
 
 hGumbelCopula <- function (copula, x, v) {
+  zero <- .Machine$double.eps
+  one <- 1 - .Machine$double.neg.eps
+  
+  x[x < zero] <- zero; x[x > one] <- one
+  v[v < zero] <- zero; v[v > one] <- one
+  
   theta <- copula@parameters
-  pcopula(copula, cbind(x, v)) * 1/v * (-log(v)) ^ (theta-1) * 
+
+  r <- pcopula(copula, cbind(x, v)) * 1/v * (-log(v)) ^ (theta-1) *
       ((-log(x))^theta + (-log(v))^theta) ^ (1/theta-1)
+
+  r[x <= zero | r < zero] <- zero
+  r[x >= one | r > one] <- one
+
+  r
 }
 
 setMethod("h", "gumbelCopula", hGumbelCopula)
-
-
-hTCopula <- function (copula, x, v) {
-  rho <- copula@parameters[1]
-  df <- if (copula@df.fixed) copula@df else copula@parameters[2]
-  q <- (qt(x, df) - rho*qt(v, df)) / 
-      sqrt(((df + qt(v, df)^2) * (1 - rho^2)) / (df+1))
-  pt(q, df+1)
-}
-
-setMethod("h", "tCopula", hTCopula)
