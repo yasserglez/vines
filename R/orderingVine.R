@@ -14,6 +14,11 @@
 # You should have received a copy of the GNU General Public License along with 
 # this program. If not, see <http://www.gnu.org/licenses/>.
 
+orderingVineCanonical <- function (type, data) {
+  seq(from = 1, to = ncol(data))
+}
+
+
 orderingVineGreedy <- function (type, data, according = "kendall") {
   if (according %in% c("pearson", "kendall", "spearman")) {
     # Calculate the value of the given measure of dependence between each
@@ -85,18 +90,20 @@ orderingVineGreedy <- function (type, data, according = "kendall") {
 }
 
 
-orderingVine <- function (type, data, method = "greedy", ...) {
+orderingVine <- function (type, data, method = "canonical", ...) {
   if (type %in% c("CVine", "DVine") && method == "greedy") {
     orderingVineGreedy(type, data, ...)
+  } else if (type %in% c("CVine", "DVine") && method == "canonical") {
+    orderingVineCanonical(type, data)
   } else {
     stop(paste("invalid", sQuote(method), "ordering method for", type))
   }
 }
 
-orderingCVine <- function (data, method = "greedy", ...) {
+orderingCVine <- function (data, method = "canonical", ...) {
   orderingVine("CVine", data, method, ...)
 }
 
-orderingDVine <- function (data, method = "greedy", ...) {
+orderingDVine <- function (data, method = "canonical", ...) {
   orderingVine("DVine", data, method, ...)
 }
