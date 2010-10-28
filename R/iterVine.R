@@ -36,7 +36,7 @@ setGeneric("iterVine",
 iterCVine <- function (vine, data, fit, eval) {
   # The implementation of this function is based on the Algorithm 3 described in 
   # Aas, K., Czado, C., Frigessi, A. & Bakken, H. Pair-copula constructions of 
-  # multiple dependence. Insurance Mathematics and Economics, 2007, Vol. 44, 
+  # multiple dependence. Insurance Mathematics and Economics, 2009, Vol. 44, 
   # pp. 182-198.
   
   # Here the indexes of the second dimention of the v array differs with the 
@@ -78,7 +78,7 @@ setMethod("iterVine", "CVine", iterCVine)
 iterDVine <- function (vine, data, fit, eval) {
   # The implementation of this function is based on the Algorithm 4 described in 
   # Aas, K., Czado, C., Frigessi, A. & Bakken, H. Pair-copula constructions of 
-  # multiple dependence. Insurance Mathematics and Economics, 2007, Vol. 44, 
+  # multiple dependence. Insurance Mathematics and Economics, 2009, Vol. 44, 
   # pp. 182-198.
   
   # Here the indexes of the second dimention of the v array differs with the 

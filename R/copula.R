@@ -17,7 +17,7 @@
 # The lower bound of the parameter of the bivariate Clayton copula in the copula
 # package differs with Appendix B.3 of Aas, K., Czado, C., Frigessi, A. and
 # Bakken, H. Pair-copula constructions of multiple dependence. Insurance 
-# Mathematics and Economics, 2007, Vol. 44, pp. 182-198.
+# Mathematics and Economics, 2009, Vol. 44, pp. 182-198.
 
 calibKendallsTauClaytonCopula <- function (copula, tau) {
   max(copula:::calibKendallsTauClaytonCopula(copula, tau), 

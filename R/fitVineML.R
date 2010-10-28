@@ -65,7 +65,7 @@ preGofCopula <- function (copula, x, y) {
     # Lower bound of the bivariate Clayton copula in the copula package differs
     # with Appendix B.3 of Aas, K., Czado, C., Frigessi, A. and Bakken, H. 
     # Pair-copula constructions of multiple dependence. Insurance Mathematics 
-    # and Economics, 2007, Vol. 44, pp. 182-198.
+    # and Economics, 2009, Vol. 44, pp. 182-198.
     copula@param.lowbnd <- 0
   }
 
@@ -166,7 +166,7 @@ fitVineML <- function (type, data, trees = ncol(data) - 1, copulas = list(),
   # Starting values for the parameters of the copulas in the PCC following the 
   # sequential estimation procedure described in section 7 of Aas, K., 
   # Czado, C., Frigessi, A. and Bakken, H. Pair-copula constructions of multiple
-  # dependence. Insurance Mathematics and Economics, 2007, Vol. 44, pp. 182-198.
+  # dependence. Insurance Mathematics and Economics, 2009, Vol. 44, pp. 182-198.
   vine <- new(type, dimension = ncol(data), trees = trees,
       copulas = matrix(list(), ncol(data) - 1, ncol(data) - 1))
   iterResult <- iterVine(vine, data, fit = selectCopula)

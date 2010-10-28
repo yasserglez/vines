@@ -30,7 +30,7 @@ setGeneric("rvine",
 rCVine <- function (vine, n) {
   # The implementation of this function is based on the Algorithm 1 described in
   # Aas, K., Czado, C., Frigessi, A. & Bakken, H. Pair-copula constructions of
-  # multiple dependence. Insurance Mathematics and Economics, 2007, Vol. 44,
+  # multiple dependence. Insurance Mathematics and Economics, 2009, Vol. 44,
   # pp. 182-198.
   
   # WARNING: This implementation includes an optimization to avoid evaluating
@@ -71,7 +71,7 @@ setMethod("rvine", "CVine", rCVine)
 rDVine <- function (vine, n) {
   # The implementation of this function is based on the Algorithm 2 described in 
   # Aas, K., Czado, C., Frigessi, A. & Bakken, H. Pair-copula constructions of 
-  # multiple dependence. Insurance Mathematics and Economics, 2007, Vol. 44, 
+  # multiple dependence. Insurance Mathematics and Economics, 2009, Vol. 44, 
   # pp. 182-198.
   
   # WARNING: This implementation includes an optimization to avoid evaluating 

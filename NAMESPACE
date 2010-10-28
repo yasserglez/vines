@@ -1,6 +1,5 @@
 # Imports
 
-import(methods)
 import(copula)
 import(ADGofTest)
 import(cubature)
