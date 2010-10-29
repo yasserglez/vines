@@ -21,8 +21,8 @@
 
 setGeneric("iterVine", 
     function (vine, data, 
-        fit = function (vine, i, j, x, y) vine@copulas[[i, j]], 
-        eval = function (vine, i, j, x, y) NULL) {
+        fit = function (vine, j, i, x, y) vine@copulas[[j, i]], 
+        eval = function (vine, j, i, x, y) NULL) {
       if (vine@trees == 0) {
         # Vine without trees, nothing to iterate for.
         list(vine = vine, evals = list())
@@ -39,14 +39,14 @@ iterCVine <- function (vine, data, fit, eval) {
   # multiple dependence. Insurance Mathematics and Economics, 2009, Vol. 44, 
   # pp. 182-198.
   
-  # Here the indexes of the second dimention of the v array differs with the 
+  # The indexes of the second dimention of the v array differs with the 
   # indexes of the first dimention of the v array in Algorithm 3 because of 
   # GNU R 1-based indexing.
   
-  # This implementation includes an optimization to avoid evaluating the 
-  # h-functions beyond the last tree of the vine that represents dependence 
-  # (given by the trees slot of the vine) because the h-functions of the 
-  # Independence copula always return the value of its first argument.
+  # This implementation avoids evaluating the h-functions beyond the last tree 
+  # of the vine that represents dependence (given by the trees slot of the vine) 
+  # because the h-functions of the Independence copula always return the value 
+  # of its first argument.
 
   evals <- list()
   d <- vine@dimension
@@ -81,15 +81,15 @@ iterDVine <- function (vine, data, fit, eval) {
   # multiple dependence. Insurance Mathematics and Economics, 2009, Vol. 44, 
   # pp. 182-198.
   
-  # Here the indexes of the second dimention of the v array differs with the 
-  # indexes of the first dimention of the v array in Algorithm 3 because of 
+  # The indexes of the second dimention of the v array differs with the 
+  # indexes of the first dimention of the v array in Algorithm 4 because of 
   # GNU R 1-based indexing.
   
-  # This implementation includes an optimization to avoid evaluating he 
-  # h-functions beyond the last tree of the vine that represents dependence 
-  # (given by the trees slot of the vine) because the h-functions of the 
-  # Independence copula always return the value of its first argument.  
-  
+  # This implementation avoids evaluating the h-functions beyond the last tree 
+  # of the vine that represents dependence (given by the trees slot of the vine) 
+  # because the h-functions of the Independence copula always return the value 
+  # of its first argument.
+
   evals <- list()
   d <- vine@dimension
   v <- array(NA, c(nrow(data), d, max(2 * d - 4, d)))
