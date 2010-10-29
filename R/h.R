@@ -24,9 +24,11 @@ hCopula <- function (copula, x, v) {
   zero <- .Machine$double.eps
   one <- 1 - .Machine$double.neg.eps
   
-  x[x < zero] <- zero; x[x > one] <- one
-  v[v < zero] <- zero; v[v > one] <- one    
-  
+  x[x < zero] <- zero
+  x[x > one] <- one
+  v[v < zero] <- zero
+  v[v > one] <- one    
+
   e <- new.env()
   assign("x", x, envir = e)
   assign("v", v, envir = e)
@@ -58,8 +60,10 @@ hNormalCopula <- function (copula, x, v) {
   zero <- .Machine$double.eps
   one <- 1 - .Machine$double.neg.eps
 
-  x[x < zero] <- zero; x[x > one] <- one
-  v[v < zero] <- zero; v[v > one] <- one  
+  x[x < zero] <- zero
+  x[x > one] <- one
+  v[v < zero] <- zero
+  v[v > one] <- one  
 
   rho <- copula@parameters
   rho[rho == -1] <- -1 + .Machine$double.eps
@@ -80,8 +84,10 @@ hTCopula <- function (copula, x, v) {
   zero <- .Machine$double.eps
   one <- 1 - .Machine$double.neg.eps
 
-  x[x < zero] <- zero; x[x > one] <- one
-  v[v < zero] <- zero; v[v > one] <- one    
+  x[x < zero] <- zero
+  x[x > one] <- one
+  v[v < zero] <- zero
+  v[v > one] <- one    
 
   rho <- copula@parameters[1]
   rho[rho == -1] <- -1 + .Machine$double.eps
@@ -103,12 +109,14 @@ hClaytonCopula <- function (copula, x, v) {
   zero <- .Machine$double.eps^0.15
   one <- 1 - .Machine$double.neg.eps^0.15
 
-  x[x < zero] <- zero; x[x > one] <- one
-  v[v < zero] <- zero; v[v > one] <- one  
+  x[x < zero] <- zero
+  x[x > one] <- one
+  v[v < zero] <- zero
+  v[v > one] <- one  
 
-  theta <- min(copula@parameters, 100)
+  theta <- copula@parameters
 
-  r <- v^(-theta-1) * (x^(-theta) + v^(-theta) - 1) ^ (-1 - 1/theta)
+  r <- v^(-theta-1) * (x^(-theta) + v^(-theta) - 1)^(-1 - 1/theta)
 
   r[x <= zero | r < zero] <- zero
   r[x >= one | r > one] <- one
@@ -123,13 +131,15 @@ hGumbelCopula <- function (copula, x, v) {
   zero <- .Machine$double.eps
   one <- 1 - .Machine$double.neg.eps
   
-  x[x < zero] <- zero; x[x > one] <- one
-  v[v < zero] <- zero; v[v > one] <- one
+  x[x < zero] <- zero
+  x[x > one] <- one
+  v[v < zero] <- zero
+  v[v > one] <- one  
   
   theta <- copula@parameters
 
-  r <- pcopula(copula, cbind(x, v)) * 1/v * (-log(v)) ^ (theta-1) *
-      ((-log(x))^theta + (-log(v))^theta) ^ (1/theta-1)
+  r <- pcopula(copula, cbind(x, v)) * 1/v * (-log(v))^(theta-1) *
+      ((-log(x))^theta + (-log(v))^theta)^(1/theta-1)
 
   r[x <= zero | r < zero] <- zero
   r[x >= one | r > one] <- one

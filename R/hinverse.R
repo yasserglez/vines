@@ -24,9 +24,11 @@ hinverseCopula <- function (copula, u, v) {
   zero <- .Machine$double.eps
   one <- 1 - .Machine$double.neg.eps
 
-  u[u < zero] <- zero; u[u > one] <- one
-  v[v < zero] <- zero; v[v > one] <- one
-  
+  u[u < zero] <- zero
+  u[u > one] <- one
+  v[v < zero] <- zero
+  v[v > one] <- one
+
   f <- function (x, u, v) abs(h(copula, x, v) - u)
   z <- function (i) optimize(f, c(zero, one), tol = 0.01, u = u[i], v = v[i])$minimum
   r <- sapply(seq(along = u), z)
@@ -53,8 +55,10 @@ hinverseNormalCopula <- function (copula, u, v) {
   zero <- .Machine$double.eps
   one <- 1 - .Machine$double.neg.eps
   
-  u[u < zero] <- zero; u[u > one] <- one
-  v[v < zero] <- zero; v[v > one] <- one 
+  u[u < zero] <- zero
+  u[u > one] <- one
+  v[v < zero] <- zero
+  v[v > one] <- one
   
   rho <- copula@parameters
   rho[rho == -1] <- -1 + .Machine$double.eps
@@ -75,8 +79,10 @@ hinverseTCopula <- function (copula, u, v) {
   zero <- .Machine$double.eps
   one <- 1 - .Machine$double.neg.eps
   
-  u[u < zero] <- zero; u[u > one] <- one
-  v[v < zero] <- zero; v[v > one] <- one
+  u[u < zero] <- zero
+  u[u > one] <- one
+  v[v < zero] <- zero
+  v[v > one] <- one
 
   rho <- copula@parameters[1]
   rho[rho == -1] <- -1 + .Machine$double.eps
@@ -98,8 +104,10 @@ hinverseClaytonCopula <- function (copula, u, v) {
   zero <- .Machine$double.eps^0.15
   one <- 1 - .Machine$double.neg.eps^0.15
   
-  u[u < zero] <- zero; u[u > one] <- one
-  v[v < zero] <- zero; v[v > one] <- one
+  u[u < zero] <- zero
+  u[u > one] <- one
+  v[v < zero] <- zero
+  v[v > one] <- one
 
   theta <- min(copula@parameters, 100)
 

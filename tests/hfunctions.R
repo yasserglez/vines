@@ -18,15 +18,13 @@ copulas <- c(
     apply(merge(seq(from = -1, to = 1, length = nParams),
             seq(from = 1, to = 500, length = nParams)), 1,
         function (p) tCopula(p[1], df = p[2], df.fixed = TRUE)),
-    lapply(seq(from = .Machine$double.eps^0.5, to = 100, length = nParams),
+    lapply(seq(from = 0, to = 100, length = nParams),
         function (theta) claytonCopula(theta)),
     lapply(seq(from = 1, to = 100, length = nParams),
         function (theta) gumbelCopula(theta)),    
     list(indepCopula()))
 
 for (copula in copulas) {
-  print(copula)
-  
   # Checking the h-function.
 
   # Check h(0, v) == 0.
