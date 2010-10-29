@@ -29,24 +29,24 @@ for (copula in copulas) {
 
   # Check h(0, v) == 0.
   u <- h(copula, zeroes, vValues)
-  try(stopifnot(isTRUE(all.equal(u, zeroes, tolerance))))
+  stopifnot(isTRUE(all.equal(u, zeroes, tolerance)))
 
   # Check h(1, v) == 1.
   u <- h(copula, ones, vValues)
-  try(stopifnot(isTRUE(all.equal(u, ones, tolerance))))
+  stopifnot(isTRUE(all.equal(u, ones, tolerance)))
 
   # Check for finite return values in (0,1).
   u <- h(copula, hArgs[ , 1], hArgs[ , 2])
-  try(stopifnot(all(is.finite(u))))
-  try(stopifnot(all(u > 0 & u < 1)))
+  stopifnot(all(is.finite(u)))
+  stopifnot(all(u > 0 & u < 1))
 
   # Checking the inverse of the h-functions.
 
   # Check for finite return values in (0,1).
   x <- hinverse(copula, u, hArgs[ , 2])
-  try(stopifnot(all(is.finite(x))))
-  try(stopifnot(all(x > 0 & x < 1)))
+  stopifnot(all(is.finite(x)))
+  stopifnot(all(x > 0 & x < 1))
 
   # Cross validation.
-  # try(stopifnot(all.equal(x, hArgs[ , 1], tolerance)))
+  # stopifnot(all.equal(x, hArgs[ , 1], tolerance))
 }

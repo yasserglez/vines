@@ -66,8 +66,8 @@ hinverseNormalCopula <- function (copula, u, v) {
   
   r <- pnorm(qnorm(u) * sqrt(1 - rho^2) + rho*qnorm(v))
   
-  r[r < zero] <- zero
-  r[r > one] <- one
+  r[u <= zero | r < zero] <- zero
+  r[u >= one | r > one] <- one
 
   r
 }
@@ -91,10 +91,10 @@ hinverseTCopula <- function (copula, u, v) {
 
   r <- pt(qt(u, df+1) * sqrt(((df + qt(v, df)^2) * (1 - rho^2)) / (df+1)) + rho*qt(v, df), df)
   
-  r[r < zero] <- zero
-  r[r > one] <- one
+  r[u <= zero | r < zero] <- zero
+  r[u >= one | r > one] <- one
   
-  r  
+  r
 }
 
 setMethod("hinverse", "tCopula", hinverseTCopula)
@@ -113,8 +113,8 @@ hinverseClaytonCopula <- function (copula, u, v) {
 
   r <- ((u * v^(theta+1)) ^ (-theta/(theta+1)) + 1 - v^(-theta)) ^ (-1/theta)
   
-  r[r < zero] <- zero
-  r[r > one] <- one
+  r[u <= zero | r < zero] <- zero
+  r[u >= one | r > one] <- one
   
   r
 }
