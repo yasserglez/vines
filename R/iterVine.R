@@ -23,7 +23,7 @@ setGeneric("iterVine",
     function (vine, data, 
         fit = function (vine, j, i, x, y) vine@copulas[[j, i]], 
         eval = function (vine, j, i, x, y) NULL) {
-      if (vine@trees == 0) {
+      if (identical(vine@trees, 0)) {
         # Vine without trees, nothing to iterate for.
         list(vine = vine, evals = list())
       } else {
@@ -61,7 +61,7 @@ iterCVine <- function (vine, data, fit, eval) {
       evals <- c(evals, list(eval(vine, j, i, v[ , j, 1], v[ , j, i+1])))
     }
 
-    if (j == vine@trees) break
+    if (identical(j, vine@trees)) break
 
     # Compute observations for the next tree.
     for (i in seq(length = d - j)) {
@@ -113,7 +113,7 @@ iterDVine <- function (vine, data, fit, eval) {
       evals <- c(evals, list(eval(vine, j, i, v[ , j, 2*i-1], v[ , j, 2*i])))
     }
 
-    if (j == vine@trees) break
+    if (identical(j, vine@trees)) break
 
     # Compute observations for the next tree.
     v[ , j+1, 1] <- h(vine@copulas[[j, 1]], v[ , j, 1], v[ , j, 2])

@@ -66,7 +66,7 @@ fitVineML <- function (type, data, trees = ncol(data) - 1,
     }
 
     L <- function (x, vine, data, lowerParams, upperParams) {
-      if (all(x >= lowerParams) && all(x <= upperParams)) {
+      if (all(is.finite(x) & x >= lowerParams & x <= upperParams)) {
         parameters(vine) <- x
         logLikVine(vine, data)
       } else {

@@ -33,7 +33,7 @@ setMethod("show", "gofVine", showGofVine)
 gofVinePIT <- function (vine, data, statistic = "breymann") {
   Z <- pitVine(vine, data)
 
-  if (statistic == "breymann") {
+  if (identical(statistic, "breymann")) {
     n <- ncol(Z)
     S <- rowSums(qnorm(Z) ^ 2)
     adResult <- ad.test(S, pchisq, df = n)
@@ -49,7 +49,7 @@ gofVinePIT <- function (vine, data, statistic = "breymann") {
 
 
 gofVine <- function (vine, data, method = "pit", ...) {
-  if (method == "pit") {
+  if (identical(method, "pit")) {
     gofVinePIT(vine, data, ...)
   } else {
     stop(paste("invalid", sQuote(method), "goodness-of-fit method"))

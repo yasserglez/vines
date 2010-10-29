@@ -17,7 +17,7 @@
 setGeneric("pitVine",
     function (vine, u)  {
       if (is.vector(u)) u <- matrix(u, nrow = 1)
-      if (vine@trees == 0) u else standardGeneric("pitVine")
+      if (identical(vine@trees, 0)) u else standardGeneric("pitVine")
     },
     signature = "vine")
 
@@ -54,7 +54,7 @@ pitDVine <- function (vine, u) {
   z[ , 2] <- h(vine@copulas[[1, 1]], u[ , 2], u[ , 1])
   
   # Stop if there are only 2 variables.
-  if (d == 2) return(z)  
+  if (identical(d, 2)) return(z)  
   
   for (t in seq(length = T)) {
     v[2, 1] <- u[t, 2]
@@ -67,7 +67,7 @@ pitDVine <- function (vine, u) {
         }
       }
       
-      if (i == d) break
+      if (identical(i, d)) break
       
       v[i, 1] <- u[t, i]
       if (vine@trees >= 2) v[i, 2] <- h(vine@copulas[[1, i-1]], v[i-1, 1], v[i, 1])

@@ -55,7 +55,7 @@ orderingVineGreedy <- function (type, data, according = "kendall") {
   values[i, j] <- -Inf
   values[j, i] <- -Inf
   
-  if (type == "DVine") {
+  if (identical(type, "DVine")) {
     ordering <- c(i, j)
     while (length(ordering) < n) {
       i <- ordering[1]
@@ -76,7 +76,7 @@ orderingVineGreedy <- function (type, data, according = "kendall") {
         ordering <- c(ordering, jj)
       }
     }
-  } else if (type == "CVine") {
+  } else if (identical(type, "CVine")) {
     if (max(values[i, ]) >= max(values[j, ])) {
       ii <- which.max(values[i, ])
       ordering <- c(i, ii, j, seq(to = n)[c(-i, -ii, -j)])
@@ -91,9 +91,9 @@ orderingVineGreedy <- function (type, data, according = "kendall") {
 
 
 orderingVine <- function (type, data, method = "canonical", ...) {
-  if (type %in% c("CVine", "DVine") && method == "greedy") {
+  if (type %in% c("CVine", "DVine") && identical(method, "greedy")) {
     orderingVineGreedy(type, data, ...)
-  } else if (type %in% c("CVine", "DVine") && method == "canonical") {
+  } else if (type %in% c("CVine", "DVine") && identical(method, "canonical")) {
     orderingVineCanonical(type, data)
   } else {
     stop(paste("invalid", sQuote(method), "ordering method for", type))
