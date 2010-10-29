@@ -24,7 +24,7 @@ fitVine <- function (type, data, method = "ml", ...) {
   if (type %in% c("CVine", "DVine") && identical(method, "ml")) {
     fitVineML(type, data, ...)
   } else {
-    stop(paste("invalid", sQuote(method), "fit method for", type))
+    stop("invalid ", sQuote(method), " fit method for ", sQuote(type))
   }
 }
 

@@ -43,7 +43,7 @@ orderingVineGreedy <- function (type, data, according = "kendall") {
       }
     }
   } else {
-    stop('invalid argument of the according argument')
+    stop("invalid value of the 'according' argument")
   }
 
   # Try to couple the pairs with the maximum value in the values matrix, 
@@ -96,7 +96,7 @@ orderingVine <- function (type, data, method = "canonical", ...) {
   } else if (type %in% c("CVine", "DVine") && identical(method, "canonical")) {
     orderingVineCanonical(type, data)
   } else {
-    stop(paste("invalid", sQuote(method), "ordering method for", type))
+    stop("invalid ", sQuote(method), " ordering method for ", sQuote(type))
   }
 }
 
