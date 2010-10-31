@@ -18,7 +18,7 @@ copulas <- c(
     apply(merge(seq(from = -1, to = 1, length = nParams),
             seq(from = 1, to = 500, length = nParams)), 1,
         function (p) tCopula(p[1], df = p[2], df.fixed = TRUE)),
-    lapply(seq(from = 0, to = 100, length = nParams),
+    lapply(seq(from = .Machine$double.xmin, to = 100, length = nParams),
         function (theta) claytonCopula(theta)),
     lapply(seq(from = 1, to = 100, length = nParams),
         function (theta) gumbelCopula(theta)),    
@@ -48,5 +48,5 @@ for (copula in copulas) {
   stopifnot(all(x > 0 & x < 1))
 
   # Cross validation.
-  # stopifnot(all.equal(x, hArgs[ , 1], tolerance))
+  # stopifnot(all.equal(x[xx], hArgs[ , 1][xx], tolerance))
 }

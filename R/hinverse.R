@@ -101,22 +101,26 @@ setMethod("hinverse", "tCopula", hinverseTCopula)
 
 
 hinverseClaytonCopula <- function (copula, u, v) {
-  zero <- .Machine$double.eps^0.15
-  one <- 1 - .Machine$double.neg.eps^0.15
+  theta <- copula@parameters
   
-  u[u < zero] <- zero
-  u[u > one] <- one
-  v[v < zero] <- zero
-  v[v > one] <- one
+  if (theta < .Machine$double.eps) {
+    x
+  } else {  
+    zero <- .Machine$double.eps^0.15
+    one <- 1 - .Machine$double.neg.eps^0.15
+    
+    u[u < zero] <- zero
+    u[u > one] <- one
+    v[v < zero] <- zero
+    v[v > one] <- one
 
-  theta <- min(copula@parameters, 100)
-
-  r <- ((u * v^(theta+1)) ^ (-theta/(theta+1)) + 1 - v^(-theta)) ^ (-1/theta)
-  
-  r[u <= zero | r < zero] <- zero
-  r[u >= one | r > one] <- one
-  
-  r
+    r <- ((u * v^(theta+1))^(-theta/(theta+1)) + 1 - v^(-theta))^(-1/theta)
+    
+    r[u <= zero | r < zero] <- zero
+    r[u >= one | r > one] <- one
+    
+    r
+  }
 }
 
 setMethod("hinverse", "claytonCopula", hinverseClaytonCopula)
