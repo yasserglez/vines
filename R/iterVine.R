@@ -20,9 +20,7 @@
 # indexes of the copula and the observations of each variable as arguments.
 
 setGeneric("iterVine", 
-    function (vine, data, 
-        fit = function (vine, j, i, x, y) vine@copulas[[j, i]], 
-        eval = function (vine, j, i, x, y) NULL) {
+    function (vine, data, fit = NULL, eval = NULL) {
       if (identical(vine@trees, 0)) {
         # Vine without trees, nothing to iterate for.
         list(vine = vine, evals = list())
@@ -33,7 +31,7 @@ setGeneric("iterVine",
     signature = "vine")
 
 
-iterCVine <- function (vine, data, fit, eval) {
+iterCVine <- function (vine, data, fit = NULL, eval = NULL) {
   # The implementation of this function is based on the Algorithm 3 described in 
   # Aas, K., Czado, C., Frigessi, A. & Bakken, H. Pair-copula constructions of 
   # multiple dependence. Insurance Mathematics and Economics, 2009, Vol. 44, 
@@ -57,8 +55,12 @@ iterCVine <- function (vine, data, fit, eval) {
   }
   for (j in seq(length = vine@trees)) {
     for (i in seq(length = d - j)) {
-      vine@copulas[[j, i]] <- fit(vine, j, i, v[ , j, 1], v[ , j, i+1])
-      evals <- c(evals, list(eval(vine, j, i, v[ , j, 1], v[ , j, i+1])))
+      if (!is.null(fit)) {
+        vine@copulas[[j, i]] <- fit(vine, j, i, v[ , j, 1], v[ , j, i+1])
+      }
+      if (!is.null(eval)) {
+        evals <- c(evals, list(eval(vine, j, i, v[ , j, 1], v[ , j, i+1])))
+      }
     }
 
     if (identical(j, vine@trees)) break
@@ -75,7 +77,7 @@ iterCVine <- function (vine, data, fit, eval) {
 setMethod("iterVine", "CVine", iterCVine)
 
 
-iterDVine <- function (vine, data, fit, eval) {
+iterDVine <- function (vine, data, fit = NULL, eval = NULL) {
   # The implementation of this function is based on the Algorithm 4 described in 
   # Aas, K., Czado, C., Frigessi, A. & Bakken, H. Pair-copula constructions of 
   # multiple dependence. Insurance Mathematics and Economics, 2009, Vol. 44, 
@@ -98,8 +100,12 @@ iterDVine <- function (vine, data, fit, eval) {
     v[ , 1, i] <- data[ , i]
   }
   for (i in seq(length = d - 1)) {
-    vine@copulas[[1, i]] <- fit(vine, 1, i, v[ , 1, i], v[ , 1, i+1])
-    evals <- c(evals, list(eval(vine, 1, i, v[ , 1, i], v[ , 1, i+1])))    
+    if (!is.null(fit)) {
+      vine@copulas[[1, i]] <- fit(vine, 1, i, v[ , 1, i], v[ , 1, i+1])
+    }
+    if (!is.null(eval)) {
+      evals <- c(evals, list(eval(vine, 1, i, v[ , 1, i], v[ , 1, i+1])))    
+    }
   }
   v[ , 2, 1] <- h(vine@copulas[[1, 1]], v[ , 1, 1], v[ , 1, 2])
   for (k in seq(length = max(d - 3, 0))) {
@@ -109,8 +115,12 @@ iterDVine <- function (vine, data, fit, eval) {
   v[ , 2, 2*d-4] <- h(vine@copulas[[1, d-1]], v[ , 1, d], v[ , 1, d-1])
   for (j in seq(from = 2, length = vine@trees - 1)) {
     for (i in seq(length = d - j)) {
-      vine@copulas[[j, i]] <- fit(vine, j, i, v[ , j, 2*i-1], v[ , j, 2*i])
-      evals <- c(evals, list(eval(vine, j, i, v[ , j, 2*i-1], v[ , j, 2*i])))
+      if (!is.null(fit)) {
+        vine@copulas[[j, i]] <- fit(vine, j, i, v[ , j, 2*i-1], v[ , j, 2*i])
+      }
+      if (!is.null(eval)) {
+        evals <- c(evals, list(eval(vine, j, i, v[ , j, 2*i-1], v[ , j, 2*i])))
+      }
     }
 
     if (identical(j, vine@trees)) break

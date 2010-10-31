@@ -45,9 +45,10 @@ fitVineML <- function (type, data, trees = ncol(data) - 1,
   # Aas, K., Czado, C., Frigessi, A. and Bakken, H. Pair-copula constructions 
   # of multiple dependence. Insurance Mathematics and Economics, 2009, Vol. 44, 
   # pp. 182-198.
+  fitCopulaWrapper <- function (vine, j, i, x, y) fitCopula(j, i, x, y)
   vine <- new(type, dimension = ncol(data), trees = trees,
       copulas = matrix(list(), ncol(data) - 1, ncol(data) - 1))
-  vine <- iterVine(vine, data, fit = fitCopula)$vine
+  vine <- iterVine(vine, data, fit = fitCopulaWrapper)$vine
   startingParams <- parameters(vine)
 
   if (nzchar(optimMethod) && length(startingParams) > 0) {
