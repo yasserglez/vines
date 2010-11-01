@@ -14,12 +14,12 @@
 # You should have received a copy of the GNU General Public License along with 
 # this program. If not, see <http://www.gnu.org/licenses/>.
 
-# Internal function that computes observations for the bivariate dependencies 
-# modeled by the copulas in the vine (using the observations of the original 
-# variables in the data matrix) and executes the f function with the vine, the 
+# Internal function that computes observations for the bivariate dependencies
+# modeled by the copulas in the vine (using the observations of the original
+# variables in the data matrix) and executes the f function with the vine, the
 # indexes of the copula and the observations of each variable as arguments.
 
-setGeneric("iterVine", 
+setGeneric("iterVine",
     function (vine, data, fit = NULL, eval = NULL) {
       if (identical(vine@trees, 0)) {
         # Vine without trees, nothing to iterate for.

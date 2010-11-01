@@ -104,7 +104,7 @@ hinverseClaytonCopula <- function (copula, u, v) {
   theta <- copula@parameters
   
   if (theta < .Machine$double.eps) {
-    x
+    u
   } else {  
     zero <- .Machine$double.eps^0.15
     one <- 1 - .Machine$double.neg.eps^0.15
