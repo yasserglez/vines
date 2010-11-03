@@ -16,7 +16,7 @@
 
 setGeneric("rvine",
     function (vine, n) {
-      if (identical(vine@trees, 0)) {
+      if (vine@trees == 0) {
         # Vine without trees, Independent vine.
         d <- vine@dimension
         matrix(runif(n * d), n, d)
@@ -54,7 +54,7 @@ rCVine <- function (vine, n) {
       }
       result[s, i] <- v[i, 1]
       
-      if (identical(i, d)) break
+      if (i == d) break
 
       for (j in seq(from = 1, to = min(vine@trees, i - 1))) {
         v[i, j+1] <- h(vine@copulas[[j, i-j]], v[i, j], v[j, j])
@@ -88,7 +88,7 @@ rDVine <- function (vine, n) {
   result[ , 2] <- hinverse(vine@copulas[[1, 1]], w[ , 2], w[ , 1])
   
   # Stop if there are only 2 variables.
-  if (identical(d, 2)) return(result)
+  if (d == 2) return(result)
   
   for (s in seq(length = n)) { # Loop over samples.
     v[1, 1] <- result[s, 1]
@@ -104,7 +104,7 @@ rDVine <- function (vine, n) {
       v[i, 1] <- hinverse(vine@copulas[[1, i-1]], v[i, 1], v[i-1, 1])
       result[s, i] <- v[i, 1]
       
-      if (identical(i, d)) break
+      if (i == d) break
 
       if (vine@trees >= 2) v[i, 2] <- h(vine@copulas[[1, i-1]], v[i-1, 1], v[i, 1])
       if (vine@trees >= 3) v[i, 3] <- h(vine@copulas[[1, i-1]], v[i, 1], v[i-1, 1])

@@ -17,7 +17,7 @@
 setGeneric("dvine",
     function (vine, u) {
       if (is.vector(u)) u <- matrix(u, nrow = 1)
-      if (identical(vine@trees, 0)) {
+      if (vine@trees == 0) {
         # Vine without trees, the product of the uniform marginal densities.
         rep(1, nrow(u))
       } else {
