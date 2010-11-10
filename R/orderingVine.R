@@ -21,13 +21,13 @@ orderingVineCanonical <- function (type, data) {
 
 orderingVineGreedy <- function (type, data, according = "kendall") {
   if (according %in% c("pearson", "kendall", "spearman")) {
-    # Calculate the value of the given measure of dependence between each
-    # pair of variables and couple the variables with the largest modular values.
+    # Calculate the value of the given measure of association between each pair
+    # of variables and couple the variables with the largest modular values.
     values <- abs(cor(data, method = according))
     diag(values) <- -Inf
   } else if (according %in% c("df")) {
-    # Fit bivariate t copulas to each pair of variables and copule the variables
-    # with the smaller degrees of freedom.
+    # Fit bivariate t copulas to each pair of variables and couple the 
+    # variables with the smaller values of the degrees of freedom.
     values <- matrix(-Inf, ncol(data), ncol(data))
     for (i in seq(length = ncol(data))) {
       for (j in seq(length = max(i - 1, 0))) {
@@ -43,7 +43,7 @@ orderingVineGreedy <- function (type, data, according = "kendall") {
       }
     }
   } else {
-    stop("invalid value of the 'according' argument")
+    stop("invalid value ", dQuote(according), " for the according argument")
   }
 
   # Try to couple the pairs with the maximum value in the values matrix, 
@@ -85,7 +85,7 @@ orderingVineGreedy <- function (type, data, according = "kendall") {
       ordering <- c(j, jj, i, seq(to = n)[c(-j, -jj, -i)])
     }
   }
-  
+
   ordering
 }
 
@@ -96,7 +96,7 @@ orderingVine <- function (type, data, method = "canonical", ...) {
   } else if (type %in% c("CVine", "DVine") && identical(method, "canonical")) {
     orderingVineCanonical(type, data)
   } else {
-    stop("invalid ", sQuote(method), " ordering method for ", sQuote(type))
+    stop("invalid ordering method ", dQuote(method), " for ", dQuote(type))
   }
 }
 

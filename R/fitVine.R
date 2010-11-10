@@ -17,14 +17,26 @@
 setClass("fitVine",
     representation = representation(
         vine = "Vine",
+        sampleSize = "numeric",
         method = "character"))
+
+
+showFitVine <- function (object) {
+  cat("Vine Inference\n\n")
+  cat("Method:", object@method, "\n")
+  cat("Vine type:", object@vine@name, "\n")
+  cat("No. of variables:", object@vine@dimension, "\n")
+  cat("No. of observations:", object@sampleSize, "\n")
+}
+
+setMethod("show", "fitVine", showFitVine)
 
 
 fitVine <- function (type, data, method = "ml", ...) {
   if (type %in% c("CVine", "DVine") && identical(method, "ml")) {
     fitVineML(type, data, ...)
   } else {
-    stop("invalid ", sQuote(method), " fit method for ", sQuote(type))
+    stop("invalid fit method ", dQuote(method), " for ", dQuote(type))
   }
 }
 

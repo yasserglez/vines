@@ -22,7 +22,7 @@ setClass("gofVine",
 
 
 showGofVine <- function (object) {
-  cat("Result of a goodness-of-fit test for vines\n")
+  cat("Vine Goodness-of-fit Test\n\n")
   cat("Method:", object@method, "\n")
   cat("Statistic:", object@statistic, "with p-value", object@pvalue, "\n")
 }
@@ -42,8 +42,8 @@ gofVinePIT <- function (vine, data, statistic = "breymann") {
         pvalue = adResult$p.value,
         statistic = adResult$statistic)
   } else {
-    stop("invalid ", sQuote(statistic), 
-        " statistic for goodness-of-fit method based on the PIT")
+    stop("invalid statistic ", dQuote(statistic),
+        " for the goodness-of-fit method based on the PIT")
   }
 }
 
@@ -52,6 +52,6 @@ gofVine <- function (vine, data, method = "pit", ...) {
   if (identical(method, "pit")) {
     gofVinePIT(vine, data, ...)
   } else {
-    stop("invalid ", sQuote(method), " goodness-of-fit method")
+    stop("invalid goodness-of-fit method ",  dQuote(method))
   }
 }
