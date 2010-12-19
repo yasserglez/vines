@@ -75,7 +75,7 @@ hinverseNormalCopula <- function (copula, u, v) {
 setMethod("hinverse", "normalCopula", hinverseNormalCopula)
 
 
-hinverseTCopula <- function (copula, u, v) {
+hinversetCopula <- function (copula, u, v) {
   zero <- .Machine$double.eps
   one <- 1 - .Machine$double.neg.eps
   
@@ -97,7 +97,7 @@ hinverseTCopula <- function (copula, u, v) {
   r
 }
 
-setMethod("hinverse", "tCopula", hinverseTCopula)
+setMethod("hinverse", "tCopula", hinversetCopula)
 
 
 hinverseClaytonCopula <- function (copula, u, v) {

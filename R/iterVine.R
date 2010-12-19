@@ -37,8 +37,8 @@ iterCVine <- function (vine, data, fit = NULL, eval = NULL) {
   # multiple dependence. Insurance Mathematics and Economics, 2009, Vol. 44, 
   # pp. 182-198.
   
-  # The indexes of the second dimention of the v array differs with the 
-  # indexes of the first dimention of the v array in Algorithm 3 because of 
+  # The indexes of the second dimension of the v array differs with the 
+  # indexes of the first dimension of the v array in Algorithm 3 because of 
   # GNU R 1-based indexing.
   
   # This implementation avoids evaluating the h-functions beyond the last tree 
@@ -83,8 +83,8 @@ iterDVine <- function (vine, data, fit = NULL, eval = NULL) {
   # multiple dependence. Insurance Mathematics and Economics, 2009, Vol. 44, 
   # pp. 182-198.
   
-  # The indexes of the second dimention of the v array differs with the 
-  # indexes of the first dimention of the v array in Algorithm 4 because of 
+  # The indexes of the second dimension of the v array differs with the 
+  # indexes of the first dimension of the v array in Algorithm 4 because of 
   # GNU R 1-based indexing.
   
   # This implementation avoids evaluating the h-functions beyond the last tree 

@@ -27,15 +27,14 @@ setClass("fitVineML",
         method = "ml"))
 
 
-showFitVineML <- function (object) {
-  showFitVine(object)
-  cat("Optimization method:", object@optimMethod, "\n")
-  cat("Convergence code:", object@optimConv, "\n")
-  cat("Initial log-likelihood:", object@startLogLik, "\n")
-  cat("Final log-likelihood:", object@finalLogLik, "\n")
-}
-
-setMethod("show", "fitVineML", showFitVineML)
+setMethod("show", "fitVineML", 
+    function (object) {
+      showFitVine(object)
+      cat("Optimization method:", object@optimMethod, "\n")
+      cat("Convergence code:", object@optimConv, "\n")
+      cat("Initial log-likelihood:", object@startLogLik, "\n")
+      cat("Final log-likelihood:", object@finalLogLik, "\n")
+    })
 
 
 # Function called by iterVine to evaluate the log-likelihood of each copula.

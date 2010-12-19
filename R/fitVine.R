@@ -21,15 +21,14 @@ setClass("fitVine",
         method = "character"))
 
 
-showFitVine <- function (object) {
-  cat("Vine Inference\n\n")
-  cat("Method:", object@method, "\n")
-  cat("Vine type:", object@vine@name, "\n")
-  cat("No. of variables:", object@vine@dimension, "\n")
-  cat("No. of observations:", object@sampleSize, "\n")
-}
-
-setMethod("show", "fitVine", showFitVine)
+setMethod("show", "fitVine",
+    function (object) {
+      cat("Vine Inference\n\n")
+      cat("Method:", object@method, "\n")
+      cat("Vine type:", object@vine@type, "\n")
+      cat("Dimension:", object@vine@dimension, "\n")
+      cat("Observations:", object@sampleSize, "\n")
+    })
 
 
 fitVine <- function (type, data, method = "ml", ...) {

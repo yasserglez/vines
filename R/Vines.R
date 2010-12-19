@@ -17,27 +17,28 @@
 setClass("Vine",
     contains = "VIRTUAL",
     representation = representation(
-        name = "character",
+        type = "character",
         dimension = "numeric",
+        dimensionNames = "character",
         copulas = "matrix",
         trees = "numeric"),
     prototype = prototype(
-        name = "Vine"))
+        type = "Vine"))
 
 
 setClass("RVine",
     contains = "Vine",
     prototype = prototype(
-        name = "Regular vine"))
+        type = "Regular vine"))
 
 
 setClass("CVine", 
     contains = "RVine",
     prototype = prototype(
-        name = "Canonical vine"))
+        type = "Canonical vine"))
 
 
 setClass("DVine",
     contain = "RVine",
     prototype = prototype(
-        name = "D-vine"))
+        type = "D-vine"))

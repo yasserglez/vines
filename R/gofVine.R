@@ -21,13 +21,12 @@ setClass("gofVine",
         statistic = "numeric"))
 
 
-showGofVine <- function (object) {
-  cat("Vine Goodness-of-fit Test\n\n")
-  cat("Method:", object@method, "\n")
-  cat("Statistic:", object@statistic, "with p-value", object@pvalue, "\n")
-}
-
-setMethod("show", "gofVine", showGofVine)
+setMethod("show", "gofVine",
+    function (object) {
+      cat("Vine Goodness-of-fit Test\n\n")
+      cat("Method:", object@method, "\n")
+      cat("Statistic:", object@statistic, "with p-value", object@pvalue, "\n")
+    })
 
 
 gofVinePIT <- function (vine, data, statistic = "breymann") {

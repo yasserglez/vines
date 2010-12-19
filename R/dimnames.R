@@ -14,23 +14,19 @@
 # You should have received a copy of the GNU General Public License along with 
 # this program. If not, see <http://www.gnu.org/licenses/>.
 
-parameters <- function (vine) {
-  f <- function (x) if (is.null(x)) numeric(0) else x@parameters
-  unlist(lapply(vine@copulas, f))
-}
+setMethod("dimnames", "Vine",
+    function (x) {
+      object@dimensionNames
+    })
 
 
-`parameters<-` <- function (vine, value) {
-  k <- 1
-  for (i in seq(along = vine@copulas)) {
-    if (!is.null(vine@copulas[[i]])) {
-      n <- length(vine@copulas[[i]]@parameters)
-      if (n > 0) {
-        params <- value[seq(from = k, to = k + n - 1)]
-        vine@copulas[[i]]@parameters <- params
-        k <- k + n
+setMethod("dimnames<-", "Vine", 
+    function (x, value) {
+      dimensionNames <- as.character(value)
+      if (length(dimensionNames) == x@dimension) {
+        x@dimensionNames <- dimensionNames
+        x
+      } else {
+        stop("length of the argument not equal to the dimension of the vine")
       }
-    }
-  }
-  vine
-}
+    })

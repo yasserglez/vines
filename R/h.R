@@ -80,7 +80,7 @@ hNormalCopula <- function (copula, x, v) {
 setMethod("h", "normalCopula", hNormalCopula)
 
 
-hTCopula <- function (copula, x, v) {
+htCopula <- function (copula, x, v) {
   zero <- .Machine$double.eps
   one <- 1 - .Machine$double.neg.eps
 
@@ -102,7 +102,7 @@ hTCopula <- function (copula, x, v) {
   r
 }
 
-setMethod("h", "tCopula", hTCopula)
+setMethod("h", "tCopula", htCopula)
 
 
 hClaytonCopula <- function (copula, x, v) {
