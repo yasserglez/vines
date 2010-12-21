@@ -82,7 +82,7 @@ fitVineML <- function (type, data, trees = ncol(data) - 1,
       upper <- Inf
     }
 
-    f <- function (x, vine, data, lowerParams, upperParams) {
+    logLik <- function (x, vine, data, lowerParams, upperParams) {
       if (all(is.finite(x) & x >= lowerParams & x <= upperParams)) {
         parameters(vine) <- x
         logLikVine(vine, data)
@@ -92,7 +92,7 @@ fitVineML <- function (type, data, trees = ncol(data) - 1,
     }
 
     optimControl <- c(optimControl, fnscale = -1)
-    optimResult <- optim(startParams, f, lower = lower, upper = upper,
+    optimResult <- optim(startParams, logLik, lower = lower, upper = upper,
         method = optimMethod, control = optimControl, vine = vine, data = data,
         lowerParams = lowerParams, upperParams = upperParams)
 
@@ -100,7 +100,7 @@ fitVineML <- function (type, data, trees = ncol(data) - 1,
 
     fit <- new("fitVineML", 
         vine = vine,
-        sampleSize = nrow(data),
+        observations = nrow(data),
         optimMethod = optimMethod,
         optimConv = optimResult$convergence,
         startParams = startParams,
@@ -108,10 +108,10 @@ fitVineML <- function (type, data, trees = ncol(data) - 1,
         finalParams = optimResult$par,
         finalLogLik = optimResult$value)
   } else {
-    # Without parameters or optimization disabled, optimization not executed.
+    # Without parameters or optimization disabled.
     fit <- new("fitVineML", 
         vine = vine,
-        sampleSize = nrow(data), 
+        observations = nrow(data), 
         optimMethod = optimMethod,
         optimConv = 0,
         startParams = startParams,

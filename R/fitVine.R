@@ -17,7 +17,7 @@
 setClass("fitVine",
     representation = representation(
         vine = "Vine",
-        sampleSize = "numeric",
+        observations = "numeric",
         method = "character"))
 
 
@@ -27,7 +27,7 @@ setMethod("show", "fitVine",
       cat("Method:", object@method, "\n")
       cat("Vine type:", object@vine@type, "\n")
       cat("Dimension:", object@vine@dimension, "\n")
-      cat("Observations:", object@sampleSize, "\n")
+      cat("Observations:", object@observations, "\n")
     })
 
 
