@@ -59,8 +59,9 @@ fitVineML <- function (type, data, trees = ncol(data) - 1,
   # of multiple dependence. Insurance Mathematics and Economics, 2009, Vol. 44, 
   # pp. 182-198.
   selectCopulaWrapper <- function (vine, j, i, x, y) selectCopula(j, i, x, y)
-  vine <- new(type, dimension = ncol(data), trees = trees,
+  vine <- Vine(type, dimension = ncol(data), trees = trees,
       copulas = matrix(list(), ncol(data) - 1, ncol(data) - 1))
+  dimnames(vine) <- colnames(data)
   iterVineResult <- iterVine(vine, data, 
       fit = selectCopulaWrapper, eval = evalLogLikCopula)
   vine <- iterVineResult$vine

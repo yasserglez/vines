@@ -23,7 +23,8 @@ setMethod("dimnames", "Vine",
 setMethod("dimnames<-", "Vine", 
     function (x, value) {
       dimensionNames <- as.character(value)
-      if (length(dimensionNames) == x@dimension) {
+      if (length(dimensionNames) == 0 || 
+          length(dimensionNames) == x@dimension) {
         x@dimensionNames <- dimensionNames
         x
       } else {

@@ -25,20 +25,37 @@ setClass("Vine",
     prototype = prototype(
         type = "Vine"))
 
-
 setClass("RVine",
     contains = "Vine",
     prototype = prototype(
         type = "Regular vine"))
-
 
 setClass("CVine", 
     contains = "RVine",
     prototype = prototype(
         type = "Canonical vine"))
 
-
 setClass("DVine",
     contain = "RVine",
     prototype = prototype(
         type = "D-vine"))
+
+
+Vine <- function (type, dimension = 2, trees = dimension - 1,
+    copulas = matrix(list(indepCopula()), dimension - 1, dimension - 1)) {
+  if (type %in% c("CVine", "DVine")) {
+    new(type, dimension = dimension, copulas = copulas, trees = trees)
+  } else {
+    stop("invalid vine type ", dQuote(type))
+  }
+}
+  
+CVine <- function (dimension = 2, trees = dimension - 1,
+    copulas = matrix(list(indepCopula()), dimension - 1, dimension - 1)) {
+  Vine("CVine", dimension = dimension, trees = trees, copulas = copulas)
+}
+  
+DVine <- function (dimension = 2, trees = dimension - 1,
+    copulas = matrix(list(indepCopula()), dimension - 1, dimension - 1)) {
+  Vine("DVine", dimension = dimension, trees = trees, copulas = copulas)
+}
