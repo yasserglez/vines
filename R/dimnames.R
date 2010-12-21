@@ -14,20 +14,22 @@
 # You should have received a copy of the GNU General Public License along with 
 # this program. If not, see <http://www.gnu.org/licenses/>.
 
-setMethod("dimnames", "Vine",
-    function (x) {
-      object@dimensionNames
-    })
+getDimnamesVine <- function (x) {
+  x@dimensionNames
+} 
+
+setMethod("dimnames", "Vine", getDimnamesVine)
 
 
-setMethod("dimnames<-", "Vine", 
-    function (x, value) {
-      dimensionNames <- as.character(value)
-      if (length(dimensionNames) == 0 || 
-          length(dimensionNames) == x@dimension) {
-        x@dimensionNames <- dimensionNames
-        x
-      } else {
-        stop("length of the argument not equal to the dimension of the vine")
-      }
-    })
+setDimnamesVine <- function (x, value) {
+  dimensionNames <- as.character(value)
+  if (length(dimensionNames) == 0 || 
+      length(dimensionNames) == x@dimension) {
+    x@dimensionNames <- dimensionNames
+    x
+  } else {
+    stop("length of the argument not equal to the dimension of the vine")
+  }
+}
+
+setMethod("dimnames<-", "Vine", setDimnamesVine)

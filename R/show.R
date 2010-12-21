@@ -14,20 +14,21 @@
 # You should have received a copy of the GNU General Public License along with 
 # this program. If not, see <http://www.gnu.org/licenses/>.
 
-setMethod("toString", "copula",
-    function (x, ...) {
-      if (length(x@parameters) > 0) {
-        parts <- character(0)
-        for (k in seq(along = x@parameters)) {
-          parts <- c(parts, paste(x@param.names[k], "=", x@parameters[k]))
-        }
-        parts <- paste(parts, collapse = ", ")
-        parameters <- paste(" (", parts, ")", sep = "")
-      } else {
-        parameters <- ""
-      }
-      paste(sub('[[:space:]]+$', '', x@message), parameters, sep = "")
-    })
+toStringCopula <- function (x, ...) {
+  if (length(x@parameters) > 0) {
+    parts <- character(0)
+    for (k in seq(along = x@parameters)) {
+      parts <- c(parts, paste(x@param.names[k], "=", x@parameters[k]))
+    }
+    parts <- paste(parts, collapse = ", ")
+    parameters <- paste(" (", parts, ")", sep = "")
+  } else {
+    parameters <- ""
+  }
+  paste(sub('[[:space:]]+$', '', x@message), parameters, sep = "")
+}
+
+setMethod("toString", "copula", toStringCopula)
 
 
 showVine <- function (object) {

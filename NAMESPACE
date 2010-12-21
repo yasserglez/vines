@@ -19,7 +19,7 @@ exportMethods(pvine)
 exportMethods(rvine)
 exportMethods(pitVine)
 
-exportMethods(show, summary)
+exportMethods(show, summary, dimnames)
 
 
 # Exported functions
