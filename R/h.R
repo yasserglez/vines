@@ -29,10 +29,7 @@ hCopula <- function (copula, x, v) {
   v[v < zero] <- zero
   v[v > one] <- one    
 
-  e <- new.env()
-  assign("x", x, envir = e)
-  assign("v", v, envir = e)
-  d <- numericDeriv(quote(pcopula(copula, cbind(x, v))), c("v"), e)
+  d <- numericDeriv(quote(pcopula(copula, cbind(x, v))), c("v"))
   r <- diag(attr(d, "gradient"))
   
   r[x <= zero | r < zero] <- zero
