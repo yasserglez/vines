@@ -48,10 +48,9 @@ showCVine <- function (object) {
   } else {
     dimNames <- as.character(seq(length = object@dimension))
   }
-  for (j in seq(length = object@trees)) {
-    copulaLabels <- character(0)
-    copulaDescs <- character(0)
 
+  for (j in seq(length = object@trees)) {
+    cat("\n")
     for (i in seq(length = object@dimension - j)) {
       conditioned <- paste(dimNames[j], dimNames[j + i], sep = ",")
       conditioning <- paste(dimNames[seq(length = j - 1)], collapse = ",")
@@ -60,17 +59,8 @@ showCVine <- function (object) {
               else character(0), 
           sep = "")
 
-      copulaLabels <- c(copulaLabels, copulaLabel)
-      copulaDescs <- c(copulaDescs, toString(object@copulas[[j, i]]))
+      cat(copulaLabel, ": ", toString(object@copulas[[j, i]]), "\n", sep = "")
     }
-
-    cat("\n")
-    copulaLabels <- format(copulaLabels)
-    for (k in seq(along = copulaLabels)) {
-      cat(copulaLabels[k], ": ", copulaDescs[k], "\n", sep = "")
-    }
-
-    if (j == object@trees) break
   }
 }
 
@@ -84,10 +74,9 @@ showDVine <- function (object) {
   } else {
     dimNames <- as.character(seq(length = object@dimension))
   }
-  for (j in seq(length = object@trees)) {
-    copulaLabels <- character(0)
-    copulaDescs <- character(0)
 
+  for (j in seq(length = object@trees)) {
+    cat("\n")
     for (i in seq(length = object@dimension - j)) {
       conditioned <- paste(dimNames[i], dimNames[i + j], sep = ",")
       conditioning <- paste(dimNames[seq(from = i + 1, to = i + j - 1)], collapse = ",")
@@ -96,17 +85,8 @@ showDVine <- function (object) {
               else character(0), 
           sep = "")
 
-      copulaLabels <- c(copulaLabels, copulaLabel)
-      copulaDescs <- c(copulaDescs, toString(object@copulas[[j, i]]))
+      cat(copulaLabel, ": ", toString(object@copulas[[j, i]]), "\n", sep = "")
     }
-
-    cat("\n")
-    copulaLabels <- format(copulaLabels)
-    for (k in seq(along = copulaLabels)) {
-      cat(copulaLabels[k], ": ", copulaDescs[k], "\n", sep = "")
-    }
-
-    if (j == object@trees) break
   }
 }
 
