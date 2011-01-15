@@ -16,14 +16,17 @@
 # this program. If not, see <http://www.gnu.org/licenses/>.
 
 setGeneric("pitVine",
-    function (vine, u)  {
-      if (is.vector(u)) u <- matrix(u, nrow = 1)
-      if (vine@trees == 0) u else standardGeneric("pitVine")
-    },
+    function (vine, u) standardGeneric("pitVine"),
     signature = "vine")
 
 
 pitCVine <- function (vine, u) {
+  if (is.vector(u)) u <- matrix(u, nrow = 1)
+
+  if (vine@trees == 0) {
+    return(u)
+  }
+
   T <- nrow(u)
   d <- vine@dimension
   z <- matrix(NA, T, d)
@@ -46,6 +49,12 @@ setMethod("pitVine", "CVine", pitCVine)
 
 
 pitDVine <- function (vine, u) {
+  if (is.vector(u)) u <- matrix(u, nrow = 1)
+  
+  if (vine@trees == 0) {
+    return(u)
+  }  
+
   T <- nrow(u)
   d <- vine@dimension
   v <- matrix(NA, d, max(2 * d - 4, d))

@@ -15,37 +15,26 @@
 # You should have received a copy of the GNU General Public License along with 
 # this program. If not, see <http://www.gnu.org/licenses/>.
 
-# Internal function that computes observations for the bivariate dependencies
-# modeled by the copulas in the vine (using the observations of the original
-# variables in the data matrix) and executes the f function with the vine, the
-# indexes of the copula and the observations of each variable as arguments.
-
 setGeneric("iterVine",
-    function (vine, data, fit = NULL, eval = NULL) {
-      if (vine@trees == 0) {
-        # Vine without trees, nothing to iterate for.
-        list(vine = vine, evals = list())
-      } else {
-        standardGeneric("iterVine")
-      }
-    },
+    function (vine, data, fit = NULL, eval = NULL)
+      standardGeneric("iterVine"),
     signature = "vine")
 
 
 iterCVine <- function (vine, data, fit = NULL, eval = NULL) {
-  # The implementation of this function is based on the Algorithm 3 described in 
-  # Aas, K., Czado, C., Frigessi, A. & Bakken, H. Pair-copula constructions of 
-  # multiple dependence. Insurance Mathematics and Economics, 2009, Vol. 44, 
-  # pp. 182-198.
+  # The implementation of this function is based on the Algorithm 3 
+  # described in Aas, K., Czado, C., Frigessi, A. & Bakken, H. Pair-copula 
+  # constructions of multiple dependence. Insurance Mathematics and 
+  # Economics, 2009, Vol. 44, pp. 182-198.
   
-  # The indexes of the second dimension of the v array differs with the 
-  # indexes of the first dimension of the v array in Algorithm 3 because of 
-  # GNU R 1-based indexing.
-  
-  # This implementation avoids evaluating the h-functions beyond the last tree 
-  # of the vine that represents dependence (given by the trees slot of the vine) 
-  # because the h-functions of the Independence copula always return the value 
-  # of its first argument.
+  if (vine@trees == 0) {
+    # Vine without trees, nothing to iterate for.
+    return(list(vine = vine, evals = list()))
+  }
+
+  # The indexes of the second dimension of the v array differs with
+  # the indexes of the first dimension of the v array in Algorithm 3
+  # because of GNU R 1-based indexing.
 
   evals <- list()
   d <- vine@dimension
@@ -79,20 +68,20 @@ setMethod("iterVine", "CVine", iterCVine)
 
 
 iterDVine <- function (vine, data, fit = NULL, eval = NULL) {
-  # The implementation of this function is based on the Algorithm 4 described in 
-  # Aas, K., Czado, C., Frigessi, A. & Bakken, H. Pair-copula constructions of 
-  # multiple dependence. Insurance Mathematics and Economics, 2009, Vol. 44, 
-  # pp. 182-198.
+  # The implementation of this function is based on the Algorithm 4 
+  # described in Aas, K., Czado, C., Frigessi, A. & Bakken, H. Pair-copula 
+  # constructions of multiple dependence. Insurance Mathematics and 
+  # Economics, 2009, Vol. 44, pp. 182-198.
   
-  # The indexes of the second dimension of the v array differs with the 
-  # indexes of the first dimension of the v array in Algorithm 4 because of 
-  # GNU R 1-based indexing.
+  if (vine@trees == 0) {
+    # Vine without trees, nothing to iterate for.
+    return(list(vine = vine, evals = list()))
+  }  
   
-  # This implementation avoids evaluating the h-functions beyond the last tree 
-  # of the vine that represents dependence (given by the trees slot of the vine) 
-  # because the h-functions of the Independence copula always return the value 
-  # of its first argument.
-
+  # The indexes of the second dimension of the v array differs with 
+  # the indexes of the first dimension of the v array in Algorithm 4 
+  # because of GNU R 1-based indexing.
+  
   evals <- list()
   d <- vine@dimension
   v <- array(NA, c(nrow(data), d, max(2 * d - 4, d)))

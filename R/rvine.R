@@ -16,29 +16,22 @@
 # this program. If not, see <http://www.gnu.org/licenses/>.
 
 setGeneric("rvine",
-    function (vine, n) {
-      if (vine@trees == 0) {
-        # Vine without trees, Independent vine.
-        d <- vine@dimension
-        matrix(runif(n * d), n, d)
-      } else {
-        standardGeneric("rvine")
-      }
-    },
+    function (vine, n) standardGeneric("rvine"),
     signature = "vine")
 
 
 rCVine <- function (vine, n) {
-  # The implementation of this function is based on the Algorithm 1 described in
-  # Aas, K., Czado, C., Frigessi, A. & Bakken, H. Pair-copula constructions of
-  # multiple dependence. Insurance Mathematics and Economics, 2009, Vol. 44,
-  # pp. 182-198.
+  # The implementation of this function is based on the Algorithm 1 
+  # described in Aas, K., Czado, C., Frigessi, A. & Bakken, H. Pair-copula 
+  # constructions of multiple dependence. Insurance Mathematics and 
+  # Economics, 2009, Vol. 44, pp. 182-198.
   
-  # WARNING: This implementation includes an optimization to avoid evaluating
-  # the h-functions beyond the last tree of the vine that represents dependence
-  # (given by the trees slot of the vine) because the h-function of the
-  # Independence copula always return the value of its first argument.
-
+  if (vine@trees == 0) {
+    # Vine without trees, Independent vine.
+    d <- vine@dimension
+    return(matrix(runif(n * d), n, d))
+  }
+  
   d <- vine@dimension
   v <- matrix(NA, d, d)
   w <- matrix(runif(n * d), n, d)
@@ -48,7 +41,7 @@ rCVine <- function (vine, n) {
   
   for (s in seq(length = n)) { # Loop over samples.
     v[1, 1] <- result[s, 1]
-    for (i in seq(from = 2, to = d)) { # Loop over the variables to be sampled.
+    for (i in seq(from = 2, to = d)) { # Loop over the variables.
       v[i, 1] <- w[s, i]
       for (k in seq(from = min(vine@trees, i - 1), to = 1)) {
       	v[i, 1] <- hinverse(vine@copulas[[k, i-k]], v[i, 1], v[k, k])
@@ -70,15 +63,16 @@ setMethod("rvine", "CVine", rCVine)
 
 
 rDVine <- function (vine, n) {
-  # The implementation of this function is based on the Algorithm 2 described in 
-  # Aas, K., Czado, C., Frigessi, A. & Bakken, H. Pair-copula constructions of 
-  # multiple dependence. Insurance Mathematics and Economics, 2009, Vol. 44, 
-  # pp. 182-198.
+  # The implementation of this function is based on the Algorithm 2 
+  # described in Aas, K., Czado, C., Frigessi, A. & Bakken, H. Pair-copula 
+  # constructions of multiple dependence. Insurance Mathematics and 
+  # Economics, 2009, Vol. 44, pp. 182-198.
   
-  # WARNING: This implementation includes an optimization to avoid evaluating 
-  # the h-functions beyond the last tree of the vine that represents dependence 
-  # (given by the trees slot of the vine) because the h-function of the 
-  # Independence copula always return the value of its first argument.  
+  if (vine@trees == 0) {
+    # Vine without trees, Independent vine.
+    d <- vine@dimension
+    return(matrix(runif(n * d), n, d))
+  }  
   
   d <- vine@dimension
   w <- matrix(runif(n * d), n, d)
@@ -95,7 +89,7 @@ rDVine <- function (vine, n) {
     v[1, 1] <- result[s, 1]
     v[2, 1] <- result[s, 2]
     v[2, 2] <- h(vine@copulas[[1, 1]], v[1, 1], v[2, 1])
-    for (i in seq(from = 3, to = d)) { # Loop over the variables to be sampled.
+    for (i in seq(from = 3, to = d)) { # Loop over the variables.
       v[i, 1] <- w[s, i]
       if (vine@trees >= 2) {
         for (k in seq(from = min(vine@trees, i - 1), to = 2)) {

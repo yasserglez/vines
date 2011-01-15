@@ -16,25 +16,24 @@
 # this program. If not, see <http://www.gnu.org/licenses/>.
 
 setGeneric("dvine",
-    function (vine, u) {
-      if (is.vector(u)) u <- matrix(u, nrow = 1)
-      if (vine@trees == 0) {
-        # Vine without trees, the product of the uniform marginal densities.
-        rep(1, nrow(u))
-      } else {
-        standardGeneric("dvine")
-      }
-    },
+    function (vine, u) standardGeneric("dvine"),
     signature = "vine")
 
 
 dCVineDVine <- function (vine, u) {
-  # Function called by iterVine to evaluate the density of each copula.
-  copulaDensity <- function (vine, j, i, x, y) {
-    dcopula(vine@copulas[[j, i]], cbind(x, y))
+  if (is.vector(u)) u <- matrix(u, nrow = 1)
+
+  if (vine@trees == 0) {
+    # The product of the uniform marginal densities.
+    rep(1, nrow(u))
+  } else {
+    # Called by iterVine to evaluate the density of each copula.
+    copulaDensity <- function (vine, j, i, x, y) {
+      dcopula(vine@copulas[[j, i]], cbind(x, y))
+    }
+    iterResult <- iterVine(vine, u, eval = copulaDensity)
+    apply(matrix(unlist(iterResult$evals), nrow(u)), 1, prod)
   }
-  iterResult <- iterVine(vine, u, eval = copulaDensity)
-  apply(matrix(unlist(iterResult$evals), nrow(u)), 1, prod)
 }
 
 setMethod("dvine", "CVine", dCVineDVine)

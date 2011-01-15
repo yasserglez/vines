@@ -16,14 +16,13 @@
 # this program. If not, see <http://www.gnu.org/licenses/>.
 
 setGeneric("pvine",
-    function (vine, u) {
-      if (is.vector(u)) u <- matrix(u, nrow = 1)
-      standardGeneric("pvine")
-    },
+    function (vine, u) standardGeneric("pvine"),
     signature = "vine")
 
 
 pCVineDVine <- function (vine, u) {
+  if (is.vector(u)) u <- matrix(u, nrow = 1)
+
   pdf <- function (x) dvine(vine, x)
   lowerLimit <- rep(0, vine@dimension)
   cdf <- function (x) {
