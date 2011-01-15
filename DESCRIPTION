@@ -3,7 +3,7 @@ Encoding: UTF-8
 Package: vines
 Title: Multivariate dependence modeling with vines
 Version: 0.1.0
-Date: 2011-01-01
+Date: 2011-01-15
 Author: Yasser González-Fernández <ygonzalezfernandez@gmail.com>
 	and Marta Soto <mrosa@icmf.inf.cu>
 Maintainer: Yasser González-Fernández <ygonzalezfernandez@gmail.com>
