@@ -21,15 +21,9 @@ setGeneric("h",
 
 
 hCopula <- function (copula, x, v) {
-  # Last resort is to evaluate the h-function numerically.
   zero <- .Machine$double.eps
   one <- 1 - .Machine$double.neg.eps
   
-  x[x < zero] <- zero
-  x[x > one] <- one
-  v[v < zero] <- zero
-  v[v > one] <- one    
-
   d <- numericDeriv(quote(pcopula(copula, cbind(x, v))), c("v"))
   r <- diag(attr(d, "gradient"))
   
@@ -58,21 +52,16 @@ hNormalCopula <- function (copula, x, v) {
   zero <- .Machine$double.eps
   one <- 1 - .Machine$double.neg.eps
 
-  x[x < zero] <- zero
-  x[x > one] <- one
-  v[v < zero] <- zero
-  v[v > one] <- one  
-
-  rho <- copula@parameters
-  rho[rho == -1] <- -1 + .Machine$double.eps
-  rho[rho == 1] <- 1 - .Machine$double.neg.eps
+  rho <- min(max(copula@parameters,
+          -1 + .Machine$double.eps),
+           1 - .Machine$double.neg.eps)
 
   r <- pnorm((qnorm(x) - rho*qnorm(v)) / sqrt(1 - rho^2))
 
   r[x <= zero | r < zero] <- zero
   r[x >= one | r > one] <- one
-
-  r  
+  
+  r
 }
 
 setMethod("h", "normalCopula", hNormalCopula)
@@ -82,14 +71,9 @@ htCopula <- function (copula, x, v) {
   zero <- .Machine$double.eps
   one <- 1 - .Machine$double.neg.eps
 
-  x[x < zero] <- zero
-  x[x > one] <- one
-  v[v < zero] <- zero
-  v[v > one] <- one    
-
-  rho <- copula@parameters[1]
-  rho[rho == -1] <- -1 + .Machine$double.eps
-  rho[rho == 1] <- 1 - .Machine$double.neg.eps  
+  rho <- min(max(copula@parameters, 
+          -1 + .Machine$double.eps),
+      1 - .Machine$double.neg.eps)
   df <- if (copula@df.fixed) copula@df else copula@parameters[2]
 
   r <- pt((qt(x, df) - rho*qt(v, df)) / sqrt(((df + qt(v, df)^2) * (1 - rho^2)) / (df+1)), df+1)
@@ -111,17 +95,17 @@ hClaytonCopula <- function (copula, x, v) {
   } else {
     zero <- .Machine$double.eps^0.15
     one <- 1 - .Machine$double.neg.eps^0.15
-
+    
     x[x < zero] <- zero
     x[x > one] <- one
     v[v < zero] <- zero
     v[v > one] <- one  
-  
+
     r <- v^(-theta-1) * (x^(-theta) + v^(-theta) - 1)^(-1-1/theta)
-  
+    
     r[x <= zero | r < zero] <- zero
     r[x >= one | r > one] <- one
-  
+    
     r
   }
 }
@@ -132,11 +116,6 @@ setMethod("h", "claytonCopula", hClaytonCopula)
 hGumbelCopula <- function (copula, x, v) {
   zero <- .Machine$double.eps
   one <- 1 - .Machine$double.neg.eps
-  
-  x[x < zero] <- zero
-  x[x > one] <- one
-  v[v < zero] <- zero
-  v[v > one] <- one  
   
   theta <- copula@parameters
 
