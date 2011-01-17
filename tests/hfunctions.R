@@ -1,49 +1,81 @@
-# Tests for the h-functions.
+# Tests for the h functions.
 
-library(vines)
+#library(vines)
 
-nvalues <- 10 # Number of values of each variable.
-nparams <- 11 # Number of values of each parameter.
-tolerance <- 0.01 # Tolerance checking for equality.
+N <- 10 # Number of values of each variable.
+P <- 5 # Number of values of each parameter.
+T <- 0.01 # Tolerance checking for equality.
 
-zeroes <- rep(.Machine$double.eps, nvalues)
-ones <- rep(1 - .Machine$double.neg.eps, nvalues)
-xvalues <- seq(from = zeroes[1], to = ones[1], length = nvalues)
-vvalues <- seq(from = zeroes[1], to = ones[1], length = nvalues)
-hargs <- merge(xvalues, vvalues)
+
+X <- seq(from = 0.25, to = 0.75, length = N)
+V <- seq(from = 0.25, to = 0.75, length = N)
+XV <- merge(X, V)
 
 copulas <- c(
-    lapply(seq(from = -1, to = 1, length = nparams), 
+    lapply(seq(from = -1, to = 1, length = P), 
         function (rho) normalCopula(rho)),
-    apply(merge(seq(from = -1, to = 1, length = nparams),
-            seq(from = 1, to = 30, length = nparams)), 1,
+    apply(merge(seq(from = -1, to = 1, length = P),
+            seq(from = 1, to = 30, length = P)), 1,
         function (p) tCopula(p[1], df = p[2], df.fixed = TRUE)),
-    lapply(seq(from = .Machine$double.xmin, to = 100, length = nparams),
+    lapply(seq(from = .Machine$double.eps, to = 3, length = P),
         function (theta) claytonCopula(theta)),
-    lapply(seq(from = 1, to = 100, length = nparams),
-        function (theta) gumbelCopula(theta)),    
+    lapply(seq(from = 1, to = 5, length = P),
+        function (theta) gumbelCopula(theta)),
     list(indepCopula()))
 
 for (copula in copulas) {
-  # Checking the h-function.
-  
-  # Check for finite return values in (0,1).
-  u <- h(copula, hargs[ , 1], hargs[ , 2])
-  stopifnot(all(is.finite(u)))
-  stopifnot(all(u > 0 & u < 1))  
+  # Validate the h-function.
+  u <- h(copula, XV[ , 1], XV[ , 2])
+  uu <- hCopula(copula, XV[ , 1], XV[ , 2])
+  stopifnot(isTRUE(all.equal(u, uu, T)))
 
+  # Validate the inverse of the h-function.
+  x <- hinverse(copula, u, XV[ , 2])
+  xx <- hinverseCopula(copula, u, XV[ , 2])
+  stopifnot(isTRUE(all.equal(x, xx, T)))
+}
+
+
+X <- seq(from = 0, to = 1, length = N)
+V <- seq(from = 0, to = 1, length = N)
+XV <- merge(X, V)
+
+copulas <- c(
+    lapply(seq(from = -1, to = 1, length = P), 
+        function (rho) normalCopula(rho)),
+    apply(merge(seq(from = -1, to = 1, length = P),
+            seq(from = 1, to = 30, length = P)), 1,
+        function (p) tCopula(p[1], df = p[2], df.fixed = TRUE)),
+    lapply(seq(from = .Machine$double.eps, to = 100, length = P),
+        function (theta) claytonCopula(theta)),
+    lapply(seq(from = 1, to = 100, length = P),
+        function (theta) gumbelCopula(theta)),
+    list(indepCopula()))
+
+for (copula in copulas) {
   # Check h(0, v) == 0.
-  u <- h(copula, zeroes, vvalues)
-  stopifnot(isTRUE(all.equal(u, zeroes, tolerance)))
+  u <- h(copula, rep(0, N), V)
+  stopifnot(isTRUE(all.equal(u, rep(0, N), T)))
 
   # Check h(1, v) == 1.
-  u <- h(copula, ones, vvalues)
-  stopifnot(isTRUE(all.equal(u, ones, tolerance)))
+  u <- h(copula, rep(1, N), V)
+  stopifnot(isTRUE(all.equal(u, rep(1, N), T)))
 
-  # Checking the inverse of the h-functions.
+  # Check for finite return values in [0,1].
+  u <- h(copula, XV[ , 1], XV[ , 2])
+  stopifnot(all(is.finite(u)))
+  stopifnot(all(u >= 0 & u <= 1))
 
-  # Check for finite return values in (0,1).
-  x <- hinverse(copula, u, hargs[ , 2])
+  # Check for finite return values in [0,1].
+  x <- hinverse(copula, u, XV[ , 2])
   stopifnot(all(is.finite(x)))
-  stopifnot(all(x > 0 & x < 1))
+  stopifnot(all(x >= 0 & x <= 1))
+
+  # Check hinverse(0, v) == 0.
+  x <- hinverse(copula, rep(0, N), V)
+  stopifnot(isTRUE(all.equal(x, rep(0, N), T)))
+
+  # Check hinverse(1, v) == 1.
+  x <- hinverse(copula, rep(1, N), V)
+  stopifnot(isTRUE(all.equal(x, rep(1, N), T)))
 }

@@ -21,21 +21,25 @@ setGeneric("hinverse",
 
 
 hinverseCopula <- function (copula, u, v) {
-  zero <- .Machine$double.eps
-  one <- 1 - .Machine$double.neg.eps
-
+  eps <- .Machine$double.eps^0.5
+  
+  r0 <- u <= eps
+  r1 <- abs(1 - u) <= eps
+  s <- r0 | r1
+  u <- pmax(pmin(u, 1 - eps), eps)
+  v <- pmax(pmin(v, 1 - eps), eps)  
   f <- function (x, u, v) abs(h(copula, x, v) - u)
-  z <- function (i) optimize(f, c(zero, one), tol = 0.01, u = u[i], v = v[i])$minimum
-  r <- sapply(seq(along = u), z)
+  z <- function (i) optimize(f, c(eps, 1 - eps), tol = 0.01, u = u[i], v = v[i])$minimum
 
-  r
+  r <- sapply(seq(along = u), function(i) if (s[i]) NA else z(i))
+  ifelse(r0, eps, ifelse(r1, 1 - eps, r))
 }
 
 setMethod("hinverse", "copula", hinverseCopula)
 
 
 hinverseIndepCopula <- function (copula, u, v) {
-  u
+  return(u)
 }
 
 setMethod("hinverse", "indepCopula", hinverseIndepCopula)
@@ -47,65 +51,49 @@ setMethod("hinverse", "indepCopula", hinverseIndepCopula)
 # Gumbel copulas.
 
 hinverseNormalCopula <- function (copula, u, v) {
-  zero <- .Machine$double.eps
-  one <- 1 - .Machine$double.neg.eps
-
-  rho <- min(max(copula@parameters,
-          -1 + .Machine$double.eps),
-      1 - .Machine$double.neg.eps)
+  eps <- .Machine$double.eps^0.5
+  
+  rho <- copula@parameters
+  r0 <- u <= eps
+  r1 <- abs(1 - u) <= eps
+  v <- pmax(pmin(v, 1 - eps), eps)
 
   r <- pnorm(qnorm(u) * sqrt(1 - rho^2) + rho*qnorm(v))
-
-  r[u <= zero | r < zero] <- zero
-  r[u >= one | r > one] <- one
-  
-  r
+  ifelse(r0, eps, ifelse(r1, 1 - eps, pmax(pmin(r, 1 - eps), eps)))
 }
 
 setMethod("hinverse", "normalCopula", hinverseNormalCopula)
 
 
 hinversetCopula <- function (copula, u, v) {
-  zero <- .Machine$double.eps
-  one <- 1 - .Machine$double.neg.eps
-
-  rho <- min(max(copula@parameters, 
-          -1 + .Machine$double.eps),
-      1 - .Machine$double.neg.eps)
+  eps <- .Machine$double.eps^0.15
+  
+  rho <- copula@parameters
   df <- if (copula@df.fixed) copula@df else copula@parameters[2]
+  r0 <- u <= eps
+  r1 <- abs(1 - u) <= eps
+  v <- pmax(pmin(v, 1 - eps), eps)
 
-  r <- pt(qt(u, df+1) * sqrt(((df + qt(v, df)^2) * (1 - rho^2)) / (df+1)) + rho*qt(v, df), df)
-  
-  r[u <= zero | r < zero] <- zero
-  r[u >= one | r > one] <- one
-  
-  r
+  r <- pt(qt(u, df+1) * sqrt(((df + qt(v, df)^2) * (1 - rho^2)) / 
+              (df+1)) + rho*qt(v, df), df)
+  ifelse(r0, eps, ifelse(r1, 1 - eps, pmax(pmin(r, 1 - eps), eps)))
 }
 
 setMethod("hinverse", "tCopula", hinversetCopula)
 
 
 hinverseClaytonCopula <- function (copula, u, v) {
-  theta <- copula@parameters
-  
-  if (theta < .Machine$double.eps) {
-    u
-  } else {  
-    zero <- .Machine$double.eps^0.15
-    one <- 1 - .Machine$double.neg.eps^0.15
-    
-    u[u < zero] <- zero
-    u[u > one] <- one
-    v[v < zero] <- zero
-    v[v > one] <- one   
+  eps <- .Machine$double.eps^0.15
 
-    r <- ((u * v^(theta+1))^(-theta/(theta+1)) + 1 - v^(-theta))^(-1/theta)
+  theta <- min(copula@parameters, 100)
+  if (theta <= eps) return(u)
+  r0 <- u <= eps
+  r1 <- abs(1 - u) <= eps
+  u <- pmax(pmin(u, 1 - eps), eps)
+  v <- pmax(pmin(v, 1 - eps), eps)
 
-    r[u <= zero | r < zero] <- zero
-    r[u >= one | r > one] <- one
-    
-    r
-  }
+  r <- ((u * v^(theta+1))^(-theta/(theta+1)) + 1 - v^(-theta))^(-1/theta)
+  ifelse(r0, eps, ifelse(r1, 1 - eps, pmax(pmin(r, 1 - eps), eps)))
 }
 
 setMethod("hinverse", "claytonCopula", hinverseClaytonCopula)

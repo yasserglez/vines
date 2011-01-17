@@ -21,23 +21,22 @@ setGeneric("h",
 
 
 hCopula <- function (copula, x, v) {
-  zero <- .Machine$double.eps
-  one <- 1 - .Machine$double.neg.eps
+  eps <- .Machine$double.eps^0.5
   
-  d <- numericDeriv(quote(pcopula(copula, cbind(x, v))), c("v"))
+  envir <- new.env()
+  assign("copula", copula, envir)
+  assign("x", pmax(pmin(x, 1 - eps), eps), envir)
+  assign("v", pmax(pmin(v, 1 - eps), eps), envir)
+  d <- numericDeriv(quote(pcopula(copula, cbind(x, v))), "v", envir)
   r <- diag(attr(d, "gradient"))
-  
-  r[x <= zero | r < zero] <- zero
-  r[x >= one | r > one] <- one
-
-  r
+  pmax(pmin(r, 1 - eps), eps)
 }
 
 setMethod("h", "copula", hCopula)
 
 
 hIndepCopula <- function (copula, x, v) {
-  x
+  return(x)
 }
 
 setMethod("h", "indepCopula", hIndepCopula)
@@ -49,83 +48,67 @@ setMethod("h", "indepCopula", hIndepCopula)
 # Gumbel copulas.
 
 hNormalCopula <- function (copula, x, v) {
-  zero <- .Machine$double.eps
-  one <- 1 - .Machine$double.neg.eps
+  eps <- .Machine$double.eps^0.5
 
-  rho <- min(max(copula@parameters,
-          -1 + .Machine$double.eps),
-           1 - .Machine$double.neg.eps)
+  rho <- copula@parameters
+  r0 <- (x <= eps) | (x != 1 & rho == 1 & x == v)
+  r1 <- abs(1 - x) <= eps | (rho == -1 & 1 - (x + v) <= eps)
+  v <- pmax(pmin(v, 1 - eps), eps)
 
   r <- pnorm((qnorm(x) - rho*qnorm(v)) / sqrt(1 - rho^2))
-
-  r[x <= zero | r < zero] <- zero
-  r[x >= one | r > one] <- one
-  
-  r
+  ifelse(r0, eps, ifelse(r1, 1 - eps, pmax(pmin(r, 1 - eps), eps)))
 }
 
 setMethod("h", "normalCopula", hNormalCopula)
 
 
 htCopula <- function (copula, x, v) {
-  zero <- .Machine$double.eps
-  one <- 1 - .Machine$double.neg.eps
+  eps <- .Machine$double.eps^0.5
 
-  rho <- min(max(copula@parameters, 
-          -1 + .Machine$double.eps),
-      1 - .Machine$double.neg.eps)
+  rho <- copula@parameters
   df <- if (copula@df.fixed) copula@df else copula@parameters[2]
+  r0 <- (x <= eps) | (x != 1 & rho == 1 & x == v)
+  r1 <- abs(1 - x) <= eps | (rho == -1 & 1 - (x + v) <= eps)
+  v <- pmax(pmin(v, 1 - eps), eps)
 
-  r <- pt((qt(x, df) - rho*qt(v, df)) / sqrt(((df + qt(v, df)^2) * (1 - rho^2)) / (df+1)), df+1)
-
-  r[x <= zero | r < zero] <- zero
-  r[x >= one | r > one] <- one
-  
-  r
+  r <- pt((qt(x, df) - rho*qt(v, df)) / 
+          sqrt(((df + qt(v, df)^2) * (1 - rho^2)) / (df+1)), df+1)
+  ifelse(r0, eps, ifelse(r1, 1 - eps, pmax(pmin(r, 1 - eps), eps)))
 }
 
 setMethod("h", "tCopula", htCopula)
 
 
 hClaytonCopula <- function (copula, x, v) {
-  theta <- copula@parameters
+  eps <- .Machine$double.eps^0.15
 
-  if (theta < .Machine$double.eps) {
-    x
-  } else {
-    zero <- .Machine$double.eps^0.15
-    one <- 1 - .Machine$double.neg.eps^0.15
-    
-    x[x < zero] <- zero
-    x[x > one] <- one
-    v[v < zero] <- zero
-    v[v > one] <- one  
+  theta <- min(copula@parameters, 100)
+  if (theta <= eps) return(x)
+  r0 <- x <= eps
+  r1 <- abs(1 - x) <= eps  
+  x <- pmax(pmin(x, 1 - eps), eps)
+  v <- pmax(pmin(v, 1 - eps), eps)
 
-    r <- v^(-theta-1) * (x^(-theta) + v^(-theta) - 1)^(-1-1/theta)
-    
-    r[x <= zero | r < zero] <- zero
-    r[x >= one | r > one] <- one
-    
-    r
-  }
+  r <- v^(-theta-1) * (x^(-theta) + v^(-theta) - 1)^(-1-1/theta)
+  ifelse(r0, eps, ifelse(r1, 1 - eps, pmax(pmin(r, 1 - eps), eps)))
 }
 
 setMethod("h", "claytonCopula", hClaytonCopula)
 
 
 hGumbelCopula <- function (copula, x, v) {
-  zero <- .Machine$double.eps
-  one <- 1 - .Machine$double.neg.eps
+  eps <- .Machine$double.eps^0.5
   
-  theta <- copula@parameters
+  theta <- min(copula@parameters, 100)
+  if (theta <= eps) return(x)
+  r0 <- x <= eps
+  r1 <- abs(1 - x) <= eps  
+  x <- pmax(pmin(x, 1 - eps), eps)
+  v <- pmax(pmin(v, 1 - eps), eps)
 
   r <- pcopula(copula, cbind(x, v)) * 1/v * (-log(v))^(theta-1) *
       ((-log(x))^theta + (-log(v))^theta)^(1/theta-1)
-
-  r[x <= zero | r < zero] <- zero
-  r[x >= one | r > one] <- one
-
-  r
+  ifelse(r0, eps, ifelse(r1, 1 - eps, pmax(pmin(r, 1 - eps), eps)))
 }
 
 setMethod("h", "gumbelCopula", hGumbelCopula)
