@@ -4,7 +4,8 @@
 
 #include "h.h"
 
-SEXP hNormalCopula(SEXP Rho, SEXP X, SEXP V) {
+SEXP hNormalCopula(SEXP Rho, SEXP X, SEXP V)
+{
 	double eps = R_pow(DOUBLE_EPS, 0.5);
 	double rho = NUMERIC_VALUE(Rho);
 	int n = LENGTH(X);
@@ -32,4 +33,9 @@ SEXP hNormalCopula(SEXP Rho, SEXP X, SEXP V) {
 	UNPROTECT(1);
 
 	return R;
+}
+
+SEXP hIndepCopula(SEXP X, SEXP V)
+{
+	return X;
 }

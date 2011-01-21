@@ -9,6 +9,8 @@
 R_CallMethodDef callRoutines[] = {
     { "hNormalCopula", (DL_FUNC) &hNormalCopula, 3 },
     { "hinverseNormalCopula", (DL_FUNC) &hinverseNormalCopula, 3 },
+    { "hIndepCopula", (DL_FUNC) &hIndepCopula, 2 },
+    { "hinverseIndepCopula", (DL_FUNC) &hinverseIndepCopula, 2 },
     { NULL, NULL, 0 }
 };
 

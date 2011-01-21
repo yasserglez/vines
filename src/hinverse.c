@@ -33,3 +33,8 @@ SEXP hinverseNormalCopula(SEXP Rho, SEXP U, SEXP V) {
 
 	return R;
 }
+
+SEXP hinverseIndepCopula(SEXP U, SEXP V)
+{
+	return U;
+}

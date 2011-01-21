@@ -36,7 +36,7 @@ setMethod("h", "copula", hCopula)
 
 
 hIndepCopula <- function (copula, x, v) {
-  return(x)
+  .Call(C_hIndepCopula, x, v)
 }
 
 setMethod("h", "indepCopula", hIndepCopula)

@@ -39,7 +39,7 @@ setMethod("hinverse", "copula", hinverseCopula)
 
 
 hinverseIndepCopula <- function (copula, u, v) {
-  return(u)
+  .Call(C_hinverseIndepCopula, x, v)
 }
 
 setMethod("hinverse", "indepCopula", hinverseIndepCopula)
