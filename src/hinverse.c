@@ -2,29 +2,29 @@
 #include <Rdefines.h>
 #include <Rmath.h>
 
-#include "h.h"
+#include "hinverse.h"
 
-SEXP hNormalCopula(SEXP Rho, SEXP X, SEXP V) {
+SEXP hinverseNormalCopula(SEXP Rho, SEXP U, SEXP V) {
 	double eps = R_pow(DOUBLE_EPS, 0.5);
 	double rho = NUMERIC_VALUE(Rho);
-	int n = LENGTH(X);
-	double *x, *v, *r;
+	int n = LENGTH(U);
+	double *u, *v, *r;
 	double vi, ri;
 	SEXP R;
 
-	x = NUMERIC_POINTER(X);
+	u = NUMERIC_POINTER(U);
 	v = NUMERIC_POINTER(V);
 	PROTECT(R = NEW_NUMERIC(n));
 	r = NUMERIC_POINTER(R);
 
 	for (int i = 0; i < n; i++) {
-		if (x[i] <= eps || (rho == 1 && x[i] == v[i] && x[i] != 1)) {
+		if (u[i] <= eps) {
 			r[i] = eps;
-		} else if (1 - x[i] <= eps || (rho == -1 && 1 - (x[i] + v[i]) <= eps)) {
+		} else if (1 - u[i] <= eps) {
 			r[i] = 1 - eps;
 		} else {
 			vi = (v[i] <= eps) ? eps : ((v[i] >= 1 - eps) ? 1 - eps : v[i]);
-			ri = pnorm((qnorm(x[i], 0, 1, 1, 0) - rho*qnorm(vi, 0, 1, 1, 0)) / sqrt(1 - rho*rho), 0, 1, 1, 0);
+			ri = pnorm(qnorm(u[i], 0, 1, 1, 0) * sqrt(1 - rho*rho) + rho*qnorm(vi, 0, 1, 1, 0), 0, 1, 1, 0);
 			r[i] = (ri <= eps) ? eps : ((ri >= 1 - eps) ? 1 - eps : ri);
 		}
 	}

@@ -51,15 +51,8 @@ setMethod("hinverse", "indepCopula", hinverseIndepCopula)
 # Gumbel copulas.
 
 hinverseNormalCopula <- function (copula, u, v) {
-  eps <- .Machine$double.eps^0.5
-  
   rho <- copula@parameters
-  r0 <- u <= eps
-  r1 <- (1 - u) <= eps
-  v <- pmax(pmin(v, 1 - eps), eps)
-
-  r <- pnorm(qnorm(u) * sqrt(1 - rho^2) + rho*qnorm(v))
-  ifelse(r0, eps, ifelse(r1, 1 - eps, pmax(pmin(r, 1 - eps), eps)))
+  .Call(C_hinverseNormalCopula, rho, u, v)
 }
 
 setMethod("hinverse", "normalCopula", hinverseNormalCopula)
