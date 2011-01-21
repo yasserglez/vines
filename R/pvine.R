@@ -1,6 +1,6 @@
 # vines: R package for multivariate dependence modeling with vines
-# Copyright (C) 2010-2011 Yasser González-Fernández
-# Copyright (C) 2010-2011 Marta Soto
+# Copyright (C) 2010, 2011 Yasser González-Fernández
+# Copyright (C) 2010, 2011 Marta Soto
 #
 # This program is free software: you can redistribute it and/or modify it under
 # the terms of the GNU General Public License as published by the Free Software 
