@@ -1,11 +1,10 @@
-# Imports
+useDynLib(vines, .registration = TRUE, .fixes = "C_")
+
 
 import(copula)
 import(ADGofTest)
 import(cubature)
 
-
-# Classes and generic functions
 
 exportClasses(Vine, RVine, CVine, DVine)
 exportClasses(fitVine, fitVineML)
@@ -21,8 +20,6 @@ exportMethods(pitVine)
 
 exportMethods(show, summary, dimnames)
 
-
-# Exported functions
 
 export(Vine, CVine, DVine)
 export(fitVine, fitCVine, fitDVine)

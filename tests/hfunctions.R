@@ -1,5 +1,7 @@
 # Tests for the h functions.
 
+library(vines)
+
 N <- 10 # Number of values of each variable.
 P <- 5 # Number of values of each parameter.
 T <- 0.01 # Tolerance checking for equality.
@@ -24,12 +26,12 @@ copulas <- c(
 for (copula in copulas) {
   # Validate the h-function.
   u <- h(copula, XV[ , 1], XV[ , 2])
-  uu <- hCopula(copula, XV[ , 1], XV[ , 2])
+  uu <- vines:::hCopula(copula, XV[ , 1], XV[ , 2])
   stopifnot(isTRUE(all.equal(u, uu, T)))
 
   # Validate the inverse of the h-function.
   x <- hinverse(copula, u, XV[ , 2])
-  xx <- hinverseCopula(copula, u, XV[ , 2])
+  xx <- vines:::hinverseCopula(copula, u, XV[ , 2])
   stopifnot(isTRUE(all.equal(x, xx, T)))
 }
 

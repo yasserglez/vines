@@ -48,15 +48,8 @@ setMethod("h", "indepCopula", hIndepCopula)
 # Gumbel copulas.
 
 hNormalCopula <- function (copula, x, v) {
-  eps <- .Machine$double.eps^0.5
-
   rho <- copula@parameters
-  r0 <- (x <= eps) | (x != 1 & rho == 1 & x == v)
-  r1 <- (1 - x) <= eps | (rho == -1 & 1 - (x + v) <= eps)
-  v <- pmax(pmin(v, 1 - eps), eps)
-
-  r <- pnorm((qnorm(x) - rho*qnorm(v)) / sqrt(1 - rho^2))
-  ifelse(r0, eps, ifelse(r1, 1 - eps, pmax(pmin(r, 1 - eps), eps)))
+  .Call(C_hNormalCopula, rho, x, v)
 }
 
 setMethod("h", "normalCopula", hNormalCopula)
