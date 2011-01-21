@@ -65,17 +65,8 @@ setMethod("h", "tCopula", hTCopula)
 
 
 hClaytonCopula <- function (copula, x, v) {
-  eps <- .Machine$double.eps^0.15
-
   theta <- min(copula@parameters, 100)
-  if (theta <= eps) return(x)
-  r0 <- x <= eps
-  r1 <- (1 - x) <= eps  
-  x <- pmax(pmin(x, 1 - eps), eps)
-  v <- pmax(pmin(v, 1 - eps), eps)
-
-  r <- v^(-theta-1) * (x^(-theta) + v^(-theta) - 1)^(-1-1/theta)
-  ifelse(r0, eps, ifelse(r1, 1 - eps, pmax(pmin(r, 1 - eps), eps)))
+  .Call(C_hClaytonCopula, theta, x, v)
 }
 
 setMethod("h", "claytonCopula", hClaytonCopula)

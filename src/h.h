@@ -18,3 +18,4 @@
 SEXP hNormalCopula(SEXP Rho, SEXP X, SEXP V);
 SEXP hIndepCopula(SEXP X, SEXP V);
 SEXP hTCopula(SEXP Rho, SEXP Df, SEXP X, SEXP V);
+SEXP hClaytonCopula(SEXP Theta, SEXP X, SEXP V);

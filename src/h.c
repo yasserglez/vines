@@ -91,3 +91,39 @@ SEXP hTCopula(SEXP Rho, SEXP Df, SEXP X, SEXP V)
 
 	return R;
 }
+
+SEXP hClaytonCopula(SEXP Theta, SEXP X, SEXP V)
+{
+	double eps = R_pow(DOUBLE_EPS, 0.15);
+	double theta = NUMERIC_VALUE(Theta);
+	int n = LENGTH(X);
+	double *x, *v, *r;
+	double xi, vi, ri;
+	SEXP R;
+
+	if (theta <= eps) {
+		return X;
+	} else {
+		x = NUMERIC_POINTER(X);
+		v = NUMERIC_POINTER(V);
+		PROTECT(R = NEW_NUMERIC(n));
+		r = NUMERIC_POINTER(R);
+
+		for (int i = 0; i < n; i++) {
+			if (x[i] <= eps) {
+				r[i] = eps;
+			} else if (1 - x[i] <= eps) {
+				r[i] = 1 - eps;
+			} else {
+				xi = (x[i] <= eps) ? eps : ((x[i] >= 1 - eps) ? 1 - eps : x[i]);
+				vi = (v[i] <= eps) ? eps : ((v[i] >= 1 - eps) ? 1 - eps : v[i]);
+				ri = R_pow(vi, -theta-1) * R_pow(R_pow(xi, -theta) + R_pow(vi, -theta) - 1, -1-1/theta);
+				r[i] = (ri <= eps) ? eps : ((ri >= 1 - eps) ? 1 - eps : ri);
+			}
+		}
+
+		UNPROTECT(1);
+
+		return R;
+	}
+}

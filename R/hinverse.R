@@ -69,16 +69,8 @@ setMethod("hinverse", "tCopula", hinverseTCopula)
 
 hinverseClaytonCopula <- function (copula, u, v) {
   eps <- .Machine$double.eps^0.15
-
   theta <- min(copula@parameters, 100)
-  if (theta <= eps) return(u)
-  r0 <- u <= eps
-  r1 <- (1 - u) <= eps
-  u <- pmax(pmin(u, 1 - eps), eps)
-  v <- pmax(pmin(v, 1 - eps), eps)
-
-  r <- ((u * v^(theta+1))^(-theta/(theta+1)) + 1 - v^(-theta))^(-1/theta)
-  ifelse(r0, eps, ifelse(r1, 1 - eps, pmax(pmin(r, 1 - eps), eps)))
+  .Call(C_hinverseClaytonCopula, theta, u, v)
 }
 
 setMethod("hinverse", "claytonCopula", hinverseClaytonCopula)

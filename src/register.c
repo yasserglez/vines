@@ -30,6 +30,8 @@ R_CallMethodDef callRoutines[] = {
     { "hinverseIndepCopula", (DL_FUNC) &hinverseIndepCopula, 2 },
     { "hTCopula", (DL_FUNC) &hTCopula, 4 },
     { "hinverseTCopula", (DL_FUNC) &hinverseTCopula, 4 },
+    { "hClaytonCopula", (DL_FUNC) &hClaytonCopula, 3 },
+    { "hinverseClaytonCopula", (DL_FUNC) &hinverseClaytonCopula, 3 },
     { NULL, NULL, 0 }
 };
 
