@@ -1,7 +1,5 @@
 # Tests for the h functions.
 
-#library(vines)
-
 N <- 10 # Number of values of each variable.
 P <- 5 # Number of values of each parameter.
 T <- 0.01 # Tolerance checking for equality.

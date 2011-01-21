@@ -52,7 +52,7 @@ hNormalCopula <- function (copula, x, v) {
 
   rho <- copula@parameters
   r0 <- (x <= eps) | (x != 1 & rho == 1 & x == v)
-  r1 <- abs(1 - x) <= eps | (rho == -1 & 1 - (x + v) <= eps)
+  r1 <- (1 - x) <= eps | (rho == -1 & 1 - (x + v) <= eps)
   v <- pmax(pmin(v, 1 - eps), eps)
 
   r <- pnorm((qnorm(x) - rho*qnorm(v)) / sqrt(1 - rho^2))
@@ -68,7 +68,7 @@ htCopula <- function (copula, x, v) {
   rho <- copula@parameters
   df <- if (copula@df.fixed) copula@df else copula@parameters[2]
   r0 <- (x <= eps) | (x != 1 & rho == 1 & x == v)
-  r1 <- abs(1 - x) <= eps | (rho == -1 & 1 - (x + v) <= eps)
+  r1 <- (1 - x) <= eps | (rho == -1 & 1 - (x + v) <= eps)
   v <- pmax(pmin(v, 1 - eps), eps)
 
   r <- pt((qt(x, df) - rho*qt(v, df)) / 
@@ -85,7 +85,7 @@ hClaytonCopula <- function (copula, x, v) {
   theta <- min(copula@parameters, 100)
   if (theta <= eps) return(x)
   r0 <- x <= eps
-  r1 <- abs(1 - x) <= eps  
+  r1 <- (1 - x) <= eps  
   x <- pmax(pmin(x, 1 - eps), eps)
   v <- pmax(pmin(v, 1 - eps), eps)
 
@@ -102,7 +102,7 @@ hGumbelCopula <- function (copula, x, v) {
   theta <- min(copula@parameters, 100)
   if (theta <= eps) return(x)
   r0 <- x <= eps
-  r1 <- abs(1 - x) <= eps  
+  r1 <- (1 - x) <= eps  
   x <- pmax(pmin(x, 1 - eps), eps)
   v <- pmax(pmin(v, 1 - eps), eps)
 

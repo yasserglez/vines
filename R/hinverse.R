@@ -24,7 +24,7 @@ hinverseCopula <- function (copula, u, v) {
   eps <- .Machine$double.eps^0.5
   
   r0 <- u <= eps
-  r1 <- abs(1 - u) <= eps
+  r1 <- (1 - u) <= eps
   s <- r0 | r1
   u <- pmax(pmin(u, 1 - eps), eps)
   v <- pmax(pmin(v, 1 - eps), eps)  
@@ -55,7 +55,7 @@ hinverseNormalCopula <- function (copula, u, v) {
   
   rho <- copula@parameters
   r0 <- u <= eps
-  r1 <- abs(1 - u) <= eps
+  r1 <- (1 - u) <= eps
   v <- pmax(pmin(v, 1 - eps), eps)
 
   r <- pnorm(qnorm(u) * sqrt(1 - rho^2) + rho*qnorm(v))
@@ -71,7 +71,7 @@ hinversetCopula <- function (copula, u, v) {
   rho <- copula@parameters
   df <- if (copula@df.fixed) copula@df else copula@parameters[2]
   r0 <- u <= eps
-  r1 <- abs(1 - u) <= eps
+  r1 <- (1 - u) <= eps
   v <- pmax(pmin(v, 1 - eps), eps)
 
   r <- pt(qt(u, df+1) * sqrt(((df + qt(v, df)^2) * (1 - rho^2)) / 
@@ -88,7 +88,7 @@ hinverseClaytonCopula <- function (copula, u, v) {
   theta <- min(copula@parameters, 100)
   if (theta <= eps) return(u)
   r0 <- u <= eps
-  r1 <- abs(1 - u) <= eps
+  r1 <- (1 - u) <= eps
   u <- pmax(pmin(u, 1 - eps), eps)
   v <- pmax(pmin(v, 1 - eps), eps)
 
