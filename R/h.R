@@ -55,21 +55,13 @@ hNormalCopula <- function (copula, x, v) {
 setMethod("h", "normalCopula", hNormalCopula)
 
 
-htCopula <- function (copula, x, v) {
-  eps <- .Machine$double.eps^0.5
-
+hTCopula <- function (copula, x, v) {
   rho <- copula@parameters
   df <- if (copula@df.fixed) copula@df else copula@parameters[2]
-  r0 <- (x <= eps) | (x != 1 & rho == 1 & x == v)
-  r1 <- (1 - x) <= eps | (rho == -1 & 1 - (x + v) <= eps)
-  v <- pmax(pmin(v, 1 - eps), eps)
-
-  r <- pt((qt(x, df) - rho*qt(v, df)) / 
-          sqrt(((df + qt(v, df)^2) * (1 - rho^2)) / (df+1)), df+1)
-  ifelse(r0, eps, ifelse(r1, 1 - eps, pmax(pmin(r, 1 - eps), eps)))
+  .Call(C_hTCopula, rho, df, x, v)
 }
 
-setMethod("h", "tCopula", htCopula)
+setMethod("h", "tCopula", hTCopula)
 
 
 hClaytonCopula <- function (copula, x, v) {

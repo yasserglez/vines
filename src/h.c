@@ -42,7 +42,8 @@ SEXP hNormalCopula(SEXP Rho, SEXP X, SEXP V)
 			r[i] = 1 - eps;
 		} else {
 			vi = (v[i] <= eps) ? eps : ((v[i] >= 1 - eps) ? 1 - eps : v[i]);
-			ri = pnorm((qnorm(x[i], 0, 1, 1, 0) - rho*qnorm(vi, 0, 1, 1, 0)) / sqrt(1 - rho*rho), 0, 1, 1, 0);
+			ri = pnorm((qnorm(x[i], 0, 1, TRUE, FALSE) - rho*qnorm(vi, 0, 1, TRUE, FALSE)) /
+					   sqrt(1 - rho*rho), 0, 1, TRUE, FALSE);
 			r[i] = (ri <= eps) ? eps : ((ri >= 1 - eps) ? 1 - eps : ri);
 		}
 	}
@@ -55,4 +56,38 @@ SEXP hNormalCopula(SEXP Rho, SEXP X, SEXP V)
 SEXP hIndepCopula(SEXP X, SEXP V)
 {
 	return X;
+}
+
+SEXP hTCopula(SEXP Rho, SEXP Df, SEXP X, SEXP V)
+{
+	double eps = R_pow(DOUBLE_EPS, 0.5);
+	double rho = NUMERIC_VALUE(Rho);
+	double df = NUMERIC_VALUE(Df);
+	int n = LENGTH(X);
+	double *x, *v, *r;
+	double b2, vi, ri;
+	SEXP R;
+
+	x = NUMERIC_POINTER(X);
+	v = NUMERIC_POINTER(V);
+	PROTECT(R = NEW_NUMERIC(n));
+	r = NUMERIC_POINTER(R);
+
+	for (int i = 0; i < n; i++) {
+		if (x[i] <= eps || (rho == 1 && x[i] == v[i] && x[i] != 1)) {
+			r[i] = eps;
+		} else if (1 - x[i] <= eps || (rho == -1 && 1 - (x[i] + v[i]) <= eps)) {
+			r[i] = 1 - eps;
+		} else {
+			vi = (v[i] <= eps) ? eps : ((v[i] >= 1 - eps) ? 1 - eps : v[i]);
+			b2 = qt(vi, df, TRUE, FALSE);
+			ri = pt((qt(x[i], df, TRUE, FALSE) - rho*b2) /
+					sqrt(((df + b2*b2) * (1 - rho*rho)) / (df+1)), df+1, TRUE, FALSE);
+			r[i] = (ri <= eps) ? eps : ((ri >= 1 - eps) ? 1 - eps : ri);
+		}
+	}
+
+	UNPROTECT(1);
+
+	return R;
 }

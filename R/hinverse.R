@@ -39,7 +39,7 @@ setMethod("hinverse", "copula", hinverseCopula)
 
 
 hinverseIndepCopula <- function (copula, u, v) {
-  .Call(C_hinverseIndepCopula, x, v)
+  .Call(C_hinverseIndepCopula, u, v)
 }
 
 setMethod("hinverse", "indepCopula", hinverseIndepCopula)
@@ -58,21 +58,13 @@ hinverseNormalCopula <- function (copula, u, v) {
 setMethod("hinverse", "normalCopula", hinverseNormalCopula)
 
 
-hinversetCopula <- function (copula, u, v) {
-  eps <- .Machine$double.eps^0.15
-  
+hinverseTCopula <- function (copula, u, v) {
   rho <- copula@parameters
   df <- if (copula@df.fixed) copula@df else copula@parameters[2]
-  r0 <- u <= eps
-  r1 <- (1 - u) <= eps
-  v <- pmax(pmin(v, 1 - eps), eps)
-
-  r <- pt(qt(u, df+1) * sqrt(((df + qt(v, df)^2) * (1 - rho^2)) / 
-              (df+1)) + rho*qt(v, df), df)
-  ifelse(r0, eps, ifelse(r1, 1 - eps, pmax(pmin(r, 1 - eps), eps)))
+  .Call(C_hinverseTCopula, rho, df, u, v)
 }
 
-setMethod("hinverse", "tCopula", hinversetCopula)
+setMethod("hinverse", "tCopula", hinverseTCopula)
 
 
 hinverseClaytonCopula <- function (copula, u, v) {
