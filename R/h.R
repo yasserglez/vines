@@ -73,18 +73,8 @@ setMethod("h", "claytonCopula", hClaytonCopula)
 
 
 hGumbelCopula <- function (copula, x, v) {
-  eps <- .Machine$double.eps^0.5
-  
   theta <- min(copula@parameters, 100)
-  if (theta <= eps) return(x)
-  r0 <- x <= eps
-  r1 <- (1 - x) <= eps  
-  x <- pmax(pmin(x, 1 - eps), eps)
-  v <- pmax(pmin(v, 1 - eps), eps)
-
-  r <- pcopula(copula, cbind(x, v)) * 1/v * (-log(v))^(theta-1) *
-      ((-log(x))^theta + (-log(v))^theta)^(1/theta-1)
-  ifelse(r0, eps, ifelse(r1, 1 - eps, pmax(pmin(r, 1 - eps), eps)))
+  .Call(C_hGumbelCopula, theta, x, v)
 }
 
 setMethod("h", "gumbelCopula", hGumbelCopula)

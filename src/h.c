@@ -127,3 +127,43 @@ SEXP hClaytonCopula(SEXP Theta, SEXP X, SEXP V)
 		return R;
 	}
 }
+
+SEXP hGumbelCopula(SEXP Theta, SEXP X, SEXP V)
+{
+	double eps = R_pow(DOUBLE_EPS, 0.5);
+	double theta = NUMERIC_VALUE(Theta);
+	int n = LENGTH(X);
+	double *x, *v, *r;
+	double xi, vi, ri;
+	double mlogxi, mlogvi, t;
+	SEXP R;
+
+	if (theta <= eps) {
+		return X;
+	} else {
+		x = NUMERIC_POINTER(X);
+		v = NUMERIC_POINTER(V);
+		PROTECT(R = NEW_NUMERIC(n));
+		r = NUMERIC_POINTER(R);
+
+		for (int i = 0; i < n; i++) {
+			if (x[i] <= eps) {
+				r[i] = eps;
+			} else if (1 - x[i] <= eps) {
+				r[i] = 1 - eps;
+			} else {
+				xi = (x[i] <= eps) ? eps : ((x[i] >= 1 - eps) ? 1 - eps : x[i]);
+				vi = (v[i] <= eps) ? eps : ((v[i] >= 1 - eps) ? 1 - eps : v[i]);
+				mlogxi = -log(xi);
+				mlogvi = -log(vi);
+				t = R_pow(mlogxi, theta) + R_pow(mlogvi, theta);
+				ri = exp(-R_pow(t)) * R_pow(mlogvi, theta-1) * R_pow(t, 1/theta-1) / vi;
+				r[i] = (ri <= eps) ? eps : ((ri >= 1 - eps) ? 1 - eps : ri);
+			}
+		}
+
+		UNPROTECT(1);
+
+		return R;
+	}
+}

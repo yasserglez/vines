@@ -23,7 +23,7 @@
 #include "hinverse.h"
 
 
-R_CallMethodDef callRoutines[] = {
+R_CallMethodDef callMethods[] = {
     { "hNormalCopula", (DL_FUNC) &hNormalCopula, 3 },
     { "hinverseNormalCopula", (DL_FUNC) &hinverseNormalCopula, 3 },
     { "hIndepCopula", (DL_FUNC) &hIndepCopula, 2 },
@@ -32,10 +32,11 @@ R_CallMethodDef callRoutines[] = {
     { "hinverseTCopula", (DL_FUNC) &hinverseTCopula, 4 },
     { "hClaytonCopula", (DL_FUNC) &hClaytonCopula, 3 },
     { "hinverseClaytonCopula", (DL_FUNC) &hinverseClaytonCopula, 3 },
+    { "hGumbelCopula", (DL_FUNC) &hGumbelCopula, 3 },
     { NULL, NULL, 0 }
 };
 
 void R_init_vines(DllInfo *info)
 {
-	R_registerRoutines(info, NULL, callRoutines, NULL, NULL);
+	R_registerRoutines(info, NULL, callMethods, NULL, NULL);
 }
