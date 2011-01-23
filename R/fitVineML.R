@@ -16,24 +16,24 @@
 # this program. If not, see <http://www.gnu.org/licenses/>.
 
 setClass("fitVineML",
-    contains = "fitVine",
-    representation = representation(
-        optimMethod = "character",
-        optimConv = "numeric",
-        startParams = "numeric",
-        startLogLik = "numeric",
-        finalParams = "numeric",
-        finalLogLik = "numeric"),
-    prototype = prototype(
-        method = "ml"))
+        contains = "fitVine",
+        representation = representation(
+                optimMethod = "character",
+                optimConv = "numeric",
+                startParams = "numeric",
+                startLogLik = "numeric",
+                finalParams = "numeric",
+                finalLogLik = "numeric"),
+        prototype = prototype(
+                method = "ml"))
 
 
 showFitVineML <- function (object) {
-  showFitVine(object)
-  cat("Optimization method:", object@optimMethod, "\n")
-  cat("Convergence code:", object@optimConv, "\n")
-  cat("Initial log-likelihood:", object@startLogLik, "\n")
-  cat("Final log-likelihood:", object@finalLogLik, "\n")
+    showFitVine(object)
+    cat("Optimization method:", object@optimMethod, "\n")
+    cat("Convergence code:", object@optimConv, "\n")
+    cat("Initial log-likelihood:", object@startLogLik, "\n")
+    cat("Final log-likelihood:", object@finalLogLik, "\n")
 }
 
 setMethod("show", "fitVineML", showFitVineML)
@@ -41,87 +41,87 @@ setMethod("show", "fitVineML", showFitVineML)
 
 # Function called by iterVine to evaluate the log-likelihood of each copula.
 evalLogLikCopula <- function (vine, j, i, x, y) {
-  copula <- vine@copulas[[j, i]]
-  loglikCopula(copula@parameters, cbind(x, y), copula)
+    copula <- vine@copulas[[j, i]]
+    loglikCopula(copula@parameters, cbind(x, y), copula)
 }
 
 
 logLikVine <- function (vine, data) {
-  iterVineResult <- iterVine(vine, data, eval = evalLogLikCopula)
-  sum(unlist(iterVineResult$evals))
+    iterVineResult <- iterVine(vine, data, eval = evalLogLikCopula)
+    sum(unlist(iterVineResult$evals))
 }
 
 
 fitVineML <- function (type, data, trees = ncol(data) - 1,
-    selectCopula = function (j, i, x, y) indepCopula(),
-    optimMethod = "Nelder-Mead", optimControl = list()) {
-  # Compute starting values for the parameters of the copulas in the pair-copula 
-  # construction following the estimation procedure described in Section 7 of 
-  # Aas, K., Czado, C., Frigessi, A. and Bakken, H. Pair-copula constructions 
-  # of multiple dependence. Insurance Mathematics and Economics, 2009, Vol. 44, 
-  # pp. 182-198.
-  selectCopulaWrapper <- function (vine, j, i, x, y) selectCopula(j, i, x, y)
-  vine <- Vine(type, dimension = ncol(data), trees = trees,
-      copulas = matrix(list(), ncol(data) - 1, ncol(data) - 1))
-  dimnames(vine) <- colnames(data)
-  iterVineResult <- iterVine(vine, data, 
-      fit = selectCopulaWrapper, eval = evalLogLikCopula)
-  vine <- iterVineResult$vine
-  startParams <- parameters(vine)
-  startLogLik <- sum(unlist(iterVineResult$evals))
-
-  if (nzchar(optimMethod) && length(startParams) > 0) {
-    # Execute the optimization method.
-    lowerParams <- unlist(lapply(vine@copulas,
-          function (x) if (is.null(x)) numeric(0) else x@param.lowbnd))
-    upperParams <- unlist(lapply(vine@copulas, 
-          function (x) if (is.null(x)) numeric(0) else x@param.upbnd))
-
-    if (identical(optimMethod, "L-BFGS-B")) {
-      lower <- lowerParams
-      upper <- upperParams
+        selectCopula = function (j, i, x, y) indepCopula(),
+        optimMethod = "Nelder-Mead", optimControl = list()) {
+    # Compute starting values for the parameters of the copulas in the 
+    # pair-copula construction following the estimation procedure described in 
+    # Section 7 of Aas, K., Czado, C., Frigessi, A. and Bakken, H. Pair-copula 
+    # constructions of multiple dependence. Insurance Mathematics and Economics, 
+    # 2009, Vol. 44, pp. 182-198.
+    selectCopulaWrapper <- function (vine, j, i, x, y) selectCopula(j, i, x, y)
+    vine <- Vine(type, dimension = ncol(data), trees = trees,
+            copulas = matrix(list(), ncol(data) - 1, ncol(data) - 1))
+    dimnames(vine) <- colnames(data)
+    iterVineResult <- iterVine(vine, data, 
+            fit = selectCopulaWrapper, eval = evalLogLikCopula)
+    vine <- iterVineResult$vine
+    startParams <- parameters(vine)
+    startLogLik <- sum(unlist(iterVineResult$evals))
+    
+    if (nzchar(optimMethod) && length(startParams) > 0) {
+        # Execute the optimization method.
+        lowerParams <- unlist(lapply(vine@copulas,
+                    function (x) if (is.null(x)) numeric(0) else x@param.lowbnd))
+        upperParams <- unlist(lapply(vine@copulas, 
+                    function (x) if (is.null(x)) numeric(0) else x@param.upbnd))
+        
+        if (identical(optimMethod, "L-BFGS-B")) {
+            lower <- lowerParams
+            upper <- upperParams
+        } else {
+            lower <- -Inf
+            upper <- Inf
+        }
+        
+        logLik <- function (x, vine, data, lowerParams, upperParams) {
+            if (all(is.finite(x) & x >= lowerParams & x <= upperParams)) {
+                parameters(vine) <- x
+                logLikVine(vine, data)
+            } else {
+                NA
+            }
+        }
+        
+        optimControl <- c(optimControl, fnscale = -1)
+        optimResult <- optim(startParams, logLik, lower = lower, upper = upper,
+                method = optimMethod, control = optimControl, vine = vine, 
+                data = data, lowerParams = lowerParams, upperParams = upperParams)
+        
+        parameters(vine) <- optimResult$par
+        
+        fit <- new("fitVineML", 
+                vine = vine,
+                observations = nrow(data),
+                optimMethod = optimMethod,
+                optimConv = optimResult$convergence,
+                startParams = startParams,
+                startLogLik = startLogLik,
+                finalParams = optimResult$par,
+                finalLogLik = optimResult$value)
     } else {
-      lower <- -Inf
-      upper <- Inf
+        # Without parameters or optimization disabled.
+        fit <- new("fitVineML", 
+                vine = vine,
+                observations = nrow(data), 
+                optimMethod = optimMethod,
+                optimConv = 0,
+                startParams = startParams,
+                startLogLik = startLogLik,
+                finalParams = startParams,
+                finalLogLik = logLikVine(vine, data))
     }
-
-    logLik <- function (x, vine, data, lowerParams, upperParams) {
-      if (all(is.finite(x) & x >= lowerParams & x <= upperParams)) {
-        parameters(vine) <- x
-        logLikVine(vine, data)
-      } else {
-        NA
-      }
-    }
-
-    optimControl <- c(optimControl, fnscale = -1)
-    optimResult <- optim(startParams, logLik, lower = lower, upper = upper,
-        method = optimMethod, control = optimControl, vine = vine, data = data,
-        lowerParams = lowerParams, upperParams = upperParams)
-
-    parameters(vine) <- optimResult$par
-
-    fit <- new("fitVineML", 
-        vine = vine,
-        observations = nrow(data),
-        optimMethod = optimMethod,
-        optimConv = optimResult$convergence,
-        startParams = startParams,
-        startLogLik = startLogLik,
-        finalParams = optimResult$par,
-        finalLogLik = optimResult$value)
-  } else {
-    # Without parameters or optimization disabled.
-    fit <- new("fitVineML", 
-        vine = vine,
-        observations = nrow(data), 
-        optimMethod = optimMethod,
-        optimConv = 0,
-        startParams = startParams,
-        startLogLik = startLogLik,
-        finalParams = startParams,
-        finalLogLik = logLikVine(vine, data))
-  }
-
-  fit
+    
+    fit
 }

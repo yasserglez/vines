@@ -16,21 +16,20 @@
 # this program. If not, see <http://www.gnu.org/licenses/>.
 
 getDimnamesVine <- function (x) {
-  x@dimensionNames
+    x@dimensionNames
 } 
 
 setMethod("dimnames", "Vine", getDimnamesVine)
 
 
 setDimnamesVine <- function (x, value) {
-  dimensionNames <- as.character(value)
-  if (length(dimensionNames) == 0 || 
-      length(dimensionNames) == x@dimension) {
-    x@dimensionNames <- dimensionNames
-    x
-  } else {
-    stop("length of the argument not equal to the dimension of the vine")
-  }
+    dimensionNames <- as.character(value)
+    if (length(dimensionNames) == 0 || length(dimensionNames) == x@dimension) {
+        x@dimensionNames <- dimensionNames
+        x
+    } else {
+        stop("length of the argument not equal to the dimension of the vine")
+    }
 }
 
 setMethod("dimnames<-", "Vine", setDimnamesVine)

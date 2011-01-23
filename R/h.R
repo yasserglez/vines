@@ -16,27 +16,27 @@
 # this program. If not, see <http://www.gnu.org/licenses/>.
 
 setGeneric("h", 
-    function (copula, x, v) standardGeneric("h"),
-    signature = "copula")
+        function (copula, x, v) standardGeneric("h"),
+        signature = "copula")
 
 
 hCopula <- function (copula, x, v) {
-  eps <- .Machine$double.eps^0.5
-  
-  envir <- new.env()
-  assign("copula", copula, envir)
-  assign("x", pmax(pmin(x, 1 - eps), eps), envir)
-  assign("v", pmax(pmin(v, 1 - eps), eps), envir)
-  d <- numericDeriv(quote(pcopula(copula, cbind(x, v))), "v", envir)
-  r <- diag(attr(d, "gradient"))
-  pmax(pmin(r, 1 - eps), eps)
+    eps <- .Machine$double.eps^0.5
+    
+    envir <- new.env()
+    assign("copula", copula, envir)
+    assign("x", pmax(pmin(x, 1 - eps), eps), envir)
+    assign("v", pmax(pmin(v, 1 - eps), eps), envir)
+    d <- numericDeriv(quote(pcopula(copula, cbind(x, v))), "v", envir)
+    r <- diag(attr(d, "gradient"))
+    pmax(pmin(r, 1 - eps), eps)
 }
 
 setMethod("h", "copula", hCopula)
 
 
 hIndepCopula <- function (copula, x, v) {
-  .Call(C_hIndepCopula, x, v)
+    .Call(C_hIndepCopula, x, v)
 }
 
 setMethod("h", "indepCopula", hIndepCopula)
@@ -48,33 +48,33 @@ setMethod("h", "indepCopula", hIndepCopula)
 # Gumbel copulas.
 
 hNormalCopula <- function (copula, x, v) {
-  rho <- copula@parameters
-  .Call(C_hNormalCopula, rho, x, v)
+    rho <- copula@parameters
+    .Call(C_hNormalCopula, rho, x, v)
 }
 
 setMethod("h", "normalCopula", hNormalCopula)
 
 
 hTCopula <- function (copula, x, v) {
-  rho <- copula@parameters
-  df <- if (copula@df.fixed) copula@df else copula@parameters[2]
-  .Call(C_hTCopula, rho, df, x, v)
+    rho <- copula@parameters
+    df <- if (copula@df.fixed) copula@df else copula@parameters[2]
+    .Call(C_hTCopula, rho, df, x, v)
 }
 
 setMethod("h", "tCopula", hTCopula)
 
 
 hClaytonCopula <- function (copula, x, v) {
-  theta <- min(copula@parameters, 100)
-  .Call(C_hClaytonCopula, theta, x, v)
+    theta <- min(copula@parameters, 100)
+    .Call(C_hClaytonCopula, theta, x, v)
 }
 
 setMethod("h", "claytonCopula", hClaytonCopula)
 
 
 hGumbelCopula <- function (copula, x, v) {
-  theta <- min(copula@parameters, 100)
-  .Call(C_hGumbelCopula, theta, x, v)
+    theta <- min(copula@parameters, 100)
+    .Call(C_hGumbelCopula, theta, x, v)
 }
 
 setMethod("h", "gumbelCopula", hGumbelCopula)

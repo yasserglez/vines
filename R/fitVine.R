@@ -16,35 +16,35 @@
 # this program. If not, see <http://www.gnu.org/licenses/>.
 
 setClass("fitVine",
-    representation = representation(
-        vine = "Vine",
-        observations = "numeric",
-        method = "character"))
+        representation = representation(
+                vine = "Vine",
+                observations = "numeric",
+                method = "character"))
 
 
 showFitVine <- function (object) {
-  cat("Vine Inference\n\n")
-  cat("Method:", object@method, "\n")
-  cat("Vine type:", object@vine@type, "\n")
-  cat("Dimension:", object@vine@dimension, "\n")
-  cat("Observations:", object@observations, "\n")
+    cat("Vine Inference\n\n")
+    cat("Method:", object@method, "\n")
+    cat("Vine type:", object@vine@type, "\n")
+    cat("Dimension:", object@vine@dimension, "\n")
+    cat("Observations:", object@observations, "\n")
 }
 
 setMethod("show", "fitVine", showFitVine)
 
 
 fitVine <- function (type, data, method = "ml", ...) {
-  if (type %in% c("CVine", "DVine") && identical(method, "ml")) {
-    fitVineML(type, data, ...)
-  } else {
-    stop("invalid fit method ", dQuote(method), " for ", dQuote(type))
-  }
+    if (type %in% c("CVine", "DVine") && identical(method, "ml")) {
+        fitVineML(type, data, ...)
+    } else {
+        stop("invalid fit method ", dQuote(method), " for ", dQuote(type))
+    }
 }
 
 fitCVine <- function (data, method = "ml", ...) {
-  fitVine("CVine", data, method, ...)
+    fitVine("CVine", data, method, ...)
 }
 
 fitDVine <- function (data, method = "ml", ...) {
-  fitVine("DVine", data, method, ...)
+    fitVine("DVine", data, method, ...)
 }

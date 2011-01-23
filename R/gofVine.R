@@ -16,43 +16,43 @@
 # this program. If not, see <http://www.gnu.org/licenses/>.
 
 setClass("gofVine",
-    representation = representation(
-        method = "character",
-        pvalue = "numeric",
-        statistic = "numeric"))
+        representation = representation(
+                method = "character",
+                pvalue = "numeric",
+                statistic = "numeric"))
 
 
 showGofVine <- function (object) {
-  cat("Vine Goodness-of-fit Test\n\n")
-  cat("Method:", object@method, "\n")
-  cat("Statistic:", object@statistic, "with p-value", object@pvalue, "\n")
+    cat("Vine Goodness-of-fit Test\n\n")
+    cat("Method:", object@method, "\n")
+    cat("Statistic:", object@statistic, "with p-value", object@pvalue, "\n")
 }
 
 setMethod("show", "gofVine", showGofVine)
 
 
 gofVinePIT <- function (vine, data, statistic = "breymann") {
-  Z <- pitVine(vine, data)
-
-  if (identical(statistic, "breymann")) {
-    n <- ncol(Z)
-    S <- rowSums(qnorm(Z) ^ 2)
-    adResult <- ad.test(S, pchisq, df = n)
-    new("gofVine",
-        method = "PIT and the Breymann et al. (2003) statistic",
-        pvalue = adResult$p.value,
-        statistic = adResult$statistic)
-  } else {
-    stop("invalid statistic ", dQuote(statistic),
-        " for the goodness-of-fit method based on the PIT")
-  }
+    Z <- pitVine(vine, data)
+    
+    if (identical(statistic, "breymann")) {
+        n <- ncol(Z)
+        S <- rowSums(qnorm(Z) ^ 2)
+        adResult <- ad.test(S, pchisq, df = n)
+        new("gofVine",
+                method = "PIT and the Breymann et al. (2003) statistic",
+                pvalue = adResult$p.value,
+                statistic = adResult$statistic)
+    } else {
+        stop("invalid statistic ", dQuote(statistic),
+                " for the goodness-of-fit method based on the PIT")
+    }
 }
 
 
 gofVine <- function (vine, data, method = "pit", ...) {
-  if (identical(method, "pit")) {
-    gofVinePIT(vine, data, ...)
-  } else {
-    stop("invalid goodness-of-fit method ", dQuote(method))
-  }
+    if (identical(method, "pit")) {
+        gofVinePIT(vine, data, ...)
+    } else {
+        stop("invalid goodness-of-fit method ", dQuote(method))
+    }
 }

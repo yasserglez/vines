@@ -16,30 +16,30 @@
 # this program. If not, see <http://www.gnu.org/licenses/>.
 
 setGeneric("hinverse", 
-    function (copula, u, v) standardGeneric("hinverse"),
-    signature = "copula")
+        function (copula, u, v) standardGeneric("hinverse"),
+        signature = "copula")
 
 
 hinverseCopula <- function (copula, u, v) {
-  eps <- .Machine$double.eps^0.5
-  
-  r0 <- u <= eps
-  r1 <- (1 - u) <= eps
-  s <- r0 | r1
-  u <- pmax(pmin(u, 1 - eps), eps)
-  v <- pmax(pmin(v, 1 - eps), eps)  
-  f <- function (x, u, v) abs(h(copula, x, v) - u)
-  z <- function (i) optimize(f, c(eps, 1 - eps), tol = 0.01, u = u[i], v = v[i])$minimum
-
-  r <- sapply(seq(along = u), function(i) if (s[i]) NA else z(i))
-  ifelse(r0, eps, ifelse(r1, 1 - eps, r))
+    eps <- .Machine$double.eps^0.5
+    
+    r0 <- u <= eps
+    r1 <- (1 - u) <= eps
+    s <- r0 | r1
+    u <- pmax(pmin(u, 1 - eps), eps)
+    v <- pmax(pmin(v, 1 - eps), eps)  
+    f <- function (x, u, v) abs(h(copula, x, v) - u)
+    z <- function (i) optimize(f, c(eps, 1 - eps), tol = 0.01, u = u[i], v = v[i])$minimum
+    
+    r <- sapply(seq(along = u), function(i) if (s[i]) NA else z(i))
+    ifelse(r0, eps, ifelse(r1, 1 - eps, r))
 }
 
 setMethod("hinverse", "copula", hinverseCopula)
 
 
 hinverseIndepCopula <- function (copula, u, v) {
-  .Call(C_hinverseIndepCopula, u, v)
+    .Call(C_hinverseIndepCopula, u, v)
 }
 
 setMethod("hinverse", "indepCopula", hinverseIndepCopula)
@@ -51,26 +51,26 @@ setMethod("hinverse", "indepCopula", hinverseIndepCopula)
 # Gumbel copulas.
 
 hinverseNormalCopula <- function (copula, u, v) {
-  rho <- copula@parameters
-  .Call(C_hinverseNormalCopula, rho, u, v)
+    rho <- copula@parameters
+    .Call(C_hinverseNormalCopula, rho, u, v)
 }
 
 setMethod("hinverse", "normalCopula", hinverseNormalCopula)
 
 
 hinverseTCopula <- function (copula, u, v) {
-  rho <- copula@parameters
-  df <- if (copula@df.fixed) copula@df else copula@parameters[2]
-  .Call(C_hinverseTCopula, rho, df, u, v)
+    rho <- copula@parameters
+    df <- if (copula@df.fixed) copula@df else copula@parameters[2]
+    .Call(C_hinverseTCopula, rho, df, u, v)
 }
 
 setMethod("hinverse", "tCopula", hinverseTCopula)
 
 
 hinverseClaytonCopula <- function (copula, u, v) {
-  eps <- .Machine$double.eps^0.15
-  theta <- min(copula@parameters, 100)
-  .Call(C_hinverseClaytonCopula, theta, u, v)
+    eps <- .Machine$double.eps^0.15
+    theta <- min(copula@parameters, 100)
+    .Call(C_hinverseClaytonCopula, theta, u, v)
 }
 
 setMethod("hinverse", "claytonCopula", hinverseClaytonCopula)

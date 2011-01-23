@@ -21,149 +21,149 @@
 
 #include "h.h"
 
-SEXP hNormalCopula(SEXP Rho, SEXP X, SEXP V)
-{
-	double eps = R_pow(DOUBLE_EPS, 0.5);
-	double rho = NUMERIC_VALUE(Rho);
-	int n = LENGTH(X);
-	double *x, *v, *r;
-	double vi, ri;
-	SEXP R;
+SEXP hNormalCopula(SEXP RHO, SEXP X, SEXP V) {
+    double eps = R_pow(DOUBLE_EPS, 0.5);
+    double rho = NUMERIC_VALUE(RHO);
+    int n = LENGTH(X);
+    double *x, *v, *u;
+    double vi, ui;
+    SEXP U;
 
-	x = NUMERIC_POINTER(X);
-	v = NUMERIC_POINTER(V);
-	PROTECT(R = NEW_NUMERIC(n));
-	r = NUMERIC_POINTER(R);
+    x = NUMERIC_POINTER(X);
+    v = NUMERIC_POINTER(V);
+    PROTECT(U = NEW_NUMERIC(n));
+    u = NUMERIC_POINTER(U);
 
-	for (int i = 0; i < n; i++) {
-		if (x[i] <= eps || (rho == 1 && x[i] == v[i] && x[i] != 1)) {
-			r[i] = eps;
-		} else if (1 - x[i] <= eps || (rho == -1 && 1 - (x[i] + v[i]) <= eps)) {
-			r[i] = 1 - eps;
-		} else {
-			vi = (v[i] <= eps) ? eps : ((v[i] >= 1 - eps) ? 1 - eps : v[i]);
-			ri = pnorm((qnorm(x[i], 0, 1, TRUE, FALSE) - rho*qnorm(vi, 0, 1, TRUE, FALSE)) /
-					   sqrt(1 - rho*rho), 0, 1, TRUE, FALSE);
-			r[i] = (ri <= eps) ? eps : ((ri >= 1 - eps) ? 1 - eps : ri);
-		}
-	}
+    for (int i = 0; i < n; i++) {
+        if (x[i] <= eps || (rho == 1 && x[i] == v[i] && x[i] != 1)) {
+            u[i] = eps;
+        } else if (1 - x[i] <= eps || (rho == -1 && 1 - (x[i] + v[i]) <= eps)) {
+            u[i] = 1 - eps;
+        } else {
+            vi = (v[i] <= eps) ? eps : ((v[i] >= 1 - eps) ? 1 - eps : v[i]);
+            ui = pnorm((qnorm(x[i], 0, 1, TRUE, FALSE) -
+                        rho * qnorm(vi, 0, 1, TRUE, FALSE)) /
+                    sqrt(1 - rho * rho), 0, 1, TRUE, FALSE);
+            u[i] = (ui <= eps) ? eps : ((ui >= 1 - eps) ? 1 - eps : ui);
+        }
+    }
 
-	UNPROTECT(1);
+    UNPROTECT(1);
 
-	return R;
+    return U;
 }
 
-SEXP hIndepCopula(SEXP X, SEXP V)
-{
-	return X;
+SEXP hIndepCopula(SEXP X, SEXP V) {
+    return X;
 }
 
-SEXP hTCopula(SEXP Rho, SEXP Df, SEXP X, SEXP V)
-{
-	double eps = R_pow(DOUBLE_EPS, 0.5);
-	double rho = NUMERIC_VALUE(Rho);
-	double df = NUMERIC_VALUE(Df);
-	int n = LENGTH(X);
-	double *x, *v, *r;
-	double b2, vi, ri;
-	SEXP R;
+SEXP hTCopula(SEXP RHO, SEXP DF, SEXP X, SEXP V) {
+    double eps = R_pow(DOUBLE_EPS, 0.5);
+    double rho = NUMERIC_VALUE(RHO);
+    double df = NUMERIC_VALUE(DF);
+    int n = LENGTH(X);
+    double *x, *v, *u;
+    double vi, ui;
+    double tmp;
+    SEXP U;
 
-	x = NUMERIC_POINTER(X);
-	v = NUMERIC_POINTER(V);
-	PROTECT(R = NEW_NUMERIC(n));
-	r = NUMERIC_POINTER(R);
+    x = NUMERIC_POINTER(X);
+    v = NUMERIC_POINTER(V);
+    PROTECT(U = NEW_NUMERIC(n));
+    u = NUMERIC_POINTER(U);
 
-	for (int i = 0; i < n; i++) {
-		if (x[i] <= eps || (rho == 1 && x[i] == v[i] && x[i] != 1)) {
-			r[i] = eps;
-		} else if (1 - x[i] <= eps || (rho == -1 && 1 - (x[i] + v[i]) <= eps)) {
-			r[i] = 1 - eps;
-		} else {
-			vi = (v[i] <= eps) ? eps : ((v[i] >= 1 - eps) ? 1 - eps : v[i]);
-			b2 = qt(vi, df, TRUE, FALSE);
-			ri = pt((qt(x[i], df, TRUE, FALSE) - rho*b2) /
-					sqrt(((df + b2*b2) * (1 - rho*rho)) / (df+1)), df+1, TRUE, FALSE);
-			r[i] = (ri <= eps) ? eps : ((ri >= 1 - eps) ? 1 - eps : ri);
-		}
-	}
+    for (int i = 0; i < n; i++) {
+        if (x[i] <= eps || (rho == 1 && x[i] == v[i] && x[i] != 1)) {
+            u[i] = eps;
+        } else if (1 - x[i] <= eps || (rho == -1 && 1 - (x[i] + v[i]) <= eps)) {
+            u[i] = 1 - eps;
+        } else {
+            vi = (v[i] <= eps) ? eps : ((v[i] >= 1 - eps) ? 1 - eps : v[i]);
+            tmp = qt(vi, df, TRUE, FALSE);
+            ui = pt((qt(x[i], df, TRUE, FALSE) - rho * tmp) /
+                    sqrt(((df + tmp * tmp) * (1 - rho * rho)) / (df + 1)),
+                    df + 1, TRUE, FALSE);
+            u[i] = (ui <= eps) ? eps : ((ui >= 1 - eps) ? 1 - eps : ui);
+        }
+    }
 
-	UNPROTECT(1);
+    UNPROTECT(1);
 
-	return R;
+    return U;
 }
 
-SEXP hClaytonCopula(SEXP Theta, SEXP X, SEXP V)
-{
-	double eps = R_pow(DOUBLE_EPS, 0.15);
-	double theta = NUMERIC_VALUE(Theta);
-	int n = LENGTH(X);
-	double *x, *v, *r;
-	double xi, vi, ri;
-	SEXP R;
+SEXP hClaytonCopula(SEXP THETA, SEXP X, SEXP V) {
+    double eps = R_pow(DOUBLE_EPS, 0.15);
+    double theta = NUMERIC_VALUE(THETA);
+    int n = LENGTH(X);
+    double *x, *v, *u;
+    double vi, ui;
+    SEXP U;
 
-	if (theta <= eps) {
-		return X;
-	} else {
-		x = NUMERIC_POINTER(X);
-		v = NUMERIC_POINTER(V);
-		PROTECT(R = NEW_NUMERIC(n));
-		r = NUMERIC_POINTER(R);
+    if (theta <= eps) {
+        U = X;
+    } else {
+        x = NUMERIC_POINTER(X);
+        v = NUMERIC_POINTER(V);
+        PROTECT(U = NEW_NUMERIC(n));
+        u = NUMERIC_POINTER(U);
 
-		for (int i = 0; i < n; i++) {
-			if (x[i] <= eps) {
-				r[i] = eps;
-			} else if (1 - x[i] <= eps) {
-				r[i] = 1 - eps;
-			} else {
-				xi = (x[i] <= eps) ? eps : ((x[i] >= 1 - eps) ? 1 - eps : x[i]);
-				vi = (v[i] <= eps) ? eps : ((v[i] >= 1 - eps) ? 1 - eps : v[i]);
-				ri = R_pow(vi, -theta-1) * R_pow(R_pow(xi, -theta) + R_pow(vi, -theta) - 1, -1-1/theta);
-				r[i] = (ri <= eps) ? eps : ((ri >= 1 - eps) ? 1 - eps : ri);
-			}
-		}
+        for (int i = 0; i < n; i++) {
+            if (x[i] <= eps) {
+                u[i] = eps;
+            } else if (1 - x[i] <= eps) {
+                u[i] = 1 - eps;
+            } else {
+                vi = (v[i] <= eps) ? eps : ((v[i] >= 1 - eps) ? 1 - eps : v[i]);
+                ui = R_pow(vi, -theta - 1) *
+                        R_pow(R_pow(x[i], -theta) + R_pow(vi, -theta) - 1,
+                                -1 - 1 / theta);
+                u[i] = (ui <= eps) ? eps : ((ui >= 1 - eps) ? 1 - eps : ui);
+            }
+        }
 
-		UNPROTECT(1);
+        UNPROTECT(1);
+    }
 
-		return R;
-	}
+    return U;
 }
 
-SEXP hGumbelCopula(SEXP Theta, SEXP X, SEXP V)
+SEXP hGumbelCopula(SEXP THETA, SEXP X, SEXP V)
 {
-	double eps = R_pow(DOUBLE_EPS, 0.5);
-	double theta = NUMERIC_VALUE(Theta);
-	int n = LENGTH(X);
-	double *x, *v, *r;
-	double xi, vi, ri;
-	double mlogxi, mlogvi, t;
-	SEXP R;
+    double eps = R_pow(DOUBLE_EPS, 0.5);
+    double theta = NUMERIC_VALUE(THETA);
+    int n = LENGTH(X);
+    double *x, *v, *u;
+    double vi, ui;
+    double mlogxi, mlogvi, tmp;
+    SEXP U;
 
-	if (theta <= eps) {
-		return X;
-	} else {
-		x = NUMERIC_POINTER(X);
-		v = NUMERIC_POINTER(V);
-		PROTECT(R = NEW_NUMERIC(n));
-		r = NUMERIC_POINTER(R);
+    if (theta <= eps) {
+        U = X;
+    } else {
+        x = NUMERIC_POINTER(X);
+        v = NUMERIC_POINTER(V);
+        PROTECT(U = NEW_NUMERIC(n));
+        u = NUMERIC_POINTER(U);
 
-		for (int i = 0; i < n; i++) {
-			if (x[i] <= eps) {
-				r[i] = eps;
-			} else if (1 - x[i] <= eps) {
-				r[i] = 1 - eps;
-			} else {
-				xi = (x[i] <= eps) ? eps : ((x[i] >= 1 - eps) ? 1 - eps : x[i]);
-				vi = (v[i] <= eps) ? eps : ((v[i] >= 1 - eps) ? 1 - eps : v[i]);
-				mlogxi = -log(xi);
-				mlogvi = -log(vi);
-				t = R_pow(mlogxi, theta) + R_pow(mlogvi, theta);
-				ri = exp(-R_pow(t)) * R_pow(mlogvi, theta-1) * R_pow(t, 1/theta-1) / vi;
-				r[i] = (ri <= eps) ? eps : ((ri >= 1 - eps) ? 1 - eps : ri);
-			}
-		}
+        for (int i = 0; i < n; i++) {
+            if (x[i] <= eps) {
+                u[i] = eps;
+            } else if (1 - x[i] <= eps) {
+                u[i] = 1 - eps;
+            } else {
+                vi = (v[i] <= eps) ? eps : ((v[i] >= 1 - eps) ? 1 - eps : v[i]);
+                mlogxi = -log(x[i]);
+                mlogvi = -log(vi);
+                tmp = R_pow(mlogxi, theta) + R_pow(mlogvi, theta);
+                ui = exp(-R_pow(tmp, 1/theta)) * R_pow(mlogvi, theta-1) *
+                        R_pow(tmp, 1/theta-1) / vi;
+                u[i] = (ui <= eps) ? eps : ((ui >= 1 - eps) ? 1 - eps : ui);
+            }
+        }
 
-		UNPROTECT(1);
+        UNPROTECT(1);
+    }
 
-		return R;
-	}
+    return U;
 }
