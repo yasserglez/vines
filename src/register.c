@@ -27,6 +27,7 @@
 
 
 R_CallMethodDef callMethods[] = {
+    { "hinverseCopula", (DL_FUNC) &hinverseCopula, 3 },
     { "hNormalCopula", (DL_FUNC) &hNormalCopula, 3 },
     { "hinverseNormalCopula", (DL_FUNC) &hinverseNormalCopula, 3 },
     { "hIndepCopula", (DL_FUNC) &hIndepCopula, 2 },

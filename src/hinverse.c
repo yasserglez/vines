@@ -19,9 +19,82 @@
 #include <R.h>
 #include <Rinternals.h>
 #include <Rmath.h>
+#include <gsl/gsl_errno.h>
+#include <gsl/gsl_roots.h>
 
 #include "hinverse.h"
+#include "common.h"
 
+
+struct fparams {
+    SEXP *Copula;
+    SEXP *U;
+    SEXP *V;
+    int i;
+};
+
+double f(double x, void *params) {
+    struct fparams *p = (struct fparams *) params;
+    double u = REAL(*(p->U))[p->i];
+    double v = REAL(*(p->V))[p->i];
+
+    return asReal(h(*(p->Copula), ScalarReal(x), ScalarReal(v))) - u;
+}
+
+SEXP hinverseCopula(SEXP Copula, SEXP U, SEXP V) {
+    double eps = R_pow(DOUBLE_EPS, 0.5);
+    int n = LENGTH(U);
+    double *u = REAL(U), *v = REAL(V);
+    gsl_function F;
+    struct fparams *params;
+    gsl_root_fsolver *solver;
+    int status;
+    double lower, upper;
+    double *x;
+    SEXP X;
+
+    params = (struct fparams *) R_alloc(1, sizeof(struct fparams));
+    params->Copula = &Copula;
+    params->U = &U;
+    params->V = &V;
+    F.function = &f;
+    F.params = params;
+
+    gsl_set_error_handler_off();
+    solver = gsl_root_fsolver_alloc(gsl_root_fsolver_brent);
+
+    PROTECT(X = allocVector(REALSXP, n));
+    x = REAL(X);
+
+    for (int i = 0; i < n; i++) {
+        if (u[i] <= eps) {
+            x[i] = eps;
+        } else if (1 - u[i] <= eps) {
+            x[i] = 1 - eps;
+        } else {
+            params->i = i;
+            gsl_root_fsolver_set(solver, &F, eps, 1 - eps);
+            do {
+                status = gsl_root_fsolver_iterate(solver);
+                if (status) {
+                    UNPROTECT(1);
+                    gsl_root_fsolver_free(solver);
+                    error(gsl_strerror(status));
+                } else {
+                    lower = gsl_root_fsolver_x_lower(solver);
+                    upper = gsl_root_fsolver_x_upper(solver);
+                    status = gsl_root_test_interval(lower, upper, 0, 0.01);
+                }
+            } while (status == GSL_CONTINUE);
+            x[i] = gsl_root_fsolver_root(solver);
+        }
+    }
+
+    UNPROTECT(1);
+    gsl_root_fsolver_free(solver);
+
+    return X;
+}
 
 SEXP hinverseIndepCopula(SEXP U, SEXP V) {
     return U;
@@ -42,11 +115,8 @@ SEXP hinverseNormalCopula(SEXP Rho, SEXP U, SEXP V) {
     double *x;
     SEXP X;
 
-    u = REAL(U);
-    v = REAL(V);
     PROTECT(X = allocVector(REALSXP, n));
     x = REAL(X);
-
     for (int i = 0; i < n; i++) {
         if (u[i] <= eps) {
             x[i] = eps;
@@ -59,7 +129,6 @@ SEXP hinverseNormalCopula(SEXP Rho, SEXP U, SEXP V) {
             x[i] = (xi <= eps) ? eps : ((xi >= 1 - eps) ? 1 - eps : xi);
         }
     }
-
     UNPROTECT(1);
 
     return X;
@@ -75,11 +144,8 @@ SEXP hinverseTCopula(SEXP Rho, SEXP Df, SEXP U, SEXP V) {
     double *x;
     SEXP X;
 
-    u = REAL(U);
-    v = REAL(V);
     PROTECT(X = allocVector(REALSXP, n));
     x = REAL(X);
-
     for (int i = 0; i < n; i++) {
         if (u[i] <= eps) {
             x[i] = eps;
@@ -94,7 +160,6 @@ SEXP hinverseTCopula(SEXP Rho, SEXP Df, SEXP U, SEXP V) {
             x[i] = (xi <= eps) ? eps : ((xi >= 1 - eps) ? 1 - eps : xi);
         }
     }
-
     UNPROTECT(1);
 
     return X;
@@ -112,10 +177,8 @@ SEXP hinverseClaytonCopula(SEXP Theta, SEXP U, SEXP V) {
     if (theta <= eps) {
         return U;
     }
-
     PROTECT(X = allocVector(REALSXP, n));
     x = REAL(X);
-
     for (int i = 0; i < n; i++) {
         if (u[i] <= eps) {
             x[i] = eps;
@@ -128,7 +191,6 @@ SEXP hinverseClaytonCopula(SEXP Theta, SEXP U, SEXP V) {
             x[i] = (xi <= eps) ? eps : ((xi >= 1 - eps) ? 1 - eps : xi);
         }
     }
-
     UNPROTECT(1);
 
     return X;

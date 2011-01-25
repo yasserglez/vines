@@ -42,7 +42,6 @@ SEXP hNormalCopula(SEXP Rho, SEXP X, SEXP V) {
 
     PROTECT(U = allocVector(REALSXP, n));
     u = REAL(U);
-
     for (int i = 0; i < n; i++) {
         if (x[i] <= eps || (rho == 1 && x[i] == v[i] && x[i] != 1)) {
             u[i] = eps;
@@ -56,7 +55,6 @@ SEXP hNormalCopula(SEXP Rho, SEXP X, SEXP V) {
             u[i] = (ui <= eps) ? eps : ((ui >= 1 - eps) ? 1 - eps : ui);
         }
     }
-
     UNPROTECT(1);
 
     return U;
@@ -74,7 +72,6 @@ SEXP hTCopula(SEXP Rho, SEXP Df, SEXP X, SEXP V) {
 
     PROTECT(U = allocVector(REALSXP, n));
     u = REAL(U);
-
     for (int i = 0; i < n; i++) {
         if (x[i] <= eps || (rho == 1 && x[i] == v[i] && x[i] != 1)) {
             u[i] = eps;
@@ -89,7 +86,6 @@ SEXP hTCopula(SEXP Rho, SEXP Df, SEXP X, SEXP V) {
             u[i] = (ui <= eps) ? eps : ((ui >= 1 - eps) ? 1 - eps : ui);
         }
     }
-
     UNPROTECT(1);
 
     return U;
@@ -107,10 +103,8 @@ SEXP hClaytonCopula(SEXP Theta, SEXP X, SEXP V) {
     if (theta <= eps) {
         return X;
     }
-
     PROTECT(U = allocVector(REALSXP, n));
     u = REAL(U);
-
     for (int i = 0; i < n; i++) {
         if (x[i] <= eps) {
             u[i] = eps;
@@ -124,7 +118,6 @@ SEXP hClaytonCopula(SEXP Theta, SEXP X, SEXP V) {
             u[i] = (ui <= eps) ? eps : ((ui >= 1 - eps) ? 1 - eps : ui);
         }
     }
-
     UNPROTECT(1);
 
     return U;
@@ -142,10 +135,8 @@ SEXP hGumbelCopula(SEXP Theta, SEXP X, SEXP V) {
     if (theta <= eps) {
         return X;
     }
-
     PROTECT(U = allocVector(REALSXP, n));
     u = REAL(U);
-
     for (int i = 0; i < n; i++) {
         if (x[i] <= eps) {
             u[i] = eps;
@@ -161,7 +152,6 @@ SEXP hGumbelCopula(SEXP Theta, SEXP X, SEXP V) {
             u[i] = (ui <= eps) ? eps : ((ui >= 1 - eps) ? 1 - eps : ui);
         }
     }
-
     UNPROTECT(1);
 
     return U;

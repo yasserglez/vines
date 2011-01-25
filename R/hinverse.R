@@ -21,18 +21,7 @@ setGeneric("hinverse",
 
 
 hinverseCopula <- function (copula, u, v) {
-    eps <- .Machine$double.eps^0.5
-    
-    r0 <- u <= eps
-    r1 <- (1 - u) <= eps
-    s <- r0 | r1
-    u <- pmax(pmin(u, 1 - eps), eps)
-    v <- pmax(pmin(v, 1 - eps), eps)  
-    f <- function (x, u, v) abs(h(copula, x, v) - u)
-    z <- function (i) optimize(f, c(eps, 1 - eps), tol = 0.01, u = u[i], v = v[i])$minimum
-    
-    r <- sapply(seq(along = u), function(i) if (s[i]) NA else z(i))
-    ifelse(r0, eps, ifelse(r1, 1 - eps, r))
+    .Call(C_hinverseCopula, copula, u, v)
 }
 
 setMethod("hinverse", "copula", hinverseCopula)
