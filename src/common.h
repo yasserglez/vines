@@ -16,6 +16,9 @@
  * this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
+
+/* Macros to index (multidimensional) arrays using 1-based indexes. */
+
 #define GET_REAL_1D(x,i) REAL(x)[(i)-1)]
 #define GET_REAL_2D(x,i,j,ni) REAL(x)[((i)-1)+(ni)*((j)-1)]
 #define GET_REAL_3D(x,i,j,k,ni,nj) REAL(x)[((i)-1)+(ni)*((j)-1)+(nj)*((k)-1)]
@@ -32,6 +35,8 @@
 #define SET_VECTOR_2D(x,i,j,ni,v) SET_VECTOR_ELT(x,((i)-1)+(ni)*((j)-1),v)
 #define SET_VECTOR_3D(x,i,j,k,ni,nj,v) SET_VECTOR_ELT(x,((i)-1)+(ni)*((j)-1)+(nj)*((k)-1),v)
 
+
+/* Functions used to call their counterparts in R interpreted code. */
 
 SEXP h(SEXP Copula, SEXP X, SEXP V);
 SEXP hinverse(SEXP Copula, SEXP U, SEXP V);
