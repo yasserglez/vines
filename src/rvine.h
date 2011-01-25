@@ -17,3 +17,4 @@
  */
 
 SEXP rCVine(SEXP Vine, SEXP N);
+SEXP rDVine(SEXP Vine, SEXP N);
