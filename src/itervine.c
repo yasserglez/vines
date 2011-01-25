@@ -20,29 +20,4 @@
 #include <Rinternals.h>
 #include <Rmath.h>
 
-#include "common.h"
-
-
-SEXP h(SEXP Copula, SEXP X, SEXP V) {
-    SEXP H, Call, U;
-
-    PROTECT(H = findFun(install("h"), R_GlobalEnv));
-    PROTECT(Call = lang4(H, Copula, X, V));
-    PROTECT(U = coerceVector(eval(Call, R_GlobalEnv), REALSXP));
-
-    UNPROTECT(3);
-
-    return U;
-}
-
-SEXP hinverse(SEXP Copula, SEXP U, SEXP V) {
-    SEXP Hinverse, Call, X;
-
-    PROTECT(Hinverse = findFun(install("hinverse"), R_GlobalEnv));
-    PROTECT(Call = lang4(Hinverse, Copula, U, V));
-    PROTECT(X = coerceVector(eval(Call, R_GlobalEnv), REALSXP));
-
-    UNPROTECT(3);
-
-    return X;
-}
+#include "itervine.h"
