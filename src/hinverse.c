@@ -26,59 +26,53 @@
 #include "common.h"
 
 
-struct fparams {
+struct fParams {
     SEXP *Copula;
     SEXP *U;
     SEXP *V;
-    int i;
+    int index;
 };
 
-double f(double x, void *params) {
-    struct fparams *p = (struct fparams *) params;
-    double u = REAL(*(p->U))[p->i];
-    double v = REAL(*(p->V))[p->i];
+static double f(double x, void *params) {
+    struct fParams *p = (struct fParams *) params;
+    double u = REAL(*(p->U))[p->index];
+    double v = REAL(*(p->V))[p->index];
 
     return asReal(h(*(p->Copula), ScalarReal(x), ScalarReal(v))) - u;
 }
 
 SEXP hinverseCopula(SEXP Copula, SEXP U, SEXP V) {
     double eps = R_pow(DOUBLE_EPS, 0.5);
-    int n = LENGTH(U);
     double *u = REAL(U), *v = REAL(V);
     gsl_function F;
-    struct fparams *params;
+    struct fParams params = {&Copula, &U, &V, 0};
     gsl_root_fsolver *solver;
     int status;
     double lower, upper;
-    double *x;
     SEXP X;
+    double *x;
 
-    params = (struct fparams *) R_alloc(1, sizeof(struct fparams));
-    params->Copula = &Copula;
-    params->U = &U;
-    params->V = &V;
     F.function = &f;
-    F.params = params;
+    F.params = &params;
 
     gsl_set_error_handler_off();
     solver = gsl_root_fsolver_alloc(gsl_root_fsolver_brent);
 
-    PROTECT(X = allocVector(REALSXP, n));
+    PROTECT(X = allocVector(REALSXP, LENGTH(U)));
     x = REAL(X);
-
-    for (int i = 0; i < n; i++) {
+    for (int i = 0; i < LENGTH(U); i++) {
         if (u[i] <= eps) {
             x[i] = eps;
         } else if (1 - u[i] <= eps) {
             x[i] = 1 - eps;
         } else {
-            params->i = i;
+            params.index = i;
             gsl_root_fsolver_set(solver, &F, eps, 1 - eps);
             do {
                 status = gsl_root_fsolver_iterate(solver);
                 if (status) {
-                    UNPROTECT(1);
                     gsl_root_fsolver_free(solver);
+                    UNPROTECT(1);
                     error(gsl_strerror(status));
                 } else {
                     lower = gsl_root_fsolver_x_lower(solver);
@@ -89,9 +83,8 @@ SEXP hinverseCopula(SEXP Copula, SEXP U, SEXP V) {
             x[i] = gsl_root_fsolver_root(solver);
         }
     }
-
-    UNPROTECT(1);
     gsl_root_fsolver_free(solver);
+    UNPROTECT(1);
 
     return X;
 }
@@ -108,16 +101,15 @@ SEXP hinverseIndepCopula(SEXP U, SEXP V) {
 
 SEXP hinverseNormalCopula(SEXP Rho, SEXP U, SEXP V) {
     double eps = R_pow(DOUBLE_EPS, 0.5);
-    int n = LENGTH(U);
     double rho = asReal(Rho);
     double *u = REAL(U), *v = REAL(V);
     double vi, xi;
-    double *x;
     SEXP X;
+    double *x;
 
-    PROTECT(X = allocVector(REALSXP, n));
+    PROTECT(X = allocVector(REALSXP, LENGTH(U)));
     x = REAL(X);
-    for (int i = 0; i < n; i++) {
+    for (int i = 0; i < LENGTH(U); i++) {
         if (u[i] <= eps) {
             x[i] = eps;
         } else if (1 - u[i] <= eps) {
@@ -136,17 +128,16 @@ SEXP hinverseNormalCopula(SEXP Rho, SEXP U, SEXP V) {
 
 SEXP hinverseTCopula(SEXP Rho, SEXP Df, SEXP U, SEXP V) {
     double eps = R_pow(DOUBLE_EPS, 0.5);
-    int n = LENGTH(U);
     double rho = asReal(Rho);
     double df = asReal(Df);
     double *u = REAL(U), *v = REAL(V);
     double vi, xi, b2;
-    double *x;
     SEXP X;
+    double *x;
 
-    PROTECT(X = allocVector(REALSXP, n));
+    PROTECT(X = allocVector(REALSXP, LENGTH(U)));
     x = REAL(X);
-    for (int i = 0; i < n; i++) {
+    for (int i = 0; i < LENGTH(U); i++) {
         if (u[i] <= eps) {
             x[i] = eps;
         } else if (1 - u[i] <= eps) {
@@ -167,19 +158,18 @@ SEXP hinverseTCopula(SEXP Rho, SEXP Df, SEXP U, SEXP V) {
 
 SEXP hinverseClaytonCopula(SEXP Theta, SEXP U, SEXP V) {
     double eps = R_pow(DOUBLE_EPS, 0.15);
-    int n = LENGTH(U);
     double theta = asReal(Theta);
     double *u = REAL(U), *v = REAL(V);
     double vi, xi;
-    double *x;
     SEXP X;
+    double *x;
 
     if (theta <= eps) {
         return U;
     }
-    PROTECT(X = allocVector(REALSXP, n));
+    PROTECT(X = allocVector(REALSXP, LENGTH(U)));
     x = REAL(X);
-    for (int i = 0; i < n; i++) {
+    for (int i = 0; i < LENGTH(U); i++) {
         if (u[i] <= eps) {
             x[i] = eps;
         } else if (1 - u[i] <= eps) {

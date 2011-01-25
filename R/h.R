@@ -23,11 +23,11 @@ setGeneric("h",
 hCopula <- function (copula, x, v) {
     eps <- .Machine$double.eps^0.5
     
-    envir <- new.env()
-    assign("copula", copula, envir)
-    assign("x", pmax(pmin(x, 1 - eps), eps), envir)
-    assign("v", pmax(pmin(v, 1 - eps), eps), envir)
-    d <- numericDeriv(quote(pcopula(copula, cbind(x, v))), "v", envir)
+    env <- new.env()
+    assign("copula", copula, env)
+    assign("x", pmax(pmin(x, 1 - eps), eps), env)
+    assign("v", pmax(pmin(v, 1 - eps), eps), env)
+    d <- numericDeriv(quote(pcopula(copula, cbind(x, v))), "v", env)
     r <- diag(attr(d, "gradient"))
     pmax(pmin(r, 1 - eps), eps)
 }

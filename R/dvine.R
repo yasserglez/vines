@@ -37,5 +37,4 @@ dCVineDVine <- function (vine, u) {
 }
 
 setMethod("dvine", "CVine", dCVineDVine)
-
 setMethod("dvine", "DVine", dCVineDVine)

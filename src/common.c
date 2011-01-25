@@ -24,10 +24,10 @@
 
 
 SEXP h(SEXP Copula, SEXP X, SEXP V) {
-    SEXP H, Call, U;
+    SEXP F, Call, U;
 
-    PROTECT(H = findFun(install("h"), R_GlobalEnv));
-    PROTECT(Call = lang4(H, Copula, X, V));
+    PROTECT(F = findFun(install("h"), R_GlobalEnv));
+    PROTECT(Call = lang4(F, Copula, X, V));
     PROTECT(U = coerceVector(eval(Call, R_GlobalEnv), REALSXP));
 
     UNPROTECT(3);
@@ -36,10 +36,10 @@ SEXP h(SEXP Copula, SEXP X, SEXP V) {
 }
 
 SEXP hinverse(SEXP Copula, SEXP U, SEXP V) {
-    SEXP Hinverse, Call, X;
+    SEXP F, Call, X;
 
-    PROTECT(Hinverse = findFun(install("hinverse"), R_GlobalEnv));
-    PROTECT(Call = lang4(Hinverse, Copula, U, V));
+    PROTECT(F = findFun(install("hinverse"), R_GlobalEnv));
+    PROTECT(Call = lang4(F, Copula, U, V));
     PROTECT(X = coerceVector(eval(Call, R_GlobalEnv), REALSXP));
 
     UNPROTECT(3);

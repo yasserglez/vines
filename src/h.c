@@ -33,16 +33,15 @@ SEXP hIndepCopula(SEXP X, SEXP V) {
 
 SEXP hNormalCopula(SEXP Rho, SEXP X, SEXP V) {
     double eps = R_pow(DOUBLE_EPS, 0.5);
-    int n = LENGTH(X);
     double rho = asReal(Rho);
     double *x = REAL(X), *v = REAL(V);
     double vi, ui;
-    double *u;
     SEXP U;
+    double *u;
 
-    PROTECT(U = allocVector(REALSXP, n));
+    PROTECT(U = allocVector(REALSXP, LENGTH(X)));
     u = REAL(U);
-    for (int i = 0; i < n; i++) {
+    for (int i = 0; i < LENGTH(X); i++) {
         if (x[i] <= eps || (rho == 1 && x[i] == v[i] && x[i] != 1)) {
             u[i] = eps;
         } else if (1 - x[i] <= eps || (rho == -1 && 1 - (x[i] + v[i]) <= eps)) {
@@ -62,17 +61,16 @@ SEXP hNormalCopula(SEXP Rho, SEXP X, SEXP V) {
 
 SEXP hTCopula(SEXP Rho, SEXP Df, SEXP X, SEXP V) {
     double eps = R_pow(DOUBLE_EPS, 0.5);
-    int n = LENGTH(X);
     double rho = asReal(Rho);
     double df = asReal(Df);
     double *x = REAL(X), *v = REAL(V);
     double vi, ui, tmp;
-    double *u;
     SEXP U;
+    double *u;
 
-    PROTECT(U = allocVector(REALSXP, n));
+    PROTECT(U = allocVector(REALSXP, LENGTH(X)));
     u = REAL(U);
-    for (int i = 0; i < n; i++) {
+    for (int i = 0; i < LENGTH(X); i++) {
         if (x[i] <= eps || (rho == 1 && x[i] == v[i] && x[i] != 1)) {
             u[i] = eps;
         } else if (1 - x[i] <= eps || (rho == -1 && 1 - (x[i] + v[i]) <= eps)) {
@@ -93,19 +91,18 @@ SEXP hTCopula(SEXP Rho, SEXP Df, SEXP X, SEXP V) {
 
 SEXP hClaytonCopula(SEXP Theta, SEXP X, SEXP V) {
     double eps = R_pow(DOUBLE_EPS, 0.15);
-    int n = LENGTH(X);
     double theta = asReal(Theta);
     double *x = REAL(X), *v = REAL(V);
     double vi, ui;
-    double *u;
     SEXP U;
+    double *u;
 
     if (theta <= eps) {
         return X;
     }
-    PROTECT(U = allocVector(REALSXP, n));
+    PROTECT(U = allocVector(REALSXP, LENGTH(X)));
     u = REAL(U);
-    for (int i = 0; i < n; i++) {
+    for (int i = 0; i < LENGTH(X); i++) {
         if (x[i] <= eps) {
             u[i] = eps;
         } else if (1 - x[i] <= eps) {
@@ -126,18 +123,17 @@ SEXP hClaytonCopula(SEXP Theta, SEXP X, SEXP V) {
 SEXP hGumbelCopula(SEXP Theta, SEXP X, SEXP V) {
     double eps = R_pow(DOUBLE_EPS, 0.5);
     double theta = asReal(Theta);
-    int n = LENGTH(X);
     double *x = REAL(X), *v = REAL(V);
     double vi, ui, tmp, mlogxi, mlogvi;
-    double *u;
     SEXP U;
+    double *u;
 
     if (theta <= eps) {
         return X;
     }
-    PROTECT(U = allocVector(REALSXP, n));
+    PROTECT(U = allocVector(REALSXP, LENGTH(X)));
     u = REAL(U);
-    for (int i = 0; i < n; i++) {
+    for (int i = 0; i < LENGTH(X); i++) {
         if (x[i] <= eps) {
             u[i] = eps;
         } else if (1 - x[i] <= eps) {

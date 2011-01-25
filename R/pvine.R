@@ -24,14 +24,13 @@ pCVineDVine <- function (vine, u) {
     if (is.vector(u)) u <- matrix(u, nrow = 1)
     
     pdf <- function (x) dvine(vine, x)
-    lowerLimit <- rep(0, vine@dimension)
+    lower <- rep(0, vine@dimension)
     cdf <- function (x) {
-        integral <- adaptIntegrate(pdf, lowerLimit, x, tol = 0.01)$integral
+        integral <- adaptIntegrate(pdf, lower, x, tol = 0.01)$integral
         min(max(0, integral), 1)
     }
     apply(u, 1, cdf)
 }
 
 setMethod("pvine", "CVine", pCVineDVine)
-
 setMethod("pvine", "DVine", pCVineDVine)
