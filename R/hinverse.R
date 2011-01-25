@@ -45,11 +45,6 @@ hinverseIndepCopula <- function (copula, u, v) {
 setMethod("hinverse", "indepCopula", hinverseIndepCopula)
 
 
-# See Aas, K., Czado, C., Frigessi, A. & Bakken, H. Pair-copula constructions 
-# of multiple dependence. Insurance Mathematics and Economics, 2009, Vol. 44, 
-# pp. 182-198 for the expression for the Gaussian, Student's t, Clayton and 
-# Gumbel copulas.
-
 hinverseNormalCopula <- function (copula, u, v) {
     rho <- copula@parameters
     .Call(C_hinverseNormalCopula, rho, u, v)

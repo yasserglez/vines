@@ -21,42 +21,7 @@ setGeneric("rvine",
 
 
 rCVine <- function (vine, n) {
-    # The implementation of this function is based on the Algorithm 1 
-    # described in Aas, K., Czado, C., Frigessi, A. & Bakken, H. Pair-copula 
-    # constructions of multiple dependence. Insurance Mathematics and 
-    # Economics, 2009, Vol. 44, pp. 182-198.
-    
-    if (vine@trees == 0) {
-        # Vine without trees, Independent vine.
-        d <- vine@dimension
-        return(matrix(runif(n * d), n, d))
-    }
-    
-    d <- vine@dimension
-    v <- matrix(NA, d, d)
-    w <- matrix(runif(n * d), n, d)
-    result <- matrix(NA, n, d)
-    
-    result[ , 1] <- w[ , 1]
-    
-    for (s in seq(length = n)) { # Loop over samples.
-        v[1, 1] <- result[s, 1]
-        for (i in seq(from = 2, to = d)) { # Loop over the variables.
-            v[i, 1] <- w[s, i]
-            for (k in seq(from = min(vine@trees, i - 1), to = 1)) {
-                v[i, 1] <- hinverse(vine@copulas[[k, i-k]], v[i, 1], v[k, k])
-            }
-            result[s, i] <- v[i, 1]
-            
-            if (i == d) break
-            
-            for (j in seq(from = 1, to = min(vine@trees, i - 1))) {
-                v[i, j+1] <- h(vine@copulas[[j, i-j]], v[i, j], v[j, j])
-            }
-        }
-    }
-    
-    result
+    .Call(C_rCVine, vine, n)
 }
 
 setMethod("rvine", "CVine", rCVine)

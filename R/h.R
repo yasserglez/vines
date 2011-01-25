@@ -41,12 +41,6 @@ hIndepCopula <- function (copula, x, v) {
 
 setMethod("h", "indepCopula", hIndepCopula)
 
-
-# See Aas, K., Czado, C., Frigessi, A. & Bakken, H. Pair-copula constructions 
-# of multiple dependence. Insurance Mathematics and Economics, 2009, Vol. 44, 
-# pp. 182-198 for the expression for the Gaussian, Student's t, Clayton and 
-# Gumbel copulas.
-
 hNormalCopula <- function (copula, x, v) {
     rho <- copula@parameters
     .Call(C_hNormalCopula, rho, x, v)

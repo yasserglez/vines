@@ -17,28 +17,31 @@
 
 #include <R.h>
 #include <Rinternals.h>
-#include <R_ext/Rdynload.h>
+#include <Rmath.h>
 
-#include "h.h"
-#include "hinverse.h"
-#include "rvine.h"
+#include "common.h"
 
 
-R_CallMethodDef callMethods[] = {
-        { "hNormalCopula", (DL_FUNC) &hNormalCopula, 3 },
-        { "hinverseNormalCopula", (DL_FUNC) &hinverseNormalCopula, 3 },
-        { "hIndepCopula", (DL_FUNC) &hIndepCopula, 2 },
-        { "hinverseIndepCopula", (DL_FUNC) &hinverseIndepCopula, 2 },
-        { "hTCopula", (DL_FUNC) &hTCopula, 4 },
-        { "hinverseTCopula", (DL_FUNC) &hinverseTCopula, 4 },
-        { "hClaytonCopula", (DL_FUNC) &hClaytonCopula, 3 },
-        { "hinverseClaytonCopula", (DL_FUNC) &hinverseClaytonCopula, 3 },
-        { "hGumbelCopula", (DL_FUNC) &hGumbelCopula, 3 },
-        { "rCVine", (DL_FUNC) &rCVine, 2 },
-        { NULL, NULL, 0 }
-};
+SEXP h(SEXP COPULA, SEXP X, SEXP V) {
+    SEXP H, H_CALL, R;
 
-void R_init_vines(DllInfo *info)
-{
-	R_registerRoutines(info, NULL, callMethods, NULL, NULL);
+    PROTECT(H = findFun(install("h"), R_GlobalEnv));
+    PROTECT(H_CALL = lang4(H, COPULA, X, V));
+    PROTECT(R = coerceVector(eval(H_CALL, R_GlobalEnv), REALSXP));
+
+    UNPROTECT(3);
+
+    return R;
+}
+
+SEXP hinverse(SEXP COPULA, SEXP U, SEXP V) {
+    SEXP HINVERSE, HINVERSE_CALL, R;
+
+    PROTECT(HINVERSE = findFun(install("hinverse"), R_GlobalEnv));
+    PROTECT(HINVERSE_CALL = lang4(HINVERSE, COPULA, U, V));
+    PROTECT(R = coerceVector(eval(HINVERSE_CALL, R_GlobalEnv), REALSXP));
+
+    UNPROTECT(3);
+
+    return R;
 }

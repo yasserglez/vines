@@ -3,7 +3,6 @@
 	<name>vines</name>
 	<comment></comment>
 	<projects>
-		<project>R</project>
 	</projects>
 	<buildSpec>
 		<buildCommand>

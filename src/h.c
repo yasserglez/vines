@@ -16,23 +16,30 @@
 // this program. If not, see <http://www.gnu.org/licenses/>.
 
 #include <R.h>
-#include <Rdefines.h>
+#include <Rinternals.h>
 #include <Rmath.h>
 
-#include "h.h"
+SEXP hIndepCopula(SEXP X, SEXP V) {
+    return X;
+}
+
+// See Aas, K., Czado, C., Frigessi, A. & Bakken, H. Pair-copula constructions
+// of multiple dependence. Insurance Mathematics and Economics, 2009, Vol. 44,
+// pp. 182-198 for the expression for the Gaussian, Student's t, Clayton and
+// Gumbel copulas.
 
 SEXP hNormalCopula(SEXP RHO, SEXP X, SEXP V) {
     double eps = R_pow(DOUBLE_EPS, 0.5);
-    double rho = NUMERIC_VALUE(RHO);
+    double rho = asReal(RHO);
     int n = LENGTH(X);
     double *x, *v, *u;
     double vi, ui;
     SEXP U;
 
-    x = NUMERIC_POINTER(X);
-    v = NUMERIC_POINTER(V);
-    PROTECT(U = NEW_NUMERIC(n));
-    u = NUMERIC_POINTER(U);
+    x = REAL(X);
+    v = REAL(V);
+    PROTECT(U = allocVector(REALSXP, n));
+    u = REAL(U);
 
     for (int i = 0; i < n; i++) {
         if (x[i] <= eps || (rho == 1 && x[i] == v[i] && x[i] != 1)) {
@@ -53,24 +60,20 @@ SEXP hNormalCopula(SEXP RHO, SEXP X, SEXP V) {
     return U;
 }
 
-SEXP hIndepCopula(SEXP X, SEXP V) {
-    return X;
-}
-
 SEXP hTCopula(SEXP RHO, SEXP DF, SEXP X, SEXP V) {
     double eps = R_pow(DOUBLE_EPS, 0.5);
-    double rho = NUMERIC_VALUE(RHO);
-    double df = NUMERIC_VALUE(DF);
+    double rho = asReal(RHO);
+    double df = asReal(DF);
     int n = LENGTH(X);
     double *x, *v, *u;
     double vi, ui;
     double tmp;
     SEXP U;
 
-    x = NUMERIC_POINTER(X);
-    v = NUMERIC_POINTER(V);
-    PROTECT(U = NEW_NUMERIC(n));
-    u = NUMERIC_POINTER(U);
+    x = REAL(X);
+    v = REAL(V);
+    PROTECT(U = allocVector(REALSXP, n));
+    u = REAL(U);
 
     for (int i = 0; i < n; i++) {
         if (x[i] <= eps || (rho == 1 && x[i] == v[i] && x[i] != 1)) {
@@ -94,7 +97,7 @@ SEXP hTCopula(SEXP RHO, SEXP DF, SEXP X, SEXP V) {
 
 SEXP hClaytonCopula(SEXP THETA, SEXP X, SEXP V) {
     double eps = R_pow(DOUBLE_EPS, 0.15);
-    double theta = NUMERIC_VALUE(THETA);
+    double theta = asReal(THETA);
     int n = LENGTH(X);
     double *x, *v, *u;
     double vi, ui;
@@ -103,10 +106,10 @@ SEXP hClaytonCopula(SEXP THETA, SEXP X, SEXP V) {
     if (theta <= eps) {
         U = X;
     } else {
-        x = NUMERIC_POINTER(X);
-        v = NUMERIC_POINTER(V);
-        PROTECT(U = NEW_NUMERIC(n));
-        u = NUMERIC_POINTER(U);
+        x = REAL(X);
+        v = REAL(V);
+        PROTECT(U = allocVector(REALSXP, n));
+        u = REAL(U);
 
         for (int i = 0; i < n; i++) {
             if (x[i] <= eps) {
@@ -131,7 +134,7 @@ SEXP hClaytonCopula(SEXP THETA, SEXP X, SEXP V) {
 SEXP hGumbelCopula(SEXP THETA, SEXP X, SEXP V)
 {
     double eps = R_pow(DOUBLE_EPS, 0.5);
-    double theta = NUMERIC_VALUE(THETA);
+    double theta = asReal(THETA);
     int n = LENGTH(X);
     double *x, *v, *u;
     double vi, ui;
@@ -141,10 +144,10 @@ SEXP hGumbelCopula(SEXP THETA, SEXP X, SEXP V)
     if (theta <= eps) {
         U = X;
     } else {
-        x = NUMERIC_POINTER(X);
-        v = NUMERIC_POINTER(V);
-        PROTECT(U = NEW_NUMERIC(n));
-        u = NUMERIC_POINTER(U);
+        x = REAL(X);
+        v = REAL(V);
+        PROTECT(U = allocVector(REALSXP, n));
+        u = REAL(U);
 
         for (int i = 0; i < n; i++) {
             if (x[i] <= eps) {

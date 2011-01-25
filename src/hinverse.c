@@ -16,23 +16,33 @@
 // this program. If not, see <http://www.gnu.org/licenses/>.
 
 #include <R.h>
-#include <Rdefines.h>
+#include <Rinternals.h>
 #include <Rmath.h>
 
 #include "hinverse.h"
 
+
+SEXP hinverseIndepCopula(SEXP U, SEXP V) {
+    return U;
+}
+
+// See Aas, K., Czado, C., Frigessi, A. & Bakken, H. Pair-copula constructions
+// of multiple dependence. Insurance Mathematics and Economics, 2009, Vol. 44,
+// pp. 182-198 for the expression for the Gaussian, Student's t, Clayton and
+// Gumbel copulas.
+
 SEXP hinverseNormalCopula(SEXP RHO, SEXP U, SEXP V) {
     double eps = R_pow(DOUBLE_EPS, 0.5);
-    double rho = NUMERIC_VALUE(RHO);
+    double rho = asReal(RHO);
     int n = LENGTH(U);
     double *u, *v, *x;
     double vi, xi;
     SEXP X;
 
-    u = NUMERIC_POINTER(U);
-    v = NUMERIC_POINTER(V);
-    PROTECT(X = NEW_NUMERIC(n));
-    x = NUMERIC_POINTER(X);
+    u = REAL(U);
+    v = REAL(V);
+    PROTECT(X = allocVector(REALSXP, n));
+    x = REAL(X);
 
     for (int i = 0; i < n; i++) {
         if (u[i] <= eps) {
@@ -52,23 +62,19 @@ SEXP hinverseNormalCopula(SEXP RHO, SEXP U, SEXP V) {
     return X;
 }
 
-SEXP hinverseIndepCopula(SEXP U, SEXP V) {
-    return U;
-}
-
 SEXP hinverseTCopula(SEXP RHO, SEXP DF, SEXP U, SEXP V) {
     double eps = R_pow(DOUBLE_EPS, 0.5);
-    double rho = NUMERIC_VALUE(RHO);
-    double df = NUMERIC_VALUE(DF);
+    double rho = asReal(RHO);
+    double df = asReal(DF);
     int n = LENGTH(U);
     double *u, *v, *x;
     double b2, vi, xi;
     SEXP X;
 
-    u = NUMERIC_POINTER(U);
-    v = NUMERIC_POINTER(V);
-    PROTECT(X = NEW_NUMERIC(n));
-    x = NUMERIC_POINTER(X);
+    u = REAL(U);
+    v = REAL(V);
+    PROTECT(X = allocVector(REALSXP, n));
+    x = REAL(X);
 
     for (int i = 0; i < n; i++) {
         if (u[i] <= eps) {
@@ -92,7 +98,7 @@ SEXP hinverseTCopula(SEXP RHO, SEXP DF, SEXP U, SEXP V) {
 
 SEXP hinverseClaytonCopula(SEXP THETA, SEXP U, SEXP V) {
     double eps = R_pow(DOUBLE_EPS, 0.15);
-    double theta = NUMERIC_VALUE(THETA);
+    double theta = asReal(THETA);
     int n = LENGTH(U);
     double *u, *v, *x;
     double vi, xi;
@@ -101,10 +107,10 @@ SEXP hinverseClaytonCopula(SEXP THETA, SEXP U, SEXP V) {
     if (theta <= eps) {
         X = U;
     } else {
-        u = NUMERIC_POINTER(U);
-        v = NUMERIC_POINTER(V);
-        PROTECT(X = NEW_NUMERIC(n));
-        x = NUMERIC_POINTER(X);
+        u = REAL(U);
+        v = REAL(V);
+        PROTECT(X = allocVector(REALSXP, n));
+        x = REAL(X);
 
         for (int i = 0; i < n; i++) {
             if (u[i] <= eps) {
