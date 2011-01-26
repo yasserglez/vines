@@ -40,6 +40,7 @@ R_CallMethodDef callMethods[] = {
     { "rCVine", (DL_FUNC) &rCVine, 2 },
     { "rDVine", (DL_FUNC) &rDVine, 2 },
     { "iterCVine", (DL_FUNC) &iterCVine, 4 },
+    { "iterDVine", (DL_FUNC) &iterDVine, 4 },
     { NULL, NULL, 0 }
 };
 

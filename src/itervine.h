@@ -17,3 +17,4 @@
  */
 
 SEXP iterCVine(SEXP Vine, SEXP Data, SEXP Fit, SEXP Eval);
+SEXP iterDVine(SEXP Vine, SEXP Data, SEXP Fit, SEXP Eval);

@@ -65,9 +65,9 @@ SEXP rCVine(SEXP Vine, SEXP N) {
 
         for (int i = 2; i <= d; i++) { /* Loop over the other variables. */
             SET_REAL_2D(V, i, 1, d, GET_REAL_2D(W, s, i, n));
-            for (int k = imin2(trees, i - 1); k >= 1; k--) {
+            for (int k = imin2(trees, i-1); k >= 1; k--) {
                 SET_REAL_2D(V, i, 1, d,
-                        asReal(hinverse(GET_VECTOR_2D(Copulas, k, i - k, d - 1),
+                        asReal(hinverse(GET_VECTOR_2D(Copulas, k, i-k, d-1),
                                ScalarReal(GET_REAL_2D(V, i, 1, d)),
                                ScalarReal(GET_REAL_2D(V, k, k, d)))));
             }
@@ -77,9 +77,9 @@ SEXP rCVine(SEXP Vine, SEXP N) {
                 break;
             }
 
-            for (int j = 1; j <= imin2(trees, i - 1); j++) {
-                SET_REAL_2D(V, i, j + 1, d,
-                        asReal(h(GET_VECTOR_2D(Copulas, j, i - j, d - 1),
+            for (int j = 1; j <= imin2(trees, i-1); j++) {
+                SET_REAL_2D(V, i, j+1, d,
+                        asReal(h(GET_VECTOR_2D(Copulas, j, i-j, d-1),
                                ScalarReal(GET_REAL_2D(V, i, j, d)),
                                ScalarReal(GET_REAL_2D(V, j, j, d)))));
             }
@@ -118,7 +118,7 @@ SEXP rDVine(SEXP Vine, SEXP N) {
         return W;
     }
 
-    PROTECT(V = allocMatrix(REALSXP, d, imax2(2 * d - 4, d)));
+    PROTECT(V = allocMatrix(REALSXP, d, imax2(2*d-4, d)));
     PROTECT(R = allocMatrix(REALSXP, n, d));
 
     for (int i = 1; i <= n; i++) { /* Values of the first variable. */
@@ -126,7 +126,7 @@ SEXP rDVine(SEXP Vine, SEXP N) {
     }
     for (int i = 1; i <= n; i++) { /* Values of the second variable. */
         SET_REAL_2D(R, i, 2, n,
-                asReal(hinverse(GET_VECTOR_2D(Copulas, 1, 1, d - 1),
+                asReal(hinverse(GET_VECTOR_2D(Copulas, 1, 1, d-1),
                        ScalarReal(GET_REAL_2D(W, i, 2, n)),
                        ScalarReal(GET_REAL_2D(W, i, 1, n)))));
     }
@@ -142,7 +142,7 @@ SEXP rDVine(SEXP Vine, SEXP N) {
         SET_REAL_2D(V, 1, 1, d, GET_REAL_2D(R, s, 1, n));
         SET_REAL_2D(V, 2, 1, d, GET_REAL_2D(R, s, 2, n));
         SET_REAL_2D(V, 2, 2, d,
-                asReal(h(GET_VECTOR_2D(Copulas, 1, 1, d - 1),
+                asReal(h(GET_VECTOR_2D(Copulas, 1, 1, d-1),
                        ScalarReal(GET_REAL_2D(V, 1, 1, d)),
                        ScalarReal(GET_REAL_2D(V, 2, 1, d)))));
 
@@ -150,17 +150,17 @@ SEXP rDVine(SEXP Vine, SEXP N) {
             SET_REAL_2D(V, i, 1, d, GET_REAL_2D(W, s, i, n));
 
             if (trees >= 2) {
-                for (int k = imin2(trees, i - 1); k >= 2; k--) {
+                for (int k = imin2(trees, i-1); k >= 2; k--) {
                     SET_REAL_2D(V, i, 1, d,
-                            asReal(hinverse(GET_VECTOR_2D(Copulas, k, i - k, d - 1),
+                            asReal(hinverse(GET_VECTOR_2D(Copulas, k, i-k, d-1),
                                    ScalarReal(GET_REAL_2D(V, i, 1, d)),
-                                   ScalarReal(GET_REAL_2D(V, i - 1, 2 * k - 2, d)))));
+                                   ScalarReal(GET_REAL_2D(V, i-1, 2*k-2, d)))));
                 }
             }
             SET_REAL_2D(V, i, 1, d,
-                    asReal(hinverse(GET_VECTOR_2D(Copulas, 1, i - 1, d - 1),
+                    asReal(hinverse(GET_VECTOR_2D(Copulas, 1, i-1, d-1),
                            ScalarReal(GET_REAL_2D(V, i, 1, d)),
-                           ScalarReal(GET_REAL_2D(V, i - 1, 1, d)))));
+                           ScalarReal(GET_REAL_2D(V, i-1, 1, d)))));
             SET_REAL_2D(R, s, i, n, GET_REAL_2D(V, i, 1, d));
 
             if (i == d) {
@@ -169,33 +169,33 @@ SEXP rDVine(SEXP Vine, SEXP N) {
 
             if (trees >= 2) {
                 SET_REAL_2D(V, i, 2, d,
-                        asReal(h(GET_VECTOR_2D(Copulas, 1, i - 1, d - 1),
-                               ScalarReal(GET_REAL_2D(V, i - 1, 1, d)),
+                        asReal(h(GET_VECTOR_2D(Copulas, 1, i-1, d-1),
+                               ScalarReal(GET_REAL_2D(V, i-1, 1, d)),
                                ScalarReal(GET_REAL_2D(V, i, 1, d)))));
             }
             if (trees >= 3) {
                 SET_REAL_2D(V, i, 3, d,
-                        asReal(h(GET_VECTOR_2D(Copulas, 1, i - 1, d - 1),
+                        asReal(h(GET_VECTOR_2D(Copulas, 1, i-1, d-1),
                                ScalarReal(GET_REAL_2D(V, i, 1, d)),
-                               ScalarReal(GET_REAL_2D(V, i - 1, 1, d)))));
+                               ScalarReal(GET_REAL_2D(V, i-1, 1, d)))));
             }
             if (trees >= 3 && i > 3) {
-                for (int j = 2; j <= imin2(trees - 1, i - 2); j++) {
-                    SET_REAL_2D(V, i, 2 * j, d,
-                            asReal(h(GET_VECTOR_2D(Copulas, j, i - j, d - 1),
-                                   ScalarReal(GET_REAL_2D(V, i - 1, 2 * j - 2, d)),
-                                   ScalarReal(GET_REAL_2D(V, i, 2 * j - 1, d)))));
-                    SET_REAL_2D(V, i, 2 * j + 1, d,
-                            asReal(h(GET_VECTOR_2D(Copulas, j, i - j, d - 1),
-                                   ScalarReal(GET_REAL_2D(V, i, 2 * j - 1, d)),
-                                   ScalarReal(GET_REAL_2D(V, i - 1, 2 * j - 2, d)))));
+                for (int j = 2; j <= imin2(trees-1, i-2); j++) {
+                    SET_REAL_2D(V, i, 2*j, d,
+                            asReal(h(GET_VECTOR_2D(Copulas, j, i-j, d-1),
+                                   ScalarReal(GET_REAL_2D(V, i-1, 2*j-2, d)),
+                                   ScalarReal(GET_REAL_2D(V, i, 2*j-1, d)))));
+                    SET_REAL_2D(V, i, 2*j+1, d,
+                            asReal(h(GET_VECTOR_2D(Copulas, j, i-j, d-1),
+                                   ScalarReal(GET_REAL_2D(V, i, 2*j-1, d)),
+                                   ScalarReal(GET_REAL_2D(V, i-1, 2*j-2, d)))));
                 }
             }
             if (trees >= i) {
-                SET_REAL_2D(V, i, 2 * i - 2, d,
-                        asReal(h(GET_VECTOR_2D(Copulas, i - 1, 1, d - 1),
-                               ScalarReal(GET_REAL_2D(V, i - 1, 2 * i - 4, d)),
-                               ScalarReal(GET_REAL_2D(V, i, 2 * i - 3, d)))));
+                SET_REAL_2D(V, i, 2*i-2, d,
+                        asReal(h(GET_VECTOR_2D(Copulas, i-1, 1, d-1),
+                               ScalarReal(GET_REAL_2D(V, i-1, 2*i-4, d)),
+                               ScalarReal(GET_REAL_2D(V, i, 2*i-3, d)))));
             }
         }
     }

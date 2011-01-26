@@ -29,65 +29,7 @@ setMethod("iterVine", "CVine", iterCVine)
 
 
 iterDVine <- function (vine, data, fit = NULL, eval = NULL) {
-    # The implementation of this function is based on the Algorithm 4 
-    # described in Aas, K., Czado, C., Frigessi, A. & Bakken, H. Pair-copula 
-    # constructions of multiple dependence. Insurance Mathematics and 
-    # Economics, 2009, Vol. 44, pp. 182-198.
-    
-    if (vine@trees == 0) {
-        # Vine without trees, nothing to iterate for.
-        return(list(vine = vine, evals = list()))
-    }  
-    
-    # The indexes of the second dimension of the v array differs with 
-    # the indexes of the first dimension of the v array in Algorithm 4 
-    # because of GNU R 1-based indexing.
-    
-    evals <- list()
-    d <- vine@dimension
-    v <- array(NA, c(nrow(data), d, max(2 * d - 4, d)))
-    
-    for (i in seq(length = d)) {
-        v[ , 1, i] <- data[ , i]
-    }
-    for (i in seq(length = d - 1)) {
-        if (!is.null(fit)) {
-            vine@copulas[[1, i]] <- fit(vine, 1, i, v[ , 1, i], v[ , 1, i+1])
-        }
-        if (!is.null(eval)) {
-            evals <- c(evals, list(eval(vine, 1, i, v[ , 1, i], v[ , 1, i+1])))    
-        }
-    }
-    v[ , 2, 1] <- h(vine@copulas[[1, 1]], v[ , 1, 1], v[ , 1, 2])
-    for (k in seq(length = max(d - 3, 0))) {
-        v[ , 2, 2*k] <- h(vine@copulas[[1, k+1]], v[ , 1, k+2], v[ , 1, k+1])
-        v[ , 2, 2*k+1] <- h(vine@copulas[[1, k+1]], v[ , 1, k+1], v[ , 1, k+2])
-    }
-    v[ , 2, 2*d-4] <- h(vine@copulas[[1, d-1]], v[ , 1, d], v[ , 1, d-1])
-    for (j in seq(from = 2, length = vine@trees - 1)) {
-        for (i in seq(length = d - j)) {
-            if (!is.null(fit)) {
-                vine@copulas[[j, i]] <- fit(vine, j, i, v[ , j, 2*i-1], v[ , j, 2*i])
-            }
-            if (!is.null(eval)) {
-                evals <- c(evals, list(eval(vine, j, i, v[ , j, 2*i-1], v[ , j, 2*i])))
-            }
-        }
-        
-        if (j == vine@trees) break
-        
-        # Compute observations for the next tree.
-        v[ , j+1, 1] <- h(vine@copulas[[j, 1]], v[ , j, 1], v[ , j, 2])
-        if (d > 4) {
-            for (i in seq(length = d - j - 2)) {
-                v[ , j+1, 2*i] <- h(vine@copulas[[j, i+1]], v[ , j, 2*i+2], v[ , j, 2*i+1])
-                v[ , j+1, 2*i+1] <- h(vine@copulas[[j, i+1]], v[ , j, 2*i+1], v[ , j, 2*i+2])
-            }
-        }
-        v[ , j+1, 2*d-2*j-2] <- h(vine@copulas[[j, d-j]], v[ , j, 2*d-2*j], v[ , j, 2*d-2*j-1])
-    }
-    
-    list(vine = vine, evals = evals)
+    .Call(C_iterDVine, vine, data, fit, eval)
 }
 
 setMethod("iterVine", "DVine", iterDVine)
