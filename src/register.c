@@ -39,6 +39,7 @@ R_CallMethodDef callMethods[] = {
     { "hGumbelCopula", (DL_FUNC) &hGumbelCopula, 3 },
     { "rCVine", (DL_FUNC) &rCVine, 2 },
     { "rDVine", (DL_FUNC) &rDVine, 2 },
+    { "iterCVine", (DL_FUNC) &iterCVine, 4 },
     { NULL, NULL, 0 }
 };
 

@@ -29,7 +29,6 @@ SEXP h(SEXP Copula, SEXP X, SEXP V) {
     PROTECT(F = findFun(install("h"), R_GlobalEnv));
     PROTECT(Call = lang4(F, Copula, X, V));
     PROTECT(U = coerceVector(eval(Call, R_GlobalEnv), REALSXP));
-
     UNPROTECT(3);
 
     return U;
@@ -41,8 +40,24 @@ SEXP hinverse(SEXP Copula, SEXP U, SEXP V) {
     PROTECT(F = findFun(install("hinverse"), R_GlobalEnv));
     PROTECT(Call = lang4(F, Copula, U, V));
     PROTECT(X = coerceVector(eval(Call, R_GlobalEnv), REALSXP));
-
     UNPROTECT(3);
 
     return X;
+}
+
+SEXP evalFunction5(SEXP F, SEXP X1, SEXP X2, SEXP X3, SEXP X4, SEXP X5) {
+    SEXP Call, T, R;
+
+    PROTECT(Call = T = allocList(6));
+    SET_TYPEOF(Call, LANGSXP);
+    SETCAR(T, F); T = CDR(T);
+    SETCAR(T, X1); T = CDR(T);
+    SETCAR(T, X2); T = CDR(T);
+    SETCAR(T, X3); T = CDR(T);
+    SETCAR(T, X4); T = CDR(T);
+    SETCAR(T, X5);
+    R = eval(Call, R_GlobalEnv);
+    UNPROTECT(1);
+
+    return R;
 }

@@ -19,7 +19,7 @@
 
 /* Macros to index (multidimensional) arrays using 1-based indexes. */
 
-#define GET_REAL_1D(x,i) REAL(x)[(i)-1)]
+#define GET_REAL_1D(x,i) REAL(x)[(i)-1]
 #define GET_REAL_2D(x,i,j,ni) REAL(x)[((i)-1)+(ni)*((j)-1)]
 #define GET_REAL_3D(x,i,j,k,ni,nj) REAL(x)[((i)-1)+(ni)*((j)-1)+(nj)*((k)-1)]
 
@@ -40,3 +40,8 @@
 
 SEXP h(SEXP Copula, SEXP X, SEXP V);
 SEXP hinverse(SEXP Copula, SEXP U, SEXP V);
+
+
+/* Function calls with different number of arguments. */
+
+SEXP evalFunction5(SEXP F, SEXP X1, SEXP X2, SEXP X3, SEXP X4, SEXP X5);

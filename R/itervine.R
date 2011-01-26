@@ -22,46 +22,7 @@ setGeneric("iterVine",
 
 
 iterCVine <- function (vine, data, fit = NULL, eval = NULL) {
-    # The implementation of this function is based on the Algorithm 3 
-    # described in Aas, K., Czado, C., Frigessi, A. & Bakken, H. Pair-copula 
-    # constructions of multiple dependence. Insurance Mathematics and 
-    # Economics, 2009, Vol. 44, pp. 182-198.
-    
-    if (vine@trees == 0) {
-        # Vine without trees, nothing to iterate for.
-        return(list(vine = vine, evals = list()))
-    }
-    
-    # The indexes of the second dimension of the v array differs with
-    # the indexes of the first dimension of the v array in Algorithm 3
-    # because of GNU R 1-based indexing.
-    
-    evals <- list()
-    d <- vine@dimension
-    v <- array(NA, c(nrow(data), d - 1, d))
-    
-    for (i in seq(length = d)) {
-        v[ , 1, i] <- data[ , i]
-    }
-    for (j in seq(length = vine@trees)) {
-        for (i in seq(length = d - j)) {
-            if (!is.null(fit)) {
-                vine@copulas[[j, i]] <- fit(vine, j, i, v[ , j, 1], v[ , j, i+1])
-            }
-            if (!is.null(eval)) {
-                evals <- c(evals, list(eval(vine, j, i, v[ , j, 1], v[ , j, i+1])))
-            }
-        }
-        
-        if (j == vine@trees) break
-        
-        # Compute observations for the next tree.
-        for (i in seq(length = d - j)) {
-            v[ , j+1, i] <- h(vine@copulas[[j, i]], v[ , j, i+1], v[ , j, 1])
-        }
-    }
-    
-    list(vine = vine, evals = evals)
+    .Call(C_iterCVine, vine, data, fit, eval)
 }
 
 setMethod("iterVine", "CVine", iterCVine)
