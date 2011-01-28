@@ -21,9 +21,7 @@ setClass("fitVineML",
                 optimMethod = "character",
                 optimConv = "numeric",
                 startParams = "numeric",
-                startLogLik = "numeric",
-                finalParams = "numeric",
-                finalLogLik = "numeric"),
+                finalParams = "numeric"),
         prototype = prototype(
                 method = "ml"))
 
@@ -32,14 +30,12 @@ showFitVineML <- function (object) {
     showFitVine(object)
     cat("Optimization method:", object@optimMethod, "\n")
     cat("Convergence code:", object@optimConv, "\n")
-    cat("Initial log-likelihood:", object@startLogLik, "\n")
-    cat("Final log-likelihood:", object@finalLogLik, "\n")
 }
 
 setMethod("show", "fitVineML", showFitVineML)
 
 
-# Function called by iterVine to evaluate the log-likelihood of each copula.
+# Called by iterVine to evaluate the log-likelihood of each copula.
 evalLogLikCopula <- function (vine, j, i, x, y) {
     copula <- vine@copulas[[j, i]]
     loglikCopula(copula@parameters, cbind(x, y), copula)
@@ -64,11 +60,9 @@ fitVineML <- function (type, data, trees = ncol(data) - 1,
     vine <- Vine(type, dimension = ncol(data), trees = trees,
             copulas = matrix(list(), ncol(data) - 1, ncol(data) - 1))
     dimnames(vine) <- colnames(data)
-    iterVineResult <- iterVine(vine, data, 
-            fit = selectCopulaWrapper, eval = evalLogLikCopula)
+    iterVineResult <- iterVine(vine, data, fit = selectCopulaWrapper)
     vine <- iterVineResult$vine
     startParams <- parameters(vine)
-    startLogLik <- sum(unlist(iterVineResult$evals))
     
     if (nzchar(optimMethod) && length(startParams) > 0) {
         # Execute the optimization method.
@@ -107,9 +101,7 @@ fitVineML <- function (type, data, trees = ncol(data) - 1,
                 optimMethod = optimMethod,
                 optimConv = optimResult$convergence,
                 startParams = startParams,
-                startLogLik = startLogLik,
-                finalParams = optimResult$par,
-                finalLogLik = optimResult$value)
+                finalParams = optimResult$par)
     } else {
         # Without parameters or optimization disabled.
         fit <- new("fitVineML", 
@@ -118,9 +110,7 @@ fitVineML <- function (type, data, trees = ncol(data) - 1,
                 optimMethod = optimMethod,
                 optimConv = 0,
                 startParams = startParams,
-                startLogLik = startLogLik,
-                finalParams = startParams,
-                finalLogLik = logLikVine(vine, data))
+                finalParams = startParams)
     }
     
     fit
