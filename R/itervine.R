@@ -21,15 +21,116 @@ setGeneric("iterVine",
         signature = "vine")
 
 
-iterCVine <- function (vine, data, fit = NULL, eval = NULL) {
-    .Call(C_iterCVine, vine, data, fit, eval)
+iterCVine <- function (vine, data, fit, eval) {
+    # Algorithm 3 from Aas, K., Czado, C., Frigessi, A. & Bakken, H. 
+    # Pair-copula constructions of multiple dependence. Insurance 
+    # Mathematics and Economics, 2009, Vol. 44, pp. 182-198.
+
+    if (vine@trees == 0) {
+        # Nothing to iterate for.
+        return(list(vine = vine, evals = list()))
+    }
+
+    # The indexes of the second dimension of the v array differs with
+    # the indexes of the first dimension of the v array in Algorithm 3
+    # because of R 1-based indexing.
+
+    evals <- list()
+    d <- vine@dimension
+    v <- array(NA, c(nrow(data), d - 1, d))
+
+    for (i in seq(length = d)) {
+        v[ , 1, i] <- data[ , i]
+    }
+    for (j in seq(length = vine@trees)) {
+        for (i in seq(length = d-j)) {
+            x <- v[ , j, 1]
+            y <- v[ , j, i+1]
+            if (!is.null(fit)) {
+                vine@copulas[[j, i]] <- fit(vine, j, i, x, y)
+            }
+            if (!is.null(eval)) {
+                evals <- c(evals, list(eval(vine, j, i, x, y)))
+            }
+        }
+
+        if (j == vine@trees) break
+        
+        # Compute observations for the next tree.
+        for (i in seq(length = d-j)) {
+            v[ , j+1, i] <- h(vine@copulas[[j, i]], v[ , j, i+1], v[ , j, 1])
+        }
+    }
+    
+    list(vine = vine, evals = evals)
 }
 
 setMethod("iterVine", "CVine", iterCVine)
 
 
-iterDVine <- function (vine, data, fit = NULL, eval = NULL) {
-    .Call(C_iterDVine, vine, data, fit, eval)
+iterDVine <- function (vine, data, fit, eval) {
+    # Algorithm 4 from Aas, K., Czado, C., Frigessi, A. & Bakken, H. 
+    # Pair-copula constructions of multiple dependence. Insurance 
+    # Mathematics and Economics, 2009, Vol. 44, pp. 182-198.
+    
+    if (vine@trees == 0) {
+        # Nothing to iterate for.
+        return(list(vine = vine, evals = list()))
+    }  
+    
+    # The indexes of the second dimension of the v array differs with 
+    # the indexes of the first dimension of the v array in Algorithm 4 
+    # because of R 1-based indexing.
+    
+    evals <- list()
+    d <- vine@dimension
+    v <- array(NA, c(nrow(data), d, max(2*d-4, d)))
+
+    for (i in seq(length = d)) {
+        v[ , 1, i] <- data[ , i]
+    }
+    for (i in seq(length = d - 1)) {
+        x <- v[ , 1, i]
+        y <- v[ , 1, i+1]
+        if (!is.null(fit)) {
+            vine@copulas[[1, i]] <- fit(vine, 1, i, x, y)
+        }
+        if (!is.null(eval)) {
+            evals <- c(evals, list(eval(vine, 1, i, x, y)))
+        }
+    }
+    v[ , 2, 1] <- h(vine@copulas[[1, 1]], v[ , 1, 1], v[ , 1, 2])
+    for (k in seq(length = max(d-3, 0))) {
+        v[ , 2, 2*k] <- h(vine@copulas[[1, k+1]], v[ , 1, k+2], v[ , 1, k+1])
+        v[ , 2, 2*k+1] <- h(vine@copulas[[1, k+1]], v[ , 1, k+1], v[ , 1, k+2])
+    }
+    v[ , 2, 2*d-4] <- h(vine@copulas[[1, d-1]], v[ , 1, d], v[ , 1, d-1])
+    for (j in seq(from = 2, length = vine@trees - 1)) {
+        for (i in seq(length = d-j)) {
+            x <- v[ , j, 2*i-1]
+            y <- v[ , j, 2*i]
+            if (!is.null(fit)) {
+                vine@copulas[[j, i]] <- fit(vine, j, i, x, y)
+            }
+            if (!is.null(eval)) {
+                evals <- c(evals, list(eval(vine, j, i, x, y)))
+            }
+        }
+        
+        if (j == vine@trees) break
+        
+        # Compute observations for the next tree.
+        v[ , j+1, 1] <- h(vine@copulas[[j, 1]], v[ , j, 1], v[ , j, 2])
+        if (d > 4) {
+            for (i in seq(length = d-j-2)) {
+                v[ , j+1, 2*i] <- h(vine@copulas[[j, i+1]], v[ , j, 2*i+2], v[ , j, 2*i+1])
+                v[ , j+1, 2*i+1] <- h(vine@copulas[[j, i+1]], v[ , j, 2*i+1], v[ , j, 2*i+2])
+            }
+        }
+        v[ , j+1, 2*d-2*j-2] <- h(vine@copulas[[j, d-j]], v[ , j, 2*d-2*j], v[ , j, 2*d-2*j-1])
+    }
+
+    list(vine = vine, evals = evals)
 }
 
 setMethod("iterVine", "DVine", iterDVine)

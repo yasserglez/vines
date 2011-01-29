@@ -22,24 +22,18 @@
 
 #include "h.h"
 #include "hinverse.h"
-#include "rvine.h"
-#include "itervine.h"
 
 
 R_CallMethodDef callMethods[] = {
+    { "hIndepCopula", (DL_FUNC) &hIndepCopula, 2 },
     { "hNormalCopula", (DL_FUNC) &hNormalCopula, 3 },
     { "hinverseNormalCopula", (DL_FUNC) &hinverseNormalCopula, 3 },
-    { "hIndepCopula", (DL_FUNC) &hIndepCopula, 2 },
     { "hinverseIndepCopula", (DL_FUNC) &hinverseIndepCopula, 2 },
     { "hTCopula", (DL_FUNC) &hTCopula, 4 },
     { "hinverseTCopula", (DL_FUNC) &hinverseTCopula, 4 },
     { "hClaytonCopula", (DL_FUNC) &hClaytonCopula, 3 },
     { "hinverseClaytonCopula", (DL_FUNC) &hinverseClaytonCopula, 3 },
     { "hGumbelCopula", (DL_FUNC) &hGumbelCopula, 3 },
-    { "rCVine", (DL_FUNC) &rCVine, 2 },
-    { "rDVine", (DL_FUNC) &rDVine, 2 },
-    { "iterCVine", (DL_FUNC) &iterCVine, 4 },
-    { "iterDVine", (DL_FUNC) &iterDVine, 4 },
     { NULL, NULL, 0 }
 };
 
