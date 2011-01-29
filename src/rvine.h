@@ -16,5 +16,5 @@
  * this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-SEXP rCVine(SEXP Vine, SEXP N);
-SEXP rDVine(SEXP Vine, SEXP N);
+SEXP rCVine(SEXP vine, SEXP samples);
+SEXP rDVine(SEXP vine, SEXP samples);

@@ -25,182 +25,183 @@
 #include "rvine.h"
 
 
-/* Based on the Algorithm 1 from Aas, K., Czado, C., Frigessi, A. & Bakken, H.
- * Pair-copula constructions of multiple dependence. Insurance Mathematics
- * and Economics, 2009, Vol. 44, pp. 182-198.
+/* Algorithm 1 from Aas, K., Czado, C., Frigessi, A. & Bakken, H.
+ * Pair-copula constructions of multiple dependence. Insurance
+ * Mathematics and Economics, 2009, Vol. 44, pp. 182-198.
  */
 
-SEXP rCVine(SEXP Vine, SEXP N) {
-    int n = asInteger(N);
-    int d = asInteger(R_do_slot(Vine, mkString("dimension")));
-    int trees = asInteger(R_do_slot(Vine, mkString("trees")));
-    SEXP Copulas = R_do_slot(Vine, mkString("copulas"));
-    SEXP W, V, R;
+SEXP rCVine(SEXP vine, SEXP samples) {
+    int n, d, trees;
+    SEXP copulas, w, v;
+    SEXP ans;
 
-    PROTECT(W = allocMatrix(REALSXP, n, d));
+    d = asInteger(R_do_slot(vine, mkString("dimension")));
+    trees = asInteger(R_do_slot(vine, mkString("trees")));
+    copulas = R_do_slot(vine, mkString("copulas"));
+    n = asInteger(samples);
+
+    PROTECT(w = allocMatrix(REALSXP, n, d));
     GetRNGstate();
     for (int i = 1; i <= n; i++) {
         for (int j = 1; j <= d; j++) {
-            SET_REAL_2D(W, i, j, n, runif(0, 1));
+            SET_REAL_2D(w, i, j, n, runif(0, 1));
         }
     }
     PutRNGstate();
 
     if (trees == 0) { /* Independence Canonical vine. */
         UNPROTECT(1);
-        return W;
+        return w;
     }
 
-    PROTECT(V = allocMatrix(REALSXP, d, d));
-    PROTECT(R = allocMatrix(REALSXP, n, d));
+    PROTECT(v = allocMatrix(REALSXP, d, d));
+    PROTECT(ans = allocMatrix(REALSXP, n, d));
 
     for (int i = 1; i <= n; i++) { /* Values of the first variable. */
-        SET_REAL_2D(R, i, 1, n, GET_REAL_2D(W, i, 1, n));
+        SET_REAL_2D(ans, i, 1, n, GET_REAL_2D(w, i, 1, n));
     }
 
     for (int s = 1; s <= n; s++) { /* Loop over samples. */
-        R_CheckUserInterrupt(); /* Allowing interrupts. */
+        R_CheckUserInterrupt(); /* Allowing to user to stop the execution. */
 
-        SET_REAL_2D(V, 1, 1, d, GET_REAL_2D(R, s, 1, n));
+        SET_REAL_2D(v, 1, 1, d, GET_REAL_2D(ans, s, 1, n));
 
         for (int i = 2; i <= d; i++) { /* Loop over the other variables. */
-            SET_REAL_2D(V, i, 1, d, GET_REAL_2D(W, s, i, n));
+            SET_REAL_2D(v, i, 1, d, GET_REAL_2D(w, s, i, n));
             for (int k = imin2(trees, i-1); k >= 1; k--) {
-                SET_REAL_2D(V, i, 1, d,
-                        asReal(hinverse(GET_VECTOR_2D(Copulas, k, i-k, d-1),
-                               ScalarReal(GET_REAL_2D(V, i, 1, d)),
-                               ScalarReal(GET_REAL_2D(V, k, k, d)))));
+                SET_REAL_2D(v, i, 1, d,
+                        asReal(hinverse(GET_VECTOR_2D(copulas, k, i-k, d-1),
+                                        ScalarReal(GET_REAL_2D(v, i, 1, d)),
+                                        ScalarReal(GET_REAL_2D(v, k, k, d)))));
             }
-            SET_REAL_2D(R, s, i, n, GET_REAL_2D(V, i, 1, d));
+            SET_REAL_2D(ans, s, i, n, GET_REAL_2D(v, i, 1, d));
 
             if (i == d) {
                 break;
             }
 
             for (int j = 1; j <= imin2(trees, i-1); j++) {
-                SET_REAL_2D(V, i, j+1, d,
-                        asReal(h(GET_VECTOR_2D(Copulas, j, i-j, d-1),
-                               ScalarReal(GET_REAL_2D(V, i, j, d)),
-                               ScalarReal(GET_REAL_2D(V, j, j, d)))));
+                SET_REAL_2D(v, i, j+1, d,
+                        asReal(h(GET_VECTOR_2D(copulas, j, i-j, d-1),
+                                 ScalarReal(GET_REAL_2D(v, i, j, d)),
+                                 ScalarReal(GET_REAL_2D(v, j, j, d)))));
             }
         }
     }
 
     UNPROTECT(3);
 
-    return R;
+    return ans;
 }
 
 
-/* Based on the Algorithm 1 from Aas, K., Czado, C., Frigessi, A. & Bakken, H.
- * Pair-copula constructions of multiple dependence. Insurance Mathematics
- * and Economics, 2009, Vol. 44, pp. 182-198.
+/* Algorithm 2 from Aas, K., Czado, C., Frigessi, A. & Bakken, H.
+ * Pair-copula constructions of multiple dependence. Insurance
+ * Mathematics and Economics, 2009, Vol. 44, pp. 182-198.
  */
 
-SEXP rDVine(SEXP Vine, SEXP N) {
-    int n = asInteger(N);
-    int d = asInteger(R_do_slot(Vine, mkString("dimension")));
-    int trees = asInteger(R_do_slot(Vine, mkString("trees")));
-    SEXP Copulas = R_do_slot(Vine, mkString("copulas"));
-    SEXP W, V, R;
+SEXP rDVine(SEXP vine, SEXP samples) {
+    int n, d, trees;
+    SEXP copulas, w, v;
+    SEXP ans;
 
-    PROTECT(W = allocMatrix(REALSXP, n, d));
+    d = asInteger(R_do_slot(vine, mkString("dimension")));
+    trees = asInteger(R_do_slot(vine, mkString("trees")));
+    copulas = R_do_slot(vine, mkString("copulas"));
+    n = asInteger(samples);
+
+    PROTECT(w = allocMatrix(REALSXP, n, d));
     GetRNGstate();
     for (int i = 1; i <= n; i++) {
         for (int j = 1; j <= d; j++) {
-            SET_REAL_2D(W, i, j, n, runif(0, 1));
+            SET_REAL_2D(w, i, j, n, runif(0, 1));
         }
     }
     PutRNGstate();
 
-    if (trees == 0) { /* Independence D-vine. */
-        UNPROTECT(1);
-        return W;
-    }
-
-    PROTECT(V = allocMatrix(REALSXP, d, imax2(2*d-4, d)));
-    PROTECT(R = allocMatrix(REALSXP, n, d));
+    PROTECT(v = allocMatrix(REALSXP, d, imax2(2*d-4, d)));
+    PROTECT(ans = allocMatrix(REALSXP, n, d));
 
     for (int i = 1; i <= n; i++) { /* Values of the first variable. */
-        SET_REAL_2D(R, i, 1, n, GET_REAL_2D(W, i, 1, n));
+        SET_REAL_2D(ans, i, 1, n, GET_REAL_2D(w, i, 1, n));
     }
     for (int i = 1; i <= n; i++) { /* Values of the second variable. */
-        SET_REAL_2D(R, i, 2, n,
-                asReal(hinverse(GET_VECTOR_2D(Copulas, 1, 1, d-1),
-                       ScalarReal(GET_REAL_2D(W, i, 2, n)),
-                       ScalarReal(GET_REAL_2D(W, i, 1, n)))));
+        SET_REAL_2D(ans, i, 2, n,
+                asReal(hinverse(GET_VECTOR_2D(copulas, 1, 1, d-1),
+                                ScalarReal(GET_REAL_2D(w, i, 2, n)),
+                                ScalarReal(GET_REAL_2D(w, i, 1, n)))));
     }
 
     if (d == 2) { /* Stop if there are only two variables. */
         UNPROTECT(3);
-        return R;
+        return ans;
     }
 
     for (int s = 1; s <= n; s++) { /* Loop over samples. */
-        R_CheckUserInterrupt(); /* Allowing interrupts. */
+        R_CheckUserInterrupt(); /* Allowing to user to stop the execution. */
 
-        SET_REAL_2D(V, 1, 1, d, GET_REAL_2D(R, s, 1, n));
-        SET_REAL_2D(V, 2, 1, d, GET_REAL_2D(R, s, 2, n));
-        SET_REAL_2D(V, 2, 2, d,
-                asReal(h(GET_VECTOR_2D(Copulas, 1, 1, d-1),
-                       ScalarReal(GET_REAL_2D(V, 1, 1, d)),
-                       ScalarReal(GET_REAL_2D(V, 2, 1, d)))));
+        SET_REAL_2D(v, 1, 1, d, GET_REAL_2D(ans, s, 1, n));
+        SET_REAL_2D(v, 2, 1, d, GET_REAL_2D(ans, s, 2, n));
+        SET_REAL_2D(v, 2, 2, d,
+                asReal(h(GET_VECTOR_2D(copulas, 1, 1, d-1),
+                         ScalarReal(GET_REAL_2D(v, 1, 1, d)),
+                         ScalarReal(GET_REAL_2D(v, 2, 1, d)))));
 
         for (int i = 3; i <= d; i++) { /* Loop over the other variables. */
-            SET_REAL_2D(V, i, 1, d, GET_REAL_2D(W, s, i, n));
+            SET_REAL_2D(v, i, 1, d, GET_REAL_2D(w, s, i, n));
 
             if (trees >= 2) {
                 for (int k = imin2(trees, i-1); k >= 2; k--) {
-                    SET_REAL_2D(V, i, 1, d,
-                            asReal(hinverse(GET_VECTOR_2D(Copulas, k, i-k, d-1),
-                                   ScalarReal(GET_REAL_2D(V, i, 1, d)),
-                                   ScalarReal(GET_REAL_2D(V, i-1, 2*k-2, d)))));
+                    SET_REAL_2D(v, i, 1, d,
+                            asReal(hinverse(GET_VECTOR_2D(copulas, k, i-k, d-1),
+                                            ScalarReal(GET_REAL_2D(v, i, 1, d)),
+                                            ScalarReal(GET_REAL_2D(v, i-1, 2*k-2, d)))));
                 }
             }
-            SET_REAL_2D(V, i, 1, d,
-                    asReal(hinverse(GET_VECTOR_2D(Copulas, 1, i-1, d-1),
-                           ScalarReal(GET_REAL_2D(V, i, 1, d)),
-                           ScalarReal(GET_REAL_2D(V, i-1, 1, d)))));
-            SET_REAL_2D(R, s, i, n, GET_REAL_2D(V, i, 1, d));
+            SET_REAL_2D(v, i, 1, d,
+                    asReal(hinverse(GET_VECTOR_2D(copulas, 1, i-1, d-1),
+                                    ScalarReal(GET_REAL_2D(v, i, 1, d)),
+                                    ScalarReal(GET_REAL_2D(v, i-1, 1, d)))));
+            SET_REAL_2D(ans, s, i, n, GET_REAL_2D(v, i, 1, d));
 
             if (i == d) {
                 break;
             }
 
             if (trees >= 2) {
-                SET_REAL_2D(V, i, 2, d,
-                        asReal(h(GET_VECTOR_2D(Copulas, 1, i-1, d-1),
-                               ScalarReal(GET_REAL_2D(V, i-1, 1, d)),
-                               ScalarReal(GET_REAL_2D(V, i, 1, d)))));
+                SET_REAL_2D(v, i, 2, d,
+                        asReal(h(GET_VECTOR_2D(copulas, 1, i-1, d-1),
+                                 ScalarReal(GET_REAL_2D(v, i-1, 1, d)),
+                                 ScalarReal(GET_REAL_2D(v, i, 1, d)))));
             }
             if (trees >= 3) {
-                SET_REAL_2D(V, i, 3, d,
-                        asReal(h(GET_VECTOR_2D(Copulas, 1, i-1, d-1),
-                               ScalarReal(GET_REAL_2D(V, i, 1, d)),
-                               ScalarReal(GET_REAL_2D(V, i-1, 1, d)))));
+                SET_REAL_2D(v, i, 3, d,
+                        asReal(h(GET_VECTOR_2D(copulas, 1, i-1, d-1),
+                                 ScalarReal(GET_REAL_2D(v, i, 1, d)),
+                                 ScalarReal(GET_REAL_2D(v, i-1, 1, d)))));
             }
             if (trees >= 3 && i > 3) {
                 for (int j = 2; j <= imin2(trees-1, i-2); j++) {
-                    SET_REAL_2D(V, i, 2*j, d,
-                            asReal(h(GET_VECTOR_2D(Copulas, j, i-j, d-1),
-                                   ScalarReal(GET_REAL_2D(V, i-1, 2*j-2, d)),
-                                   ScalarReal(GET_REAL_2D(V, i, 2*j-1, d)))));
-                    SET_REAL_2D(V, i, 2*j+1, d,
-                            asReal(h(GET_VECTOR_2D(Copulas, j, i-j, d-1),
-                                   ScalarReal(GET_REAL_2D(V, i, 2*j-1, d)),
-                                   ScalarReal(GET_REAL_2D(V, i-1, 2*j-2, d)))));
+                    SET_REAL_2D(v, i, 2*j, d,
+                            asReal(h(GET_VECTOR_2D(copulas, j, i-j, d-1),
+                                     ScalarReal(GET_REAL_2D(v, i-1, 2*j-2, d)),
+                                     ScalarReal(GET_REAL_2D(v, i, 2*j-1, d)))));
+                    SET_REAL_2D(v, i, 2*j+1, d,
+                            asReal(h(GET_VECTOR_2D(copulas, j, i-j, d-1),
+                                     ScalarReal(GET_REAL_2D(v, i, 2*j-1, d)),
+                                     ScalarReal(GET_REAL_2D(v, i-1, 2*j-2, d)))));
                 }
             }
             if (trees >= i) {
-                SET_REAL_2D(V, i, 2*i-2, d,
-                        asReal(h(GET_VECTOR_2D(Copulas, i-1, 1, d-1),
-                               ScalarReal(GET_REAL_2D(V, i-1, 2*i-4, d)),
-                               ScalarReal(GET_REAL_2D(V, i, 2*i-3, d)))));
+                SET_REAL_2D(v, i, 2*i-2, d,
+                        asReal(h(GET_VECTOR_2D(copulas, i-1, 1, d-1),
+                                 ScalarReal(GET_REAL_2D(v, i-1, 2*i-4, d)),
+                                 ScalarReal(GET_REAL_2D(v, i, 2*i-3, d)))));
             }
         }
     }
 
     UNPROTECT(3);
 
-    return R;
+    return ans;
 }

@@ -16,5 +16,5 @@
  * this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-SEXP iterCVine(SEXP Vine, SEXP Data, SEXP Fit, SEXP Eval);
-SEXP iterDVine(SEXP Vine, SEXP Data, SEXP Fit, SEXP Eval);
+SEXP iterCVine(SEXP vine, SEXP data, SEXP fFit, SEXP fEval);
+SEXP iterDVine(SEXP vine, SEXP data, SEXP fFit, SEXP fEval);

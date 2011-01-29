@@ -32,15 +32,19 @@ SEXP hIndepCopula(SEXP X, SEXP V) {
  */
 
 SEXP hNormalCopula(SEXP Rho, SEXP X, SEXP V) {
-    double eps = R_pow(DOUBLE_EPS, 0.5);
-    double rho = asReal(Rho);
-    double *x = REAL(X), *v = REAL(V);
+    double eps;
+    double rho;
+    double *x, *v, *u;
     double vi, ui;
     SEXP U;
-    double *u;
 
     PROTECT(U = allocVector(REALSXP, LENGTH(X)));
+    eps = R_pow(DOUBLE_EPS, 0.5);
+    rho = asReal(Rho);
+    x = REAL(X);
+    v = REAL(V);
     u = REAL(U);
+
     for (int i = 0; i < LENGTH(X); i++) {
         if (x[i] <= eps || (rho == 1 && x[i] == v[i] && x[i] != 1)) {
             u[i] = eps;
@@ -49,27 +53,32 @@ SEXP hNormalCopula(SEXP Rho, SEXP X, SEXP V) {
         } else {
             vi = (v[i] <= eps) ? eps : ((v[i] >= 1 - eps) ? 1 - eps : v[i]);
             ui = pnorm((qnorm(x[i], 0, 1, TRUE, FALSE) -
-                        rho * qnorm(vi, 0, 1, TRUE, FALSE)) /
-                    sqrt(1 - rho * rho), 0, 1, TRUE, FALSE);
+                        rho*qnorm(vi, 0, 1, TRUE, FALSE)) /
+                       sqrt(1 - rho * rho), 0, 1, TRUE, FALSE);
             u[i] = (ui <= eps) ? eps : ((ui >= 1 - eps) ? 1 - eps : ui);
         }
     }
+
     UNPROTECT(1);
 
     return U;
 }
 
 SEXP hTCopula(SEXP Rho, SEXP Df, SEXP X, SEXP V) {
-    double eps = R_pow(DOUBLE_EPS, 0.5);
-    double rho = asReal(Rho);
-    double df = asReal(Df);
-    double *x = REAL(X), *v = REAL(V);
+    double eps;
+    double rho, df;
+    double *x, *v, *u;
     double vi, ui, tmp;
     SEXP U;
-    double *u;
 
     PROTECT(U = allocVector(REALSXP, LENGTH(X)));
+    eps = R_pow(DOUBLE_EPS, 0.5);
+    rho = asReal(Rho);
+    df = asReal(Df);
+    x = REAL(X);
+    v = REAL(V);
     u = REAL(U);
+
     for (int i = 0; i < LENGTH(X); i++) {
         if (x[i] <= eps || (rho == 1 && x[i] == v[i] && x[i] != 1)) {
             u[i] = eps;
@@ -84,24 +93,31 @@ SEXP hTCopula(SEXP Rho, SEXP Df, SEXP X, SEXP V) {
             u[i] = (ui <= eps) ? eps : ((ui >= 1 - eps) ? 1 - eps : ui);
         }
     }
+
     UNPROTECT(1);
 
     return U;
 }
 
 SEXP hClaytonCopula(SEXP Theta, SEXP X, SEXP V) {
-    double eps = R_pow(DOUBLE_EPS, 0.15);
-    double theta = asReal(Theta);
-    double *x = REAL(X), *v = REAL(V);
+    double eps;
+    double theta;
+    double *x, *v, *u;
     double vi, ui;
     SEXP U;
-    double *u;
+
+    eps = R_pow(DOUBLE_EPS, 0.15);
+    theta = asReal(Theta);
 
     if (theta <= eps) {
         return X;
     }
+
     PROTECT(U = allocVector(REALSXP, LENGTH(X)));
+    x = REAL(X);
+    v = REAL(V);
     u = REAL(U);
+
     for (int i = 0; i < LENGTH(X); i++) {
         if (x[i] <= eps) {
             u[i] = eps;
@@ -109,30 +125,36 @@ SEXP hClaytonCopula(SEXP Theta, SEXP X, SEXP V) {
             u[i] = 1 - eps;
         } else {
             vi = (v[i] <= eps) ? eps : ((v[i] >= 1 - eps) ? 1 - eps : v[i]);
-            ui = R_pow(vi, -theta - 1) *
-                    R_pow(R_pow(x[i], -theta) + R_pow(vi, -theta) - 1,
-                            -1 - 1 / theta);
+            ui = (R_pow(vi, -theta - 1) *
+                  R_pow(R_pow(x[i], -theta) + R_pow(vi, -theta) - 1, -1-1/theta));
             u[i] = (ui <= eps) ? eps : ((ui >= 1 - eps) ? 1 - eps : ui);
         }
     }
+
     UNPROTECT(1);
 
     return U;
 }
 
 SEXP hGumbelCopula(SEXP Theta, SEXP X, SEXP V) {
-    double eps = R_pow(DOUBLE_EPS, 0.5);
-    double theta = asReal(Theta);
-    double *x = REAL(X), *v = REAL(V);
+    double eps;
+    double theta;
+    double *x, *v, *u;
     double vi, ui, tmp, mlogxi, mlogvi;
     SEXP U;
-    double *u;
+
+    eps = R_pow(DOUBLE_EPS, 0.5);
+    theta = asReal(Theta);
 
     if (theta <= eps) {
         return X;
     }
+
     PROTECT(U = allocVector(REALSXP, LENGTH(X)));
+    x = REAL(X);
+    v = REAL(V);
     u = REAL(U);
+
     for (int i = 0; i < LENGTH(X); i++) {
         if (x[i] <= eps) {
             u[i] = eps;
@@ -143,11 +165,12 @@ SEXP hGumbelCopula(SEXP Theta, SEXP X, SEXP V) {
             mlogxi = -log(x[i]);
             mlogvi = -log(vi);
             tmp = R_pow(mlogxi, theta) + R_pow(mlogvi, theta);
-            ui = exp(-R_pow(tmp, 1/theta)) * R_pow(mlogvi, theta-1) *
-                    R_pow(tmp, 1/theta-1) / vi;
+            ui = (exp(-R_pow(tmp, 1/theta)) * R_pow(mlogvi, theta-1) *
+                  R_pow(tmp, 1/theta-1) / vi);
             u[i] = (ui <= eps) ? eps : ((ui >= 1 - eps) ? 1 - eps : ui);
         }
     }
+
     UNPROTECT(1);
 
     return U;

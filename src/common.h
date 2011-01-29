@@ -17,8 +17,6 @@
  */
 
 
-/* Macros to index (multidimensional) arrays using 1-based indexes. */
-
 #define GET_REAL_1D(x,i) REAL(x)[(i)-1]
 #define GET_REAL_2D(x,i,j,ni) REAL(x)[((i)-1)+(ni)*((j)-1)]
 #define GET_REAL_3D(x,i,j,k,ni,nj) REAL(x)[((i)-1)+(ni)*((j)-1)+(nj)*((k)-1)]
@@ -36,12 +34,8 @@
 #define SET_VECTOR_3D(x,i,j,k,ni,nj,v) SET_VECTOR_ELT(x,((i)-1)+(ni)*((j)-1)+(nj)*((k)-1),v)
 
 
-/* Functions used to call their counterparts in R interpreted code. */
-
-SEXP h(SEXP Copula, SEXP X, SEXP V);
-SEXP hinverse(SEXP Copula, SEXP U, SEXP V);
+SEXP h(SEXP copula, SEXP x, SEXP v);
+SEXP hinverse(SEXP copula, SEXP u, SEXP v);
 
 
-/* Function calls with different number of arguments. */
-
-SEXP evalFunction5(SEXP F, SEXP X1, SEXP X2, SEXP X3, SEXP X4, SEXP X5);
+SEXP evalFunction5(SEXP f, SEXP x1, SEXP x2, SEXP x3, SEXP x4, SEXP x5);

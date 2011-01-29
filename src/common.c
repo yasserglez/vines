@@ -23,41 +23,48 @@
 #include "common.h"
 
 
-SEXP h(SEXP Copula, SEXP X, SEXP V) {
-    SEXP F, Call, U;
+SEXP h(SEXP copula, SEXP x, SEXP v) {
+    SEXP f, fCall, ans;
+    PROTECT_INDEX anspi;
 
-    PROTECT(F = findFun(install("h"), R_GlobalEnv));
-    PROTECT(Call = lang4(F, Copula, X, V));
-    PROTECT(U = coerceVector(eval(Call, R_GlobalEnv), REALSXP));
+    PROTECT(f = findFun(install("h"), R_GlobalEnv));
+    PROTECT(fCall = lang4(f, copula, x, v));
+    PROTECT_WITH_INDEX(ans = eval(fCall, R_GlobalEnv), &anspi);
+    REPROTECT(ans = coerceVector(ans, REALSXP), anspi);
+
     UNPROTECT(3);
 
-    return U;
+    return ans;
 }
 
-SEXP hinverse(SEXP Copula, SEXP U, SEXP V) {
-    SEXP F, Call, X;
+SEXP hinverse(SEXP copula, SEXP u, SEXP v) {
+    SEXP f, fCall, ans;
+    PROTECT_INDEX anspi;
 
-    PROTECT(F = findFun(install("hinverse"), R_GlobalEnv));
-    PROTECT(Call = lang4(F, Copula, U, V));
-    PROTECT(X = coerceVector(eval(Call, R_GlobalEnv), REALSXP));
+    PROTECT(f = findFun(install("hinverse"), R_GlobalEnv));
+    PROTECT(fCall = lang4(f, copula, u, v));
+    PROTECT_WITH_INDEX(ans = eval(fCall, R_GlobalEnv), &anspi);
+    REPROTECT(ans = coerceVector(ans, REALSXP), anspi);
+
     UNPROTECT(3);
 
-    return X;
+    return ans;
 }
 
-SEXP evalFunction5(SEXP F, SEXP X1, SEXP X2, SEXP X3, SEXP X4, SEXP X5) {
-    SEXP Call, T, R;
+SEXP evalFunction5(SEXP f, SEXP x1, SEXP x2, SEXP x3, SEXP x4, SEXP x5) {
+    SEXP fCall, t, ans;
 
-    PROTECT(Call = T = allocList(6));
-    SET_TYPEOF(Call, LANGSXP);
-    SETCAR(T, F); T = CDR(T);
-    SETCAR(T, X1); T = CDR(T);
-    SETCAR(T, X2); T = CDR(T);
-    SETCAR(T, X3); T = CDR(T);
-    SETCAR(T, X4); T = CDR(T);
-    SETCAR(T, X5);
-    R = eval(Call, R_GlobalEnv);
-    UNPROTECT(1);
+    PROTECT(fCall = t = allocList(6));
+    SET_TYPEOF(fCall, LANGSXP);
+    SETCAR(t, f); t = CDR(t);
+    SETCAR(t, x1); t = CDR(t);
+    SETCAR(t, x2); t = CDR(t);
+    SETCAR(t, x3); t = CDR(t);
+    SETCAR(t, x4); t = CDR(t);
+    SETCAR(t, x5);
+    PROTECT(ans = eval(fCall, R_GlobalEnv));
 
-    return R;
+    UNPROTECT(2);
+
+    return ans;
 }
