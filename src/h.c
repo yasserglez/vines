@@ -20,15 +20,17 @@
 #include <Rinternals.h>
 #include <Rmath.h>
 
+#include "h.h"
+
 
 SEXP hIndepCopula(SEXP X, SEXP V) {
     return X;
 }
 
-/* See Aas, K., Czado, C., Frigessi, A. & Bakken, H. Pair-copula constructions
- * of multiple dependence. Insurance Mathematics and Economics, 2009, Vol. 44,
- * pp. 182-198. for the expression for the Gaussian, Student's t, Clayton and
- * Gumbel copulas.
+/* See Aas, K., Czado, C., Frigessi, A. & Bakken, H. Pair-copula
+ * constructions of multiple dependence. Insurance Mathematics and
+ * Economics, 2009, Vol. 44, pp. 182-198. for the expression for the
+ * Gaussian, Student's t, Clayton and Gumbel copulas.
  */
 
 SEXP hNormalCopula(SEXP Rho, SEXP X, SEXP V) {

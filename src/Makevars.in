@@ -1,7 +1,0 @@
-# Based on the Makevars.in file from the gsl R package.
-
-GSL_CFLAGS=@GSL_CFLAGS@
-GSL_LIBS=@GSL_LIBS@
-
-PKG_CPPFLAGS=$(GSL_CFLAGS)
-PKG_LIBS=$(GSL_LIBS)

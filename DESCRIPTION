@@ -11,7 +11,6 @@ Description:
 License: GPL (>= 3)
 LazyLoad: yes
 Depends: methods, copula, ADGofTest, cubature
-SystemRequirements: GNU Scientific Library (>= 1.14)
 Collate: h.R hinverse.R vines.R show.R parameters.R dimnames.R
 	itervine.R fitvine.R fitvineml.R orderingvine.R pitvine.R
 	gofvine.R dvine.R pvine.R rvine.R

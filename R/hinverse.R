@@ -21,7 +21,24 @@ setGeneric("hinverse",
 
 
 hinverseCopula <- function (copula, u, v) {
-    .Call(C_hinverseCopula, copula, u, v)
+    eps <- .Machine$double.eps^0.5
+    r0 <- u <= eps
+    r1 <- abs(1 - u) <= eps
+    skip <- r0 | r1
+    u <- pmax(pmin(u, 1-eps), eps)
+    v <- pmax(pmin(v, 1-eps), eps)
+    f <- function (x, u, v, copula) h(copula, x, v) - u
+    r <- sapply(seq(along = u),
+            function (i) {
+                if (skip[i]) {
+                    NA
+                } else {
+                    uniroot(f, lower = eps, upper = 1-eps,
+                            f.lower = -u[i], f.upper = 1-u[i], tol = 0.01,
+                            copula = copula, u = u[i], v = v[i])$root
+                }
+            })
+    ifelse(r0, eps, ifelse(r1, 1 - eps, r))
 }
 
 setMethod("hinverse", "copula", hinverseCopula)

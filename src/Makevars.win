@@ -1,4 +1,0 @@
-# Based on the Makevars.win file from the gsl R package.
-
-PKG_CPPFLAGS=-I$(LIB_GSL)/include
-PKG_LIBS=-L$(LIB_GSL)/lib -lgsl

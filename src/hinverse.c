@@ -19,84 +19,18 @@
 #include <R.h>
 #include <Rinternals.h>
 #include <Rmath.h>
-#include <gsl/gsl_errno.h>
-#include <gsl/gsl_roots.h>
 
 #include "hinverse.h"
-#include "common.h"
 
-
-struct fParams {
-    SEXP *Copula;
-    SEXP *U;
-    SEXP *V;
-    int index;
-};
-
-static double f(double x, void *params) {
-    struct fParams *p = (struct fParams *) params;
-    double u = REAL(*(p->U))[p->index];
-    double v = REAL(*(p->V))[p->index];
-
-    return asReal(h(*(p->Copula), ScalarReal(x), ScalarReal(v))) - u;
-}
-
-SEXP hinverseCopula(SEXP Copula, SEXP U, SEXP V) {
-    double eps = R_pow(DOUBLE_EPS, 0.5);
-    double *u = REAL(U), *v = REAL(V);
-    gsl_function F;
-    struct fParams params = {&Copula, &U, &V, 0};
-    gsl_root_fsolver *solver;
-    int status;
-    double lower, upper;
-    SEXP X;
-    double *x;
-
-    F.function = &f;
-    F.params = &params;
-
-    gsl_set_error_handler_off();
-    solver = gsl_root_fsolver_alloc(gsl_root_fsolver_brent);
-
-    PROTECT(X = allocVector(REALSXP, LENGTH(U)));
-    x = REAL(X);
-    for (int i = 0; i < LENGTH(U); i++) {
-        if (u[i] <= eps) {
-            x[i] = eps;
-        } else if (1 - u[i] <= eps) {
-            x[i] = 1 - eps;
-        } else {
-            params.index = i;
-            gsl_root_fsolver_set(solver, &F, eps, 1 - eps);
-            do {
-                status = gsl_root_fsolver_iterate(solver);
-                if (status) {
-                    gsl_root_fsolver_free(solver);
-                    UNPROTECT(1);
-                    error(gsl_strerror(status));
-                } else {
-                    lower = gsl_root_fsolver_x_lower(solver);
-                    upper = gsl_root_fsolver_x_upper(solver);
-                    status = gsl_root_test_interval(lower, upper, 0, 0.01);
-                }
-            } while (status == GSL_CONTINUE);
-            x[i] = gsl_root_fsolver_root(solver);
-        }
-    }
-    gsl_root_fsolver_free(solver);
-    UNPROTECT(1);
-
-    return X;
-}
 
 SEXP hinverseIndepCopula(SEXP U, SEXP V) {
     return U;
 }
 
-/* See Aas, K., Czado, C., Frigessi, A. & Bakken, H. Pair-copula constructions
- * of multiple dependence. Insurance Mathematics and Economics, 2009, Vol. 44,
- * pp. 182-198. for the expression for the Gaussian, Student's t, Clayton and
- * Gumbel copulas.
+/* See Aas, K., Czado, C., Frigessi, A. & Bakken, H. Pair-copula
+ * constructions of multiple dependence. Insurance Mathematics and
+ * Economics, 2009, Vol. 44, pp. 182-198. for the expression for the
+ * Gaussian, Student's t, Clayton and Gumbel copulas.
  */
 
 SEXP hinverseNormalCopula(SEXP Rho, SEXP U, SEXP V) {
