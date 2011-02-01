@@ -35,25 +35,6 @@ showFitVineML <- function (object) {
 setMethod("show", "fitVineML", showFitVineML)
 
 
-# Functions called by iterVine to check if the vine can be truncated.
-truncVineAIC <- function (smallModel, fullModel, data) {
-    smallAIC <- -2*logLikVine(smallModel, data) + 
-            2*length(parameters(smallModel))
-    fullAIC <- -2*logLikVine(fullModel, data) + 
-            2*length(parameters(fullModel))
-    smallAIC < fullAIC
-}
-
-truncVineBIC <- function (smallModel, fullModel, data) {
-    k <- log(nrow(data))
-    smallBIC <- -2*logLikVine(smallModel, data) +
-            k*length(parameters(smallModel))
-    fullBIC <- -2*logLikVine(fullModel, data) +
-            k*length(parameters(fullModel))
-    smallBIC < fullBIC
-}
-
-
 # Function called by iterVine to evaluate the log-likelihood of each copula.
 evalCopulaLogLik <- function (vine, j, i, x, y) {
     copula <- vine@copulas[[j, i]]
@@ -72,9 +53,34 @@ fitVineML <- function (type, data, trees = ncol(data) - 1, truncMethod = "",
 
     if (nzchar(truncMethod)) {
         if (identical(truncMethod, "AIC")) {
-            truncVine <- truncVineAIC
+            previousAIC <- NA
+            truncVine <- function (smallModel, fullModel, data) {
+                if (is.finite(previousAIC)) {
+                    smallAIC <- previousAIC
+                } else {
+                    smallAIC <- -2*logLikVine(smallModel, data) + 
+                            2*length(parameters(smallModel))
+                }
+                fullAIC <- -2*logLikVine(fullModel, data) + 
+                        2*length(parameters(fullModel))
+                previousAIC <<- fullAIC
+                smallAIC < fullAIC
+            }
         } else if (identical(truncMethod, "BIC")) {
-            truncVine <- truncVineBIC
+            previousBIC <- NA
+            truncVine <- function (smallModel, fullModel, data) {
+                k <- log(nrow(data))
+                if (is.finite(previousBIC)) {
+                    smallBIC <- previousBIC
+                } else {                
+                    smallBIC <- -2*logLikVine(smallModel, data) +
+                            k*length(parameters(smallModel))
+                }
+                fullBIC <- -2*logLikVine(fullModel, data) +
+                        k*length(parameters(fullModel))
+                previousBIC <<- fullBIC
+                smallBIC < fullBIC
+            }
         } else {
             stop("invalid vine truncation method ", dQuote(truncMethod))
         }
