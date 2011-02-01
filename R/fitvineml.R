@@ -35,42 +35,73 @@ showFitVineML <- function (object) {
 setMethod("show", "fitVineML", showFitVineML)
 
 
-# Called by iterVine to evaluate the log-likelihood of each copula.
-evalLogLikCopula <- function (vine, j, i, x, y) {
+# Functions called by iterVine to check if the vine can be truncated.
+truncVineAIC <- function (smallModel, fullModel, data) {
+    smallAIC <- -2*logLikVine(smallModel, data) + 
+            2*length(parameters(smallModel))
+    fullAIC <- -2*logLikVine(fullModel, data) + 
+            2*length(parameters(fullModel))
+    smallAIC < fullAIC
+}
+
+truncVineBIC <- function (smallModel, fullModel, data) {
+    k <- log(nrow(data))
+    smallBIC <- -2*logLikVine(smallModel, data) +
+            k*length(parameters(smallModel))
+    fullBIC <- -2*logLikVine(fullModel, data) +
+            k*length(parameters(fullModel))
+    smallBIC < fullBIC
+}
+
+
+# Function called by iterVine to evaluate the log-likelihood of each copula.
+evalCopulaLogLik <- function (vine, j, i, x, y) {
     copula <- vine@copulas[[j, i]]
     loglikCopula(copula@parameters, cbind(x, y), copula)
 }
 
-
 logLikVine <- function (vine, data) {
-    iterVineResult <- iterVine(vine, data, eval = evalLogLikCopula)
+    iterVineResult <- iterVine(vine, data, evalCopula = evalCopulaLogLik)
     sum(unlist(iterVineResult$evals))
 }
 
 
-fitVineML <- function (type, data, trees = ncol(data) - 1,
-        selectCopula = function (j, i, x, y) indepCopula(),
+fitVineML <- function (type, data, trees = ncol(data) - 1, truncMethod = "",
+        selectCopula = function (vine, j, i, x, y) indepCopula(),
         optimMethod = "Nelder-Mead", optimControl = list()) {
-    # Compute starting values for the parameters of the copulas in the 
-    # pair-copula construction following the estimation procedure described in 
-    # Section 7 of Aas, K., Czado, C., Frigessi, A. and Bakken, H. Pair-copula 
-    # constructions of multiple dependence. Insurance Mathematics and Economics, 
+
+    if (nzchar(truncMethod)) {
+        if (identical(truncMethod, "AIC")) {
+            truncVine <- truncVineAIC
+        } else if (identical(truncMethod, "BIC")) {
+            truncVine <- truncVineBIC
+        } else {
+            stop("invalid vine truncation method ", dQuote(truncMethod))
+        }
+    } else {
+        truncVine = NULL
+    }
+
+    # Compute starting values for the parameters of the copulas in the
+    # pair-copula construction following the estimation procedure described in
+    # Section 7 of Aas, K., Czado, C., Frigessi, A. and Bakken, H. Pair-copula
+    # constructions of multiple dependence. Insurance Mathematics and Economics,
     # 2009, Vol. 44, pp. 182-198.
-    selectCopulaWrapper <- function (vine, j, i, x, y) selectCopula(j, i, x, y)
     vine <- Vine(type, dimension = ncol(data), trees = trees,
             copulas = matrix(list(), ncol(data) - 1, ncol(data) - 1))
     dimnames(vine) <- colnames(data)
-    iterVineResult <- iterVine(vine, data, fit = selectCopulaWrapper)
+    iterVineResult <- iterVine(vine, data,
+            selectCopula = selectCopula, truncVine = truncVine)
     vine <- iterVineResult$vine
     startParams <- parameters(vine)
-    
+
     if (nzchar(optimMethod) && length(startParams) > 0) {
         # Execute the optimization method.
         lowerParams <- unlist(lapply(vine@copulas,
                     function (x) if (is.null(x)) numeric(0) else x@param.lowbnd))
-        upperParams <- unlist(lapply(vine@copulas, 
+        upperParams <- unlist(lapply(vine@copulas,
                     function (x) if (is.null(x)) numeric(0) else x@param.upbnd))
-        
+
         if (identical(optimMethod, "L-BFGS-B")) {
             lower <- lowerParams
             upper <- upperParams
@@ -87,14 +118,14 @@ fitVineML <- function (type, data, trees = ncol(data) - 1,
                 NA
             }
         }
-        
+
         optimControl <- c(optimControl, fnscale = -1)
         optimResult <- optim(startParams, logLik, lower = lower, upper = upper,
-                method = optimMethod, control = optimControl, vine = vine, 
+                method = optimMethod, control = optimControl, vine = vine,
                 data = data, lowerParams = lowerParams, upperParams = upperParams)
-        
+
         parameters(vine) <- optimResult$par
-        
+
         fit <- new("fitVineML", 
                 vine = vine,
                 observations = nrow(data),
@@ -112,6 +143,6 @@ fitVineML <- function (type, data, trees = ncol(data) - 1,
                 startParams = startParams,
                 finalParams = startParams)
     }
-    
+
     fit
 }

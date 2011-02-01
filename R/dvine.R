@@ -28,10 +28,10 @@ dCVineDVine <- function (vine, u) {
         rep(1, nrow(u))
     } else {
         # Called by iterVine to evaluate the density of each copula.
-        copulaDensity <- function (vine, j, i, x, y) {
+        evalCopulaDensity <- function (vine, j, i, x, y) {
             dcopula(vine@copulas[[j, i]], cbind(x, y))
         }
-        iterResult <- iterVine(vine, u, eval = copulaDensity)
+        iterResult <- iterVine(vine, u, evalCopula = evalCopulaDensity)
         apply(matrix(unlist(iterResult$evals), nrow(u)), 1, prod)
     }
 }
