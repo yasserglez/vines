@@ -11,14 +11,13 @@ exportClasses(fitVine, fitVineML)
 exportClasses(gofVine)
 
 exportMethods(h, hinverse)
-exportMethods(calibKendallsTau, calibSpearmansRho)
 
 exportMethods(dvine)
 exportMethods(pvine)
 exportMethods(rvine)
 exportMethods(pitVine)
 
-exportMethods(show, summary, dimnames)
+exportMethods(show, dimnames, "dimnames<-")
 
 
 export(Vine, CVine, DVine)
