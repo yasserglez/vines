@@ -35,14 +35,15 @@ See \code{\linkS4class{fitVine}} for information about the inherited slots.
 
 \section{Methods}{
   \describe{
-    \item{show}{\code{signature(object = "fitVineML")}: 
+    \item{show}{\code{signature(object = "fitVineML")}:
       Print information about the fitted vine.}
   }
 }
 
 \seealso{
+  \code{\linkS4class{fitVine}},
   \code{\link{fitVine}},
-  \code{\linkS4class{fitVine}}.
+  \code{\link{vineParameters}}.
 }
 
 \keyword{classes}

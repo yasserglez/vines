@@ -59,10 +59,10 @@ fitVineML <- function (type, data, trees = ncol(data) - 1, truncMethod = "",
                     smallAIC <- previousAIC
                 } else {
                     smallAIC <- -2*logLikVine(smallModel, data) + 
-                            2*length(parameters(smallModel))
+                            2*length(vineParameters(smallModel))
                 }
                 fullAIC <- -2*logLikVine(fullModel, data) + 
-                        2*length(parameters(fullModel))
+                        2*length(vineParameters(fullModel))
                 previousAIC <<- fullAIC
                 smallAIC < fullAIC
             }
@@ -74,10 +74,10 @@ fitVineML <- function (type, data, trees = ncol(data) - 1, truncMethod = "",
                     smallBIC <- previousBIC
                 } else {                
                     smallBIC <- -2*logLikVine(smallModel, data) +
-                            k*length(parameters(smallModel))
+                            k*length(vineParameters(smallModel))
                 }
                 fullBIC <- -2*logLikVine(fullModel, data) +
-                        k*length(parameters(fullModel))
+                        k*length(vineParameters(fullModel))
                 previousBIC <<- fullBIC
                 smallBIC < fullBIC
             }
@@ -99,7 +99,7 @@ fitVineML <- function (type, data, trees = ncol(data) - 1, truncMethod = "",
     iterVineResult <- iterVine(vine, data,
             selectCopula = selectCopula, truncVine = truncVine)
     vine <- iterVineResult$vine
-    startParams <- parameters(vine)
+    startParams <- vineParameters(vine)
 
     if (nzchar(optimMethod) && length(startParams) > 0) {
         # Execute the optimization method.
@@ -118,7 +118,7 @@ fitVineML <- function (type, data, trees = ncol(data) - 1, truncMethod = "",
         
         logLik <- function (x, vine, data, lowerParams, upperParams) {
             if (all(is.finite(x) & x >= lowerParams & x <= upperParams)) {
-                parameters(vine) <- x
+                vineParameters(vine) <- x
                 logLikVine(vine, data)
             } else {
                 NA
@@ -130,7 +130,7 @@ fitVineML <- function (type, data, trees = ncol(data) - 1, truncMethod = "",
                 method = optimMethod, control = optimControl, vine = vine,
                 data = data, lowerParams = lowerParams, upperParams = upperParams)
 
-        parameters(vine) <- optimResult$par
+        vineParameters(vine) <- optimResult$par
 
         fit <- new("fitVineML", 
                 vine = vine,

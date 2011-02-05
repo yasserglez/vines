@@ -15,16 +15,16 @@
 # You should have received a copy of the GNU General Public License along with 
 # this program. If not, see <http://www.gnu.org/licenses/>.
 
-parameters <- function (vine) {
-    f <- function (x) if (is.null(x)) numeric(0) else x@parameters
+vineParameters <- function (vine) {
+    f <- function (x) if (is(x, "copula")) x@parameters else numeric(0)
     unlist(lapply(vine@copulas, f))
 }
 
 
-`parameters<-` <- function (vine, value) {
+`vineParameters<-` <- function (vine, value) {
     k <- 1
     for (i in seq(along = vine@copulas)) {
-        if (!is.null(vine@copulas[[i]])) {
+        if (is(vine@copulas[[i]], "copula")) {
             n <- length(vine@copulas[[i]]@parameters)
             if (n > 0) {
                 params <- value[seq(from = k, to = k + n - 1)]

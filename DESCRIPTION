@@ -16,6 +16,6 @@ Description: Vines are graphical models for pair-copula constructions
 License: GPL (>= 3)
 LazyLoad: yes
 Depends: methods, copula, ADGofTest, cubature
-Collate: h.R hinverse.R vines.R show.R parameters.R dimnames.R
+Collate: h.R hinverse.R vines.R show.R vineparameters.R dimnames.R
 	itervine.R fitvine.R fitvineml.R orderingvine.R pitvine.R
 	gofvine.R dvine.R pvine.R rvine.R
