@@ -1,19 +1,19 @@
-\name{fitVineML-class}
+\name{vineFitML-class}
 
 \docType{class}
 
-\alias{fitVineML-class}
-\alias{show,fitVineML-method}
+\alias{vineFitML-class}
+\alias{show,vineFitML-method}
 
 \title{Class for the Results of Vine Inference by Maximum Likelihood}
 
 \description{
-Extends the \code{\linkS4class{fitVine}} class to include information
+Extends the \code{\linkS4class{vineFit}} class to include information
 about the Maximum Likelihood inference.
 }
 
 \section{Slots}{
-See \code{\linkS4class{fitVine}} for information about the inherited slots.
+See \code{\linkS4class{vineFit}} for information about the inherited slots.
 
 \describe{
   \item{\code{optimMethod}:}{Object of class \code{character}. 
@@ -34,16 +34,16 @@ See \code{\linkS4class{fitVine}} for information about the inherited slots.
 }
 
 \section{Methods}{
-  \describe{
-    \item{show}{\code{signature(object = "fitVineML")}:
-      Print information about the fitted vine.}
-  }
+\describe{
+  \item{show}{\code{signature(object = "vineFitML")}:
+    Print information about the fitted vine.}
+}
 }
 
 \seealso{
-  \code{\linkS4class{fitVine}},
-  \code{\link{fitVine}},
-  \code{\link{vineParameters}}.
+\code{\linkS4class{vineFit}},
+\code{\link{vineFit}},
+\code{\link{vineParameters}}.
 }
 
 \keyword{classes}

@@ -7,7 +7,7 @@ import(cubature)
 
 
 exportClasses(Vine, RVine, CVine, DVine)
-exportClasses(fitVine, fitVineML)
+exportClasses(vineFit, vineFitML)
 exportClasses(gofVine)
 
 exportMethods(h, hinverse)
@@ -21,7 +21,7 @@ exportMethods(show, dimnames, "dimnames<-")
 
 
 export(Vine, CVine, DVine)
-export(fitVine, fitCVine, fitDVine)
+export(vineFit)
 export(orderingVine, orderingCVine, orderingDVine)
 export(vineParameters, "vineParameters<-")
 export(gofVine)

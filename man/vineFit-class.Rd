@@ -1,16 +1,16 @@
-\name{fitVine-class}
+\name{vineFit-class}
 
 \docType{class}
 
-\alias{fitVine-class}
-\alias{show,fitVine-method}
+\alias{vineFit-class}
+\alias{show,vineFit-method}
 
 \title{Class for the Results of Vine Inference}
 
 \description{
 This is the base class of all classes giving information about vine inference.
 Objects of this class (or subclasses containing information about specific
-inference methods) are created as results of calls to the \code{\link{fitVine}}
+inference methods) are created as results of calls to the \code{\link{vineFit}}
 function.
 }
 
@@ -26,15 +26,15 @@ function.
 }
 
 \section{Methods}{
-  \describe{
-    \item{show}{\code{signature(object = "fitVine")}: 
-      Print information about the fitted vine.}
-  }
+\describe{
+  \item{show}{\code{signature(object = "vineFit")}:
+    Print information about the fitted vine.}
+}
 }
 
 \seealso{
-  \code{\link{fitVine}},
-  \code{\linkS4class{fitVineML}}.
+\code{\link{vineFit}},
+\code{\linkS4class{vineFitML}}.
 }
 
 \keyword{classes}

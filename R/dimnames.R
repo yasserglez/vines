@@ -15,14 +15,14 @@
 # You should have received a copy of the GNU General Public License along with 
 # this program. If not, see <http://www.gnu.org/licenses/>.
 
-getDimnamesVine <- function (x) {
+getVineDimnames <- function (x) {
     x@dimensionNames
 } 
 
-setMethod("dimnames", "Vine", getDimnamesVine)
+setMethod("dimnames", "Vine", getVineDimnames)
 
 
-setDimnamesVine <- function (x, value) {
+setVineDimnames <- function (x, value) {
     dimensionNames <- as.character(value)
     if (length(dimensionNames) == 0 || length(dimensionNames) == x@dimension) {
         x@dimensionNames <- dimensionNames
@@ -32,4 +32,4 @@ setDimnamesVine <- function (x, value) {
     }
 }
 
-setMethod("dimnames<-", "Vine", setDimnamesVine)
+setMethod("dimnames<-", "Vine", setVineDimnames)

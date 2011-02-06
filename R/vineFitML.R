@@ -15,8 +15,8 @@
 # You should have received a copy of the GNU General Public License along with 
 # this program. If not, see <http://www.gnu.org/licenses/>.
 
-setClass("fitVineML",
-        contains = "fitVine",
+setClass("vineFitML",
+        contains = "vineFit",
         representation = representation(
                 optimMethod = "character",
                 optimConv = "numeric",
@@ -26,13 +26,13 @@ setClass("fitVineML",
                 method = "ml"))
 
 
-showFitVineML <- function (object) {
-    showFitVine(object)
+showVineFitML <- function (object) {
+    showVineFit(object)
     cat("Optimization method:", object@optimMethod, "\n")
     cat("Convergence code:", object@optimConv, "\n")
 }
 
-setMethod("show", "fitVineML", showFitVineML)
+setMethod("show", "vineFitML", showVineFitML)
 
 
 # Function called by iterVine to evaluate the log-likelihood of each copula.
@@ -47,10 +47,9 @@ logLikVine <- function (vine, data) {
 }
 
 
-fitVineML <- function (type, data, trees = ncol(data) - 1, truncMethod = "",
-        selectCopula = function (vine, j, i, x, y) indepCopula(),
+vineFitML <- function (type, data, trees = ncol(data) - 1, truncMethod = "",
+        selectCopula = function (x, y) indepCopula(),
         optimMethod = "Nelder-Mead", optimControl = list()) {
-
     if (nzchar(truncMethod)) {
         if (identical(truncMethod, "AIC")) {
             previousAIC <- NA
@@ -93,11 +92,12 @@ fitVineML <- function (type, data, trees = ncol(data) - 1, truncMethod = "",
     # Section 7 of Aas, K., Czado, C., Frigessi, A. and Bakken, H. Pair-copula
     # constructions of multiple dependence. Insurance Mathematics and Economics,
     # 2009, Vol. 44, pp. 182-198.
+    selectCopulaWrapper <- function (vine, j, i, x, y) selectCopula(x, y)
     vine <- Vine(type, dimension = ncol(data), trees = trees,
             copulas = matrix(list(), ncol(data) - 1, ncol(data) - 1))
     dimnames(vine) <- colnames(data)
     iterVineResult <- iterVine(vine, data,
-            selectCopula = selectCopula, truncVine = truncVine)
+            selectCopula = selectCopulaWrapper, truncVine = truncVine)
     vine <- iterVineResult$vine
     startParams <- vineParameters(vine)
 
@@ -132,7 +132,7 @@ fitVineML <- function (type, data, trees = ncol(data) - 1, truncMethod = "",
 
         vineParameters(vine) <- optimResult$par
 
-        fit <- new("fitVineML", 
+        fit <- new("vineFitML", 
                 vine = vine,
                 observations = nrow(data),
                 optimMethod = optimMethod,
@@ -141,7 +141,7 @@ fitVineML <- function (type, data, trees = ncol(data) - 1, truncMethod = "",
                 finalParams = optimResult$par)
     } else {
         # Without parameters or optimization disabled.
-        fit <- new("fitVineML", 
+        fit <- new("vineFitML", 
                 vine = vine,
                 observations = nrow(data), 
                 optimMethod = optimMethod,
