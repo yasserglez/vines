@@ -32,7 +32,7 @@ setMethod("show", "gofVine", showGofVine)
 
 
 gofVinePIT <- function (vine, data, statistic = "breymann") {
-    Z <- pitVine(vine, data)
+    Z <- vinePIT(vine, data)
     
     if (identical(statistic, "breymann")) {
         n <- ncol(Z)

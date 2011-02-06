@@ -15,7 +15,7 @@ exportMethods(h, hinverse)
 exportMethods(dvine)
 exportMethods(pvine)
 exportMethods(rvine)
-exportMethods(pitVine)
+exportMethods(vinePIT)
 
 exportMethods(show, dimnames, "dimnames<-")
 

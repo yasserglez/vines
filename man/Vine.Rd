@@ -29,15 +29,11 @@ rvine(vine, n)
 \arguments{
 \item{vine}{A \code{\linkS4class{Vine}} object.}
 \item{u}{A vector of the same dimension of the vine or a matrix with one 
-  column for each dimension of the vine and rows giving the coordinates 
-  of the points where the density or distribution functions needs to be 
-  evaluated.}
+  column for each dimension of the vine.}
 \item{n}{Number of observations to be generated.}
 }
 
 \details{
-All this functions are S4 generic functions on the first argument.
-
 The implementation of the \code{dvine} function for \code{\linkS4class{CVine}} 
 and \code{\linkS4class{DVine}} is based on the Algorithms 3 and 4 from
 Aas et al. (2009).
