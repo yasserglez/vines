@@ -35,15 +35,15 @@ showVineFitML <- function (object) {
 setMethod("show", "vineFitML", showVineFitML)
 
 
-# Function called by iterVine to evaluate the log-likelihood of each copula.
+# Function called by vineIter to evaluate the log-likelihood of each copula.
 evalCopulaLogLik <- function (vine, j, i, x, y) {
     copula <- vine@copulas[[j, i]]
     loglikCopula(copula@parameters, cbind(x, y), copula)
 }
 
-logLikVine <- function (vine, data) {
-    iterVineResult <- iterVine(vine, data, evalCopula = evalCopulaLogLik)
-    sum(unlist(iterVineResult$evals))
+vineLogLik <- function (vine, data) {
+    vineIterResult <- vineIter(vine, data, evalCopula = evalCopulaLogLik)
+    sum(unlist(vineIterResult$evals))
 }
 
 
@@ -57,10 +57,10 @@ vineFitML <- function (type, data, trees = ncol(data) - 1, truncMethod = "",
                 if (is.finite(previousAIC)) {
                     smallAIC <- previousAIC
                 } else {
-                    smallAIC <- -2*logLikVine(smallModel, data) + 
+                    smallAIC <- -2*vineLogLik(smallModel, data) + 
                             2*length(vineParameters(smallModel))
                 }
-                fullAIC <- -2*logLikVine(fullModel, data) + 
+                fullAIC <- -2*vineLogLik(fullModel, data) + 
                         2*length(vineParameters(fullModel))
                 previousAIC <<- fullAIC
                 smallAIC < fullAIC
@@ -72,10 +72,10 @@ vineFitML <- function (type, data, trees = ncol(data) - 1, truncMethod = "",
                 if (is.finite(previousBIC)) {
                     smallBIC <- previousBIC
                 } else {                
-                    smallBIC <- -2*logLikVine(smallModel, data) +
+                    smallBIC <- -2*vineLogLik(smallModel, data) +
                             k*length(vineParameters(smallModel))
                 }
-                fullBIC <- -2*logLikVine(fullModel, data) +
+                fullBIC <- -2*vineLogLik(fullModel, data) +
                         k*length(vineParameters(fullModel))
                 previousBIC <<- fullBIC
                 smallBIC < fullBIC
@@ -96,9 +96,9 @@ vineFitML <- function (type, data, trees = ncol(data) - 1, truncMethod = "",
     vine <- Vine(type, dimension = ncol(data), trees = trees,
             copulas = matrix(list(), ncol(data) - 1, ncol(data) - 1))
     dimnames(vine) <- colnames(data)
-    iterVineResult <- iterVine(vine, data,
+    vineIterResult <- vineIter(vine, data,
             selectCopula = selectCopulaWrapper, truncVine = truncVine)
-    vine <- iterVineResult$vine
+    vine <- vineIterResult$vine
     startParams <- vineParameters(vine)
 
     if (nzchar(optimMethod) && length(startParams) > 0) {
@@ -119,7 +119,7 @@ vineFitML <- function (type, data, trees = ncol(data) - 1, truncMethod = "",
         logLik <- function (x, vine, data, lowerParams, upperParams) {
             if (all(is.finite(x) & x >= lowerParams & x <= upperParams)) {
                 vineParameters(vine) <- x
-                logLikVine(vine, data)
+                vineLogLik(vine, data)
             } else {
                 NA
             }

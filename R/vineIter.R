@@ -15,10 +15,10 @@
 # You should have received a copy of the GNU General Public License along with 
 # this program. If not, see <http://www.gnu.org/licenses/>.
 
-setGeneric("iterVine",
+setGeneric("vineIter",
         function (vine, data, evalCopula = NULL,
                   selectCopula = NULL, truncVine = NULL)
-            standardGeneric("iterVine"),
+            standardGeneric("vineIter"),
         signature = "vine")
 
 
@@ -83,7 +83,7 @@ iterCVine <- function (vine, data, evalCopula, selectCopula, truncVine) {
     }
 }
 
-setMethod("iterVine", "CVine", iterCVine)
+setMethod("vineIter", "CVine", iterCVine)
 
 
 iterDVine <- function (vine, data, evalCopula, selectCopula, truncVine) {
@@ -190,4 +190,4 @@ iterDVine <- function (vine, data, evalCopula, selectCopula, truncVine) {
     }
 }
 
-setMethod("iterVine", "DVine", iterDVine)
+setMethod("vineIter", "DVine", iterDVine)

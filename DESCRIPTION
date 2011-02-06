@@ -17,5 +17,5 @@ License: GPL (>= 3)
 LazyLoad: yes
 Depends: methods, copula, ADGofTest, cubature
 Collate: h.R hinverse.R Vine.R show.R vineParameters.R dimnames.R
-	itervine.R vineFit.R vineFitML.R orderingvine.R pitvine.R
+	vineIter.R vineFit.R vineFitML.R orderingvine.R pitvine.R
 	gofvine.R dvine.R pvine.R rvine.R

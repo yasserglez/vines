@@ -22,6 +22,7 @@ exportMethods(show, dimnames, "dimnames<-")
 
 export(Vine, CVine, DVine)
 export(vineFit)
+export(vineLogLik)
 export(orderingVine, orderingCVine, orderingDVine)
 export(vineParameters, "vineParameters<-")
 export(gofVine)
