@@ -20,17 +20,27 @@ vineParameters(vine) <- parameters
   copulas in the pair-copula construction. This vector is the result
   of the concatenation of the \code{parameters} slot of the 
   \code{\linkS4class{copula}} objects in the \code{copulas} slot of the 
-  \code{\linkS4class{Vine}} object (by columns).}
+  \code{\linkS4class{Vine}} object (by rows).}
 }
 
 \examples{
-dimension <- 3
-copulas <- matrix(list(gumbelCopula(3.45), claytonCopula(2.75),
-                       tCopula(0.75, df = 5), NULL),
-                  ncol = dimension - 1, nrow = dimension - 1)
-vine <- DVine(dimension = dimension, trees = dimension - 1,
+dimension <- 5
+copulas <- matrix(c(list(tCopula(-0.25, df = 2),
+                         tCopula(-0.5, df = 4),
+                         tCopula(0.25, df = 6),
+                         tCopula(0.5, df = 8)),
+                    rep(list(NULL), 12)),
+                  ncol = dimension - 1, nrow = dimension - 1,
+                  byrow = TRUE)
+vine <- DVine(dimension = dimension, trees = 1, 
               copulas = copulas)
+dimnames(vine) <- c("A", "B", "C", "D", "E")
+
+vineParameters(vine)
 show(vine)
-vineParameters(vine) <- vineParameters(vine) / 2
-show(vine) 
+
+vineParameters(vine) <- c(-0.25, 3, -0.5, 5, 0.25, 7, 0.5, 9)
+
+vineParameters(vine)
+show(vine)
 }

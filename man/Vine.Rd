@@ -86,8 +86,8 @@ copulas <- matrix(list(normalCopula(0.5), claytonCopula(2.75),
                   ncol = dimension - 1, nrow = dimension - 1)
 vine <- DVine(dimension = dimension, trees = dimension - 1,
               copulas = copulas)
-dimnames(vine) <- c("X", "Y", "Z")
-show(vine)
+dimnames(vine) <- c("A", "B", "C")
+
 data <- rvine(vine, 1)
 dvine(vine, data)
 pvine(vine, data)
