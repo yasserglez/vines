@@ -61,10 +61,10 @@ selectCopula <- function (x, y) {
 }
 normalCVine <- vineFit("CVine", data, method = "ml",
                        selectCopula = selectCopula,
-                       optimMethod = "")
+                       optimMethod = "")@vine
 normalDVine <- vineFit("DVine", data, method = "ml",
                        selectCopula = selectCopula,
-                       optimMethod = "")
+                       optimMethod = "")@vine
 show(normalCVine)
 show(normalDVine)
 

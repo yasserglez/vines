@@ -1,6 +1,7 @@
 \name{vinePIT-methods}
 \docType{methods}
 
+\alias{vinePIT}
 \alias{vinePIT-methods}
 \alias{vinePIT,CVine-method}
 \alias{vinePIT,DVine-method}
@@ -65,6 +66,10 @@ data <- matrix(runif(dimension * 100),
                ncol = dimension, nrow = 100)
 
 vinePIT(vine, data)
+}
+
+\seealso{
+\code{\link{vinePIT}}.
 }
 
 \keyword{methods}

@@ -10,13 +10,13 @@ Retrieve or set the parameters of a \code{\linkS4class{Vine}}.
 }
 
 \usage{
-parameters <- vineParameters(vine)
-vineParameters(vine) <- parameters
+value <- vineParameters(vine)
+vineParameters(vine) <- value
 }
 
 \arguments{
 \item{vine}{A \code{\linkS4class{Vine}} object.}
-\item{parameters}{\code{numeric} vector with the parameters of all the 
+\item{value}{\code{numeric} vector with the parameters of all the 
   copulas in the pair-copula construction. This vector is the result
   of the concatenation of the \code{parameters} slot of the 
   \code{\linkS4class{copula}} objects in the \code{copulas} slot of the 
