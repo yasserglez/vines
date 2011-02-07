@@ -29,8 +29,8 @@ Bedford, T. and Cooke, R. M. (2002) Vines -- a new graphical model for
 dependent random variables. \emph{Annals of Statistics} \bold{30},
 1031--1068.
 
-Joe, H. (1996) Families of \eqn{m}{m}-variate distributions with given
-margins and \eqn{m(m-1)/2}{m(m-1)/2} bivariate dependence parameters.
+Joe, H. (1996) Families of \eqn{m}-variate distributions with given
+margins and \eqn{m(m-1)/2} bivariate dependence parameters.
 In Ruschendorf, L. and Schweizer, B. and Taylor, M. D. (Eds.),
 \emph{Distributions with fixed marginals and related topics}.
 }
