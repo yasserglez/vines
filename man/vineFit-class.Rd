@@ -28,7 +28,7 @@ function.
 \section{Methods}{
 \describe{
   \item{show}{\code{signature(object = "vineFit")}:
-    Print information about the fitted vine.}
+    Print the result of the vine inference.}
 }
 }
 

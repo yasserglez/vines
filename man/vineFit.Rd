@@ -26,7 +26,7 @@ vineFit(type, data, method = "ml", ...)
 \value{
 An object of class \code{\linkS4class{vineFit}} or a subclass with 
 information specific to the used inference method. The \code{vine} slot 
-of this class will contain the fitted \code{\linkS4class{Vine}} object.
+of this object will contain the fitted \code{\linkS4class{Vine}} object.
 }
 
 \details{

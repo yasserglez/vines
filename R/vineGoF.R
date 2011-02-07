@@ -15,7 +15,7 @@
 # You should have received a copy of the GNU General Public License along with 
 # this program. If not, see <http://www.gnu.org/licenses/>.
 
-setClass("gofVine",
+setClass("vineGoF",
         representation = representation(
                 method = "character",
                 pvalue = "numeric",
@@ -28,17 +28,17 @@ showGofVine <- function (object) {
     cat("Statistic:", object@statistic, "with p-value", object@pvalue, "\n")
 }
 
-setMethod("show", "gofVine", showGofVine)
+setMethod("show", "vineGoF", showGofVine)
 
 
-gofVinePIT <- function (vine, data, statistic = "breymann") {
+vineGoFPIT <- function (vine, data, statistic = "Breymann") {
     Z <- vinePIT(vine, data)
-    
-    if (identical(statistic, "breymann")) {
+
+    if (identical(statistic, "Breymann")) {
         n <- ncol(Z)
         S <- rowSums(qnorm(Z) ^ 2)
         adResult <- ad.test(S, pchisq, df = n)
-        new("gofVine",
+        new("vineGoF",
                 method = "PIT and the Breymann et al. (2003) statistic",
                 pvalue = adResult$p.value,
                 statistic = adResult$statistic)
@@ -49,9 +49,9 @@ gofVinePIT <- function (vine, data, statistic = "breymann") {
 }
 
 
-gofVine <- function (vine, data, method = "pit", ...) {
-    if (identical(method, "pit")) {
-        gofVinePIT(vine, data, ...)
+vineGoF <- function (vine, data, method = "PIT", ...) {
+    if (identical(method, "PIT")) {
+        vineGoFPIT(vine, data, ...)
     } else {
         stop("invalid goodness-of-fit method ", dQuote(method))
     }

@@ -37,7 +37,7 @@ package. It is a virtual class, no objects may be created from it.
 \section{Methods}{
 \describe{
   \item{show}{\code{signature(object = "Vine")}: 
-    Print information about the vine.}
+    Print a text representation of the vine.}
   \item{dimnames}{\code{signature(x = "Vine")}:
     Retrieve the names of the dimensions of the vine.}
   \item{dimnames<-}{\code{signature(x = "Vine")}:

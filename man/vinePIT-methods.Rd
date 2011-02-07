@@ -10,8 +10,8 @@
 \description{
 Probability Integral Transform (PIT) of Rosenblatt (1952) for vine models. 
 The PIT converts a set of dependent variables into a new set of variables 
-which are independent and Uniform under the null hypothesis that the data 
-originate from a given multivariate distribution.
+which are independent and Uniform in \eqn{(0,1)}{(0,1)} under the hypothesis 
+that the data originate from a given multivariate distribution.
 }
 
 \usage{
@@ -63,7 +63,7 @@ vine <- CVine(dimension = dimension, trees = 1,
 
 data <- matrix(runif(dimension * 100), 
                ncol = dimension, nrow = 100)
-               
+
 vinePIT(vine, data)
 }
 
