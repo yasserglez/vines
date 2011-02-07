@@ -15,7 +15,7 @@ vineFit(type, data, method = "ml", ...)
 }
 
 \arguments{
-\item{type}{Type of vine. Supported values are \code{"CVine"} 
+\item{type}{Type of vine. Supported values: are \code{"CVine"} 
   and \code{"DVine"}.}
 \item{data}{Data matrix of pseudo-observations.}
 \item{method}{Inference method. Supported values are: 

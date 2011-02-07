@@ -15,15 +15,11 @@
 # You should have received a copy of the GNU General Public License along with 
 # this program. If not, see <http://www.gnu.org/licenses/>.
 
-orderingVineCanonical <- function (type, data) {
-    seq(from = 1, to = ncol(data))
-}
-
-
-orderingVineGreedy <- function (type, data, according = "kendall") {
+vineOrderingGreedy <- function (type, data, according = "kendall") {
     if (according %in% c("pearson", "kendall", "spearman")) {
-        # Calculate the value of the given measure of association between each pair
-        # of variables and couple the variables with the largest modular values.
+        # Calculate the value of the given measure of association between 
+        # each pair of variables and couple the variables with the largest 
+        # modular values.
         values <- abs(cor(data, method = according))
         diag(values) <- -Inf
     } else if (according %in% c("df")) {
@@ -46,7 +42,7 @@ orderingVineGreedy <- function (type, data, according = "kendall") {
     } else {
         stop("invalid value ", dQuote(according), " for the according argument")
     }
-    
+
     # Try to couple the pairs with the maximum value in the values matrix, 
     
     n <- ncol(data)
@@ -91,20 +87,10 @@ orderingVineGreedy <- function (type, data, according = "kendall") {
 }
 
 
-orderingVine <- function (type, data, method = "canonical", ...) {
+vineOrdering <- function (type, data, method = "greedy", ...) {
     if (type %in% c("CVine", "DVine") && identical(method, "greedy")) {
-        orderingVineGreedy(type, data, ...)
-    } else if (type %in% c("CVine", "DVine") && identical(method, "canonical")) {
-        orderingVineCanonical(type, data)
+        vineOrderingGreedy(type, data, ...)
     } else {
         stop("invalid ordering method ", dQuote(method), " for ", dQuote(type))
     }
-}
-
-orderingCVine <- function (data, method = "canonical", ...) {
-    orderingVine("CVine", data, method, ...)
-}
-
-orderingDVine <- function (data, method = "canonical", ...) {
-    orderingVine("DVine", data, method, ...)
 }

@@ -23,18 +23,14 @@ DVine(dimension = 2, trees = dimension - 1,
 }
 
 \arguments{
-\item{type}{
-  See the documentation of the corresponding \code{\linkS4class{Vine}} slot.
-} 
-\item{dimension}{
-  See the documentation of the corresponding \code{\linkS4class{Vine}} slot.
-} 
-\item{trees}{
-  See the documentation of the corresponding \code{\linkS4class{Vine}} slot.
-} 
-\item{copulas}{
-  See the documentation of the corresponding \code{\linkS4class{Vine}} slot.
-}
+\item{type}{Type of vine. Supported values are \code{"CVine"} and 
+  \code{"DVine"}.}
+\item{dimension}{See the documentation of the corresponding 
+  \code{\linkS4class{Vine}} slot.} 
+\item{trees}{See the documentation of the corresponding 
+  \code{\linkS4class{Vine}} slot.} 
+\item{copulas}{See the documentation of the corresponding 
+  \code{\linkS4class{Vine}} slot.}
 }
 
 \seealso{
