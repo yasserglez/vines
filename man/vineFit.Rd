@@ -81,7 +81,7 @@ show(fit@vine)
 
 \seealso{
 \code{\linkS4class{CVine}},
-\code{\linkS4class{DVine}}
+\code{\linkS4class{DVine}},
 \code{\linkS4class{vineFit}},
 \code{\linkS4class{vineFitML}}.
 }
