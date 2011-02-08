@@ -1,0 +1,16 @@
+citHeader("To cite package 'vines' in publications use:")
+
+desc <- packageDescription("vines")
+year <- sub(".*(2[[:digit:]]{3})-.*", "\\1", desc$Date)
+version <- desc$Version
+
+citEntry(entry = "manual",
+         title = "vines: Multivariate Dependence Modeling with Vines",
+         author = personList(as.person("González-Fernández, Y."),
+                             as.person("Soto, M.")),
+         year = year,
+         note = paste("{R} package version", version),
+         textVersion = paste("González-Fernández, Y. and Soto, M. (", year, ") ",
+                             "vines: Multivariate Dependence Modeling with Vines. ",
+                             paste("R package version", version),
+                             ".", sep = ""))
