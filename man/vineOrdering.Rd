@@ -24,7 +24,7 @@ vineOrdering(type, data, method = "greedy", ...)
 
 \value{
 An \code{integer} vector giving the indexes of the variables in order.
-This vector should be used to reorder the variables of the \code{data} matrix.
+This vector can be used to reorder the variables of the \code{data} matrix.
 }
 
 \details{
@@ -44,8 +44,10 @@ the first tree of the vines. Additional parameters for this method are:
     \describe{
       \item{\code{"kendall"}}{Absolute value of Kendall's \eqn{\tau}{tau}.}
       \item{\code{"spearman"}}{Absolute value of Spearman's \eqn{\rho}{rho}.}
-      \item{\code{"pearson"}}{Absolute value of Pearson's \eqn{\rho}{} correlation coefficient.}
-      \item{\code{"df"}}{Smaller degrees of freedom of a bivariate Student's t copula.}
+      \item{\code{"pearson"}}{Absolute value of Pearson's product moment 
+        correlation coefficient.}
+      \item{\code{"df"}}{Smaller degrees of freedom of a bivariate 
+        Student's t copula.}
     }
   }
 }

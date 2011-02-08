@@ -5,7 +5,7 @@
 \title{Vine Inference}
 
 \description{
-Fit a vine model to multivariate data in to the unit hypercube. The 
+Fit a vine model to multivariate data in the unit hypercube. The 
 data can be pseudo-observations constructed from empirical or parametric
 marginal cumulative distribution functions.
 }
@@ -15,7 +15,7 @@ vineFit(type, data, method = "ml", ...)
 }
 
 \arguments{
-\item{type}{Type of vine. Supported values: are \code{"CVine"} 
+\item{type}{Type of vine. Supported values are: \code{"CVine"} 
   and \code{"DVine"}.}
 \item{data}{Data matrix of pseudo-observations.}
 \item{method}{Inference method. Supported values are: 
@@ -31,11 +31,11 @@ of this object will contain the fitted \code{\linkS4class{Vine}} object.
 
 \details{
 
-The \code{"ml"} (Maximum Likelihood) method uses sequential estimation 
-procedure outlined in Aas et al. (2009) to determine the parametric
-shape and initial values for the parameters of each bivariate copula 
-and then execute a numerical maximization of the full log-likelihood 
-of the vine. Additional arguments for this method are:
+The \code{"ml"} (Maximum Likelihood) method uses the sequential estimation 
+procedure outlined in Aas et al. (2009) to determine the family and initial 
+values for the parameters of each bivariate copula and then execute a 
+numerical maximization of the full log-likelihood of the vine. 
+Additional arguments for this method are:
 
 \describe{
   \item{\code{selectCopula}}{Function called to select the bivariate copulas

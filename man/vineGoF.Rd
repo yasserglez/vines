@@ -6,7 +6,7 @@
 
 \description{
 Goodness-of-fit tests to verify whether the dependency structure of a data 
-is appropriately modelled by a given pair-copula construction.
+is appropriately modelled by a pair-copula construction.
 }
 
 \usage{

@@ -18,17 +18,17 @@ h(copula, x, v)
 }
 
 \arguments{
-\item{copula}{Bivariate \code{\linkS4class{copula}} object.}
+\item{copula}{A bivariate \code{\linkS4class{copula}} object.}
 \item{x}{\code{numeric} vector.}
 \item{v}{\code{numeric} vector.}
 }
 
 \description{
   This function should be defined for every copula used in the pair-copula
-  constructions and it represents the conditional distribution of \code{x}
-  given \code{v} in terms of the copula when \code{x} and \code{v} are Uniform.
-  It is defined as the partial derivative of the distribution function of the 
-  copula with respect to its second argument.
+  constructions. It represents the conditional distribution of \code{x}
+  given \code{v} in terms of the copula when \code{x} and \code{v} are Uniform
+  and defined as the partial derivative of the distribution function of the 
+  copula with respect to the second argument.
   \deqn{h(x,v) = F(x|v) = \frac{\partial C(x,v)}{\partial v}}{}
 }
 

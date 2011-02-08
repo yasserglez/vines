@@ -16,7 +16,7 @@ package. It is a virtual class, no objects may be created from it.
 \section{Slots}{
 \describe{
   \item{\code{type}:}{Object of class \code{character}.
-    Type of vine: Canonical vine, D-vine.}
+    Descriptive name of the type of vine: Canonical vine, D-vine.}
   \item{\code{dimension}:}{Object of class \code{numeric}.
     Dimension of the vine.}
   \item{\code{dimensionNames}:}{Object of class \code{character}.

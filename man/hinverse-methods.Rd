@@ -17,7 +17,7 @@ hinverse(copula, u, v)
 }
 
 \arguments{
-\item{copula}{Bivariate \code{\linkS4class{copula}} object.}
+\item{copula}{A bivariate \code{\linkS4class{copula}} object.}
 \item{u}{\code{numeric} vector.}
 \item{v}{\code{numeric} vector.}
 }
@@ -25,8 +25,8 @@ hinverse(copula, u, v)
 \description{
   This function should be defined for every copula used in the pair-copula
   constructions or evaluated numerically. It represents the inverse of the 
-  h-function with respect to the first variable \code{x}, or equivalently 
-  the inverse of the conditional distribution function.
+  h-function, or equivalently the inverse of the conditional distribution 
+  function.
 }
 
 \section{Methods}{

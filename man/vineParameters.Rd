@@ -30,7 +30,8 @@ copulas <- matrix(c(list(tCopula(-0.25, df = 2),
                          tCopula(0.25, df = 6),
                          tCopula(0.5, df = 8)),
                     rep(list(NULL), 12)),
-                  ncol = dimension - 1, nrow = dimension - 1,
+                  ncol = dimension - 1, 
+                  nrow = dimension - 1,
                   byrow = TRUE)
 vine <- DVine(dimension = dimension, trees = 1, 
               copulas = copulas)
