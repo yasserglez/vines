@@ -80,3 +80,11 @@ hFGMCopula <- function (copula, x, v) {
 }
 
 setMethod("h", "fgmCopula", hFGMCopula)
+
+
+hGalambosCopula <- function (copula, x, v) {
+    theta <- min(copula@parameters, 25)
+    .Call(C_hGalambosCopula, theta, x, v)
+}
+
+setMethod("h", "galambosCopula", hGalambosCopula)

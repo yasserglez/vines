@@ -178,7 +178,6 @@ SEXP hGumbelCopula(SEXP Theta, SEXP X, SEXP V) {
     return U;
 }
 
-
 SEXP hFGMCopula(SEXP Theta, SEXP X, SEXP V) {
     double eps;
     double theta;
@@ -201,6 +200,47 @@ SEXP hFGMCopula(SEXP Theta, SEXP X, SEXP V) {
             u[i] = 1 - eps;
         } else {
             ui = (1 + theta * (-1 + 2*v[i]) * (-1 + x[i])) * x[i];
+            u[i] = (ui <= eps) ? eps : ((ui >= 1 - eps) ? 1 - eps : ui);
+        }
+    }
+
+    UNPROTECT(1);
+
+    return U;
+}
+
+SEXP hGalambosCopula(SEXP Theta, SEXP X, SEXP V) {
+    double eps;
+    double theta;
+    double *x, *v, *u;
+    double vi, ui, tmp, mlogxi, mlogvi, cdf;
+    SEXP U;
+
+    eps = R_pow(DOUBLE_EPS, 0.5);
+    theta = asReal(Theta);
+
+    if (theta <= eps) {
+        return X;
+    }
+
+    PROTECT(U = allocVector(REALSXP, LENGTH(X)));
+    x = REAL(X);
+    v = REAL(V);
+    u = REAL(U);
+
+    for (int i = 0; i < LENGTH(X); i++) {
+        if (x[i] <= eps) {
+            u[i] = eps;
+        } else if (1 - x[i] <= eps) {
+            u[i] = 1 - eps;
+        } else {
+            vi = (v[i] <= eps) ? eps : ((v[i] >= 1 - eps) ? 1 - eps : v[i]);
+            mlogxi = -log(x[i]);
+            mlogvi = -log(vi);
+            cdf = x[i] * vi * exp(R_pow(R_pow(mlogxi, -theta) +
+                                        R_pow(mlogvi, -theta), -1/theta));
+            ui = (cdf/vi) * (1 - R_pow(1 + R_pow(mlogvi/mlogxi, theta),
+                                       -1-1/theta));
             u[i] = (ui <= eps) ? eps : ((ui >= 1 - eps) ? 1 - eps : ui);
         }
     }
