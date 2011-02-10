@@ -72,3 +72,11 @@ hGumbelCopula <- function (copula, x, v) {
 }
 
 setMethod("h", "gumbelCopula", hGumbelCopula)
+
+
+hFGMCopula <- function (copula, x, v) {
+    theta <- copula@parameters
+    .Call(C_hFGMCopula, theta, x, v)
+}
+
+setMethod("h", "fgmCopula", hFGMCopula)

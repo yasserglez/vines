@@ -34,6 +34,7 @@ R_CallMethodDef callMethods[] = {
     { "hClaytonCopula", (DL_FUNC) &hClaytonCopula, 3 },
     { "hinverseClaytonCopula", (DL_FUNC) &hinverseClaytonCopula, 3 },
     { "hGumbelCopula", (DL_FUNC) &hGumbelCopula, 3 },
+    { "hFGMCopula", (DL_FUNC) &hFGMCopula, 3 },
     { NULL, NULL, 0 }
 };
 

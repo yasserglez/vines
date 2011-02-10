@@ -177,3 +177,35 @@ SEXP hGumbelCopula(SEXP Theta, SEXP X, SEXP V) {
 
     return U;
 }
+
+
+SEXP hFGMCopula(SEXP Theta, SEXP X, SEXP V) {
+    double eps;
+    double theta;
+    double *x, *v, *u;
+    double ui;
+    SEXP U;
+
+    eps = R_pow(DOUBLE_EPS, 0.5);
+    theta = asReal(Theta);
+
+    PROTECT(U = allocVector(REALSXP, LENGTH(X)));
+    x = REAL(X);
+    v = REAL(V);
+    u = REAL(U);
+
+    for (int i = 0; i < LENGTH(X); i++) {
+        if (x[i] <= eps) {
+            u[i] = eps;
+        } else if (1 - x[i] <= eps) {
+            u[i] = 1 - eps;
+        } else {
+            ui = (1 + theta * (-1 + 2*v[i]) * (-1 + x[i])) * x[i];
+            u[i] = (ui <= eps) ? eps : ((ui >= 1 - eps) ? 1 - eps : ui);
+        }
+    }
+
+    UNPROTECT(1);
+
+    return U;
+}
