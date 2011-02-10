@@ -74,3 +74,11 @@ hinverseClaytonCopula <- function (copula, u, v) {
 }
 
 setMethod("hinverse", "claytonCopula", hinverseClaytonCopula)
+
+
+hinverseFrankCopula <- function (copula, u, v) {
+    theta <- max(min(copula@parameters, 100), -100)
+    .Call(C_hinverseFrankCopula, theta, u, v)
+}
+
+setMethod("hinverse", "frankCopula", hinverseFrankCopula)

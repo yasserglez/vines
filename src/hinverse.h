@@ -21,3 +21,4 @@ SEXP hinverseNormalCopula(SEXP Rho, SEXP U, SEXP V);
 SEXP hinverseIndepCopula(SEXP U, SEXP V);
 SEXP hinverseTCopula(SEXP Rho, SEXP Df, SEXP U, SEXP V);
 SEXP hinverseClaytonCopula(SEXP THETA, SEXP U, SEXP V);
+SEXP hinverseFrankCopula(SEXP Theta, SEXP U, SEXP V);

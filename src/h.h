@@ -23,3 +23,4 @@ SEXP hClaytonCopula(SEXP Theta, SEXP X, SEXP V);
 SEXP hGumbelCopula(SEXP Theta, SEXP X, SEXP V);
 SEXP hFGMCopula(SEXP Theta, SEXP X, SEXP V);
 SEXP hGalambosCopula(SEXP Theta, SEXP X, SEXP V);
+SEXP hFrankCopula(SEXP Theta, SEXP X, SEXP V);

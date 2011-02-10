@@ -73,7 +73,7 @@ SEXP hinverseTCopula(SEXP Rho, SEXP Df, SEXP U, SEXP V) {
     SEXP X;
 
     PROTECT(X = allocVector(REALSXP, LENGTH(U)));
-    eps = R_pow(DOUBLE_EPS, 0.5);
+    eps = R_pow(DOUBLE_EPS, 0.25);
     rho = asReal(Rho);
     df = asReal(Df);
     u = REAL(U);
@@ -126,8 +126,45 @@ SEXP hinverseClaytonCopula(SEXP Theta, SEXP U, SEXP V) {
             x[i] = 1 - eps;
         } else {
             vi = (v[i] <= eps) ? eps : ((v[i] >= 1 - eps) ? 1 - eps : v[i]);
-            xi = R_pow(R_pow(u[i] * R_pow(vi, theta + 1), -theta/(theta+1)) +
+            xi = R_pow(R_pow(u[i] * R_pow(vi, theta+1), -theta/(theta+1)) +
                        1 - R_pow(vi, -theta), -1/theta);
+            x[i] = (xi <= eps) ? eps : ((xi >= 1 - eps) ? 1 - eps : xi);
+        }
+    }
+
+    UNPROTECT(1);
+
+    return X;
+}
+
+SEXP hinverseFrankCopula(SEXP Theta, SEXP U, SEXP V) {
+    double eps;
+    double theta;
+    double *u, *v, *x;
+    double vi, xi;
+    SEXP X;
+
+    eps = R_pow(DOUBLE_EPS, 0.15);
+    theta = asReal(Theta);
+
+    if (abs(theta) <= eps) {
+        return U;
+    }
+
+    PROTECT(X = allocVector(REALSXP, LENGTH(U)));
+    u = REAL(U);
+    v = REAL(V);
+    x = REAL(X);
+
+    for (int i = 0; i < LENGTH(U); i++) {
+        if (u[i] <= eps) {
+            x[i] = eps;
+        } else if (1 - u[i] <= eps) {
+            x[i] = 1 - eps;
+        } else {
+            xi = -log(1 - ((1 - exp(-theta)) /
+                           ((R_pow(u[i], -1) - 1) *
+                             exp(-theta*v[i]) + 1))) / theta;
             x[i] = (xi <= eps) ? eps : ((xi >= 1 - eps) ? 1 - eps : xi);
         }
     }

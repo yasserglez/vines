@@ -74,7 +74,7 @@ SEXP hTCopula(SEXP Rho, SEXP Df, SEXP X, SEXP V) {
     SEXP U;
 
     PROTECT(U = allocVector(REALSXP, LENGTH(X)));
-    eps = R_pow(DOUBLE_EPS, 0.5);
+    eps = R_pow(DOUBLE_EPS, 0.25);
     rho = asReal(Rho);
     df = asReal(Df);
     x = REAL(X);
@@ -241,6 +241,44 @@ SEXP hGalambosCopula(SEXP Theta, SEXP X, SEXP V) {
                                         R_pow(mlogvi, -theta), -1/theta));
             ui = (cdf/vi) * (1 - R_pow(1 + R_pow(mlogvi/mlogxi, theta),
                                        -1-1/theta));
+            u[i] = (ui <= eps) ? eps : ((ui >= 1 - eps) ? 1 - eps : ui);
+        }
+    }
+
+    UNPROTECT(1);
+
+    return U;
+}
+
+SEXP hFrankCopula(SEXP Theta, SEXP X, SEXP V) {
+    double eps;
+    double theta;
+    double *x, *v, *u;
+    double vi, ui;
+    SEXP U;
+
+    eps = R_pow(DOUBLE_EPS, 0.5);
+    theta = asReal(Theta);
+
+    if (abs(theta) <= eps) {
+        return X;
+    }
+
+    PROTECT(U = allocVector(REALSXP, LENGTH(X)));
+    x = REAL(X);
+    v = REAL(V);
+    u = REAL(U);
+
+    for (int i = 0; i < LENGTH(X); i++) {
+        if (x[i] <= eps) {
+            u[i] = eps;
+        } else if (1 - x[i] <= eps) {
+            u[i] = 1 - eps;
+        } else {
+            vi = (v[i] <= eps) ? eps : ((v[i] >= 1 - eps) ? 1 - eps : v[i]);
+            ui = exp(-theta*vi) / (((1 - exp(-theta)) /
+                                    (1 - exp(-theta*x[i]))) +
+                                   exp(-theta*vi) - 1);
             u[i] = (ui <= eps) ? eps : ((ui >= 1 - eps) ? 1 - eps : ui);
         }
     }

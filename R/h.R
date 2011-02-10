@@ -88,3 +88,11 @@ hGalambosCopula <- function (copula, x, v) {
 }
 
 setMethod("h", "galambosCopula", hGalambosCopula)
+
+
+hFrankCopula <- function (copula, x, v) {
+    theta <- max(min(copula@parameters, 100), -100)
+    .Call(C_hFrankCopula, theta, x, v)
+}
+
+setMethod("h", "frankCopula", hFrankCopula)
