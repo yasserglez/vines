@@ -21,6 +21,12 @@ copulas <- c(
                 function (theta) claytonCopula(theta)),
         lapply(seq(from = 1, to = 5, length = P),
                 function (theta) gumbelCopula(theta)),
+        lapply(seq(from = -1, to = 1, length = P), 
+                function (theta) fgmCopula(theta)),
+        lapply(seq(from = 1, to = 5, length = P),
+                function (theta) galambosCopula(theta)),       
+        lapply(seq(from = -10, to = 10, length = P),
+                function (theta) frankCopula(theta)),
         list(indepCopula()))
 
 for (copula in copulas) {
@@ -50,6 +56,12 @@ copulas <- c(
                 function (theta) claytonCopula(theta)),
         lapply(seq(from = 1, to = 100, length = P),
                 function (theta) gumbelCopula(theta)),
+        lapply(seq(from = -1, to = 1, length = P),
+                function (theta) fgmCopula(theta)),
+        lapply(seq(from = 1, to = 25, length = P),
+                function (theta) galambosCopula(theta)),
+        lapply(seq(from = -100, to = 100, length = P),
+                function (theta) frankCopula(theta)),       
         list(indepCopula()))
 
 for (copula in copulas) {
