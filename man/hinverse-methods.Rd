@@ -9,6 +9,7 @@
 \alias{hinverse,normalCopula-method}
 \alias{hinverse,tCopula-method}
 \alias{hinverse,claytonCopula-method}
+\alias{hinverse,frankCopula-method}
 
 \title{Methods for the Inverse of the h-functions}
 
@@ -61,9 +62,27 @@ hinverse(copula, u, v)
 
 \item{\code{signature(copula = "claytonCopula")}}{
   Inverse of the h-function of the Clayton copula.
-  \deqn{h^{-1}(u, v; \theta) = \left( \left( u\ v^{\theta+1}\right)^{-\frac{\theta}{\theta+1}} + 
-                                      1 - v^{-\theta} \right)^{-1/\theta}}{}  
+  \deqn{h^{-1}(u, v; \theta) = 
+    \left( \left( u\ v^{\theta+1}\right)^{-\frac{\theta}{\theta+1}} + 
+                  1 - v^{-\theta} \right)^{-1/\theta}}{}  
 }
+
+\item{\code{signature(copula = "frankCopula")}}{
+  Inverse of the h-function of the Frank copula.
+  \deqn{h^{-1}(u, v; \theta) = 
+    -\log \left( 1 - \frac{1-e^{-\theta}}
+                          {(u^{-1} - 1) e^{-\theta v} + 1} \right) / \theta}{}
+} 
 }}
+
+\references{
+Aas, K. and Czado, C. and Frigessi, A. and Bakken, H. (2009)
+Pair-copula constructions of multiple dependence.
+\emph{Insurance: Mathematics and Economics} \bold{44}, 182--198.
+
+Schirmacher, D. and Schirmacher, E. (2008)
+Multivariate dependence modeling using pair-copulas.
+\emph{Enterprise Risk Management Symposium, Chicago}.
+}
 
 \keyword{methods}

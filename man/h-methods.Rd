@@ -10,6 +10,9 @@
 \alias{h,tCopula-method}
 \alias{h,claytonCopula-method}
 \alias{h,gumbelCopula-method}
+\alias{h,fgmCopula-method}
+\alias{h,frankCopula-method}
+\alias{h,galambosCopula-method}
 
 \title{Methods for the h-functions}
 
@@ -72,6 +75,36 @@ h(copula, x, v)
   \deqn{h(x, v; \theta) = C(x, v; \theta)\ \frac{1}{v}\ (-\log v)^{\theta-1}
                           \left((-\log x)^{\theta} + (-\log v)^{\theta} \right)^{1/\theta-1}}{}
 }
+
+\item{\code{signature(copula = "fgmCopula")}}{
+  h-function of the Farlie-Gumbel-Morgenstern copula.
+  \deqn{h(x, v; \theta) =
+    (1 + \theta \ (-1 + 2v) \ (-1 + x)) \ x}{} 
+}
+
+\item{\code{signature(copula = "frankCopula")}}{
+  h-function of the Frank copula.
+  \deqn{h(x, v; \theta) = 
+    \frac{e^{-\theta v}}
+         {\frac{1 - e^{-\theta}}{1 - e^{-\theta x}} + e^{-\theta v} - 1}}{}
+}
+
+\item{\code{signature(copula = "galambosCopula")}}{
+  h-function of the Galambos copula.
+  \deqn{h(x, v; \theta) = 
+    \frac{C(x, v; \theta)}{v} 
+    \left( 1 - \left[ 1 + \left(\frac{-\log v}{-\log x}\right)^{\theta} \right]^{-1-1/\theta} \right)}{}
+}
 }}
+
+\references{
+Aas, K. and Czado, C. and Frigessi, A. and Bakken, H. (2009)
+Pair-copula constructions of multiple dependence.
+\emph{Insurance: Mathematics and Economics} \bold{44}, 182--198.
+
+Schirmacher, D. and Schirmacher, E. (2008)
+Multivariate dependence modeling using pair-copulas.
+\emph{Enterprise Risk Management Symposium, Chicago}.
+}
 
 \keyword{methods}

@@ -74,7 +74,7 @@ SEXP hTCopula(SEXP Rho, SEXP Df, SEXP X, SEXP V) {
     SEXP U;
 
     PROTECT(U = allocVector(REALSXP, LENGTH(X)));
-    eps = R_pow(DOUBLE_EPS, 0.25);
+    eps = R_pow(DOUBLE_EPS, 0.5);
     rho = asReal(Rho);
     df = asReal(Df);
     x = REAL(X);
@@ -208,6 +208,11 @@ SEXP hFGMCopula(SEXP Theta, SEXP X, SEXP V) {
 
     return U;
 }
+
+/* See Schirmacher, D. and Schirmacher, E. (2008) Multivariate dependence
+ * modeling using pair-copulas. Enterprise Risk Management Symposium, Chicago.
+ * for the expression for the Galambos and Frank copulas.
+ */
 
 SEXP hGalambosCopula(SEXP Theta, SEXP X, SEXP V) {
     double eps;

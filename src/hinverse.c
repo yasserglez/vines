@@ -73,7 +73,7 @@ SEXP hinverseTCopula(SEXP Rho, SEXP Df, SEXP U, SEXP V) {
     SEXP X;
 
     PROTECT(X = allocVector(REALSXP, LENGTH(U)));
-    eps = R_pow(DOUBLE_EPS, 0.25);
+    eps = R_pow(DOUBLE_EPS, 0.5);
     rho = asReal(Rho);
     df = asReal(Df);
     u = REAL(U);
@@ -136,6 +136,11 @@ SEXP hinverseClaytonCopula(SEXP Theta, SEXP U, SEXP V) {
 
     return X;
 }
+
+/* See Schirmacher, D. and Schirmacher, E. (2008) Multivariate dependence
+ * modeling using pair-copulas. Enterprise Risk Management Symposium, Chicago.
+ * for the expression for the Frank copula.
+ */
 
 SEXP hinverseFrankCopula(SEXP Theta, SEXP U, SEXP V) {
     double eps;
