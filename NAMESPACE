@@ -4,6 +4,7 @@ useDynLib(vines, .registration = TRUE, .fixes = "C_")
 import(copula)
 import(ADGofTest)
 import(cubature)
+import(TSP)
 
 
 exportClasses(Vine, RVine, CVine, DVine)
