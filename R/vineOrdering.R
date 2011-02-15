@@ -59,9 +59,24 @@ vineOrderingGreedy <- function (type, data, according = "kendall") {
 }
 
 
+vineOrderingRandom <- function (type, data) {
+    n <- ncol(data)
+    sample(n, n)
+}
+
+
+vineOrderingCanonical <- function (type, data) {
+    seq(from = 1, to = ncol(data))
+}
+
+
 vineOrdering <- function (type, data, method = "greedy", ...) {
     if (type %in% c("CVine", "DVine") && identical(method, "greedy")) {
         vineOrderingGreedy(type, data, ...)
+    } else if (identical(method, "canonical")) {
+        vineOrderingCanonical(type, data)
+    } else if (identical(method, "random")) {
+        vineOrderingRandom(type, data)
     } else {
         stop("invalid ordering method ", dQuote(method), " for ", dQuote(type))
     }
