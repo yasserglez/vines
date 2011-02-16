@@ -15,7 +15,7 @@
 # You should have received a copy of the GNU General Public License along with 
 # this program. If not, see <http://www.gnu.org/licenses/>.
 
-vineOrderingGreedy <- function (type, data, according = "kendall") {
+vineOrderGreedy <- function (type, data, according = "kendall") {
     n <- ncol(data)
 
     if (according %in% c("pearson", "kendall", "spearman")) {
@@ -48,36 +48,30 @@ vineOrderingGreedy <- function (type, data, according = "kendall") {
     if (identical(type, "DVine")) {
         tsp <- insert_dummy(as.TSP(weights), label = "dummy")
         tour <- solve_TSP(tsp, method = "cheapest_insertion")
-        ordering <- cut_tour(tour, "dummy")
-        names(ordering) <- NULL
+        order <- cut_tour(tour, "dummy")
+        names(order) <- NULL
     } else if (identical(type, "CVine")) {
         root <- which.min(colSums(weights))
-        ordering <- c(root, seq(to = n)[-root])
+        order <- c(root, seq(to = n)[-root])
     }
 
-    ordering
+    order
 }
 
 
-vineOrderingRandom <- function (type, data) {
+vineOrderRandom <- function (type, data) {
     n <- ncol(data)
     sample(n, n)
 }
 
 
-vineOrderingCanonical <- function (type, data) {
-    seq(from = 1, to = ncol(data))
-}
-
-
-vineOrdering <- function (type, data, method = "greedy", ...) {
+vineOrder <- function (type, data, method = "greedy", ...) {
     if (type %in% c("CVine", "DVine") && identical(method, "greedy")) {
-        vineOrderingGreedy(type, data, ...)
-    } else if (identical(method, "canonical")) {
-        vineOrderingCanonical(type, data)
+        vineOrderGreedy(type, data, ...)
     } else if (identical(method, "random")) {
-        vineOrderingRandom(type, data)
+        vineOrderRandom(type, data)
     } else {
-        stop("invalid ordering method ", dQuote(method), " for ", dQuote(type))
+        stop("invalid ordering method ", dQuote(method), 
+                " for ", dQuote(type))
     }
 }

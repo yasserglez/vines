@@ -5,7 +5,7 @@
 \title{Vine Inference}
 
 \description{
-Fit a vine model to multivariate data in the unit hypercube. The 
+Fit a vine model to multivariate data in the unit hypercube. The
 data can be pseudo-observations constructed from empirical or parametric
 marginal cumulative distribution functions.
 }
@@ -15,17 +15,17 @@ vineFit(type, data, method = "ml", ...)
 }
 
 \arguments{
-\item{type}{Type of vine. Supported values are: \code{"CVine"} 
+\item{type}{Type of vine. Supported values are: \code{"CVine"}
   and \code{"DVine"}.}
 \item{data}{Data matrix of pseudo-observations.}
-\item{method}{Inference method. Supported values are: 
+\item{method}{Inference method. Supported values are:
   \code{"ml"} (Maximum Likelihood).}
 \item{...}{Additional arguments for the inference method.}
 }
 
 \value{
-An object of class \code{\linkS4class{vineFit}} or a subclass with 
-information specific to the used inference method. The \code{vine} slot 
+An object of class \code{\linkS4class{vineFit}} or a subclass with
+information specific to the used inference method. The \code{vine} slot
 of this object will contain the fitted \code{\linkS4class{Vine}} object.
 }
 
@@ -90,6 +90,10 @@ show(fit@vine)
 Aas, K. and Czado, C. and Frigessi, A. and Bakken, H. (2009)
 Pair-copula constructions of multiple dependence.
 \emph{Insurance: Mathematics and Economics} \bold{44}, 182--198.
+
+Brechmann, E. C. (2010) Truncated and simplified regular vines 
+and their applications. Diploma Thesis. \emph{Technische 
+Universitat Munchen}.
 
 Brechmann, E. C. and Czado, C. and Aas, K. (2010) Truncated regular 
 vines in high dimensions with application to financial data. 
