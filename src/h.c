@@ -218,7 +218,7 @@ SEXP hGalambosCopula(SEXP Theta, SEXP X, SEXP V) {
     double eps;
     double theta;
     double *x, *v, *u;
-    double vi, ui, tmp, mlogxi, mlogvi, cdf;
+    double vi, ui, mlogxi, mlogvi, cdf;
     SEXP U;
 
     eps = R_pow(DOUBLE_EPS, 0.5);

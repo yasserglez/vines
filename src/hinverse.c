@@ -146,7 +146,7 @@ SEXP hinverseFrankCopula(SEXP Theta, SEXP U, SEXP V) {
     double eps;
     double theta;
     double *u, *v, *x;
-    double vi, xi;
+    double xi;
     SEXP X;
 
     eps = R_pow(DOUBLE_EPS, 0.15);
