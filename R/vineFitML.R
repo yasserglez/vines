@@ -60,10 +60,10 @@ vineFitML <- function (type, data, trees = ncol(data) - 1, truncMethod = "",
                     smallAIC <- -2*vineLogLik(smallModel, data) + 
                             2*length(vineParameters(smallModel))
                 }
-                fullAIC <- -2*vineLogLik(fullModel, data) + 
+                largeAIC <- -2*vineLogLik(fullModel, data) + 
                         2*length(vineParameters(fullModel))
-                previousAIC <<- fullAIC
-                smallAIC < fullAIC
+                previousAIC <<- largeAIC
+                smallAIC <= largeAIC
             }
         } else if (identical(truncMethod, "BIC")) {
             previousBIC <- NA
@@ -71,14 +71,14 @@ vineFitML <- function (type, data, trees = ncol(data) - 1, truncMethod = "",
                 k <- log(nrow(data))
                 if (is.finite(previousBIC)) {
                     smallBIC <- previousBIC
-                } else {                
+                } else {
                     smallBIC <- -2*vineLogLik(smallModel, data) +
                             k*length(vineParameters(smallModel))
                 }
-                fullBIC <- -2*vineLogLik(fullModel, data) +
+                largeBIC <- -2*vineLogLik(fullModel, data) +
                         k*length(vineParameters(fullModel))
-                previousBIC <<- fullBIC
-                smallBIC < fullBIC
+                previousBIC <<- largeBIC
+                smallBIC <= largeBIC
             }
         } else {
             stop("invalid vine truncation method ", dQuote(truncMethod))
