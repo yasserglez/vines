@@ -54,6 +54,8 @@ vineFitML <- function (type, data, trees = ncol(data) - 1, truncMethod = "",
         if (identical(truncMethod, "AIC")) {
             previousAIC <- NA
             truncVine <- function (smallModel, fullModel, data) {
+                # TODO: This implementation can be improved by calculating
+                # the information criterion only for the last tree.
                 if (is.finite(previousAIC)) {
                     smallAIC <- previousAIC
                 } else {
@@ -68,6 +70,8 @@ vineFitML <- function (type, data, trees = ncol(data) - 1, truncMethod = "",
         } else if (identical(truncMethod, "BIC")) {
             previousBIC <- NA
             truncVine <- function (smallModel, fullModel, data) {
+                # TODO: This implementation can be improved by calculating
+                # the information criterion only for the last tree.                
                 k <- log(nrow(data))
                 if (is.finite(previousBIC)) {
                     smallBIC <- previousBIC
