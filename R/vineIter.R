@@ -28,7 +28,6 @@ iterCVine <- function (vine, data, evalCopula, selectCopula, truncVine) {
     # Mathematics and Economics, 2009, Vol. 44, pp. 182-198.
 
     if (vine@trees == 0) {
-        # Nothing to iterate for.
         return(list(vine = vine, evals = list()))
     }
 
@@ -63,7 +62,7 @@ iterCVine <- function (vine, data, evalCopula, selectCopula, truncVine) {
         
         if (is.function(truncVine)) {
             # Check if the last expanded tree is required or if the vine
-            # can be truncated on the previous tree.
+            # should be truncated on the previous tree.
             fullModel <- vine
             fullModel@trees <- j
             if (truncVine(smallModel, fullModel, data)) {
@@ -92,7 +91,6 @@ iterDVine <- function (vine, data, evalCopula, selectCopula, truncVine) {
     # Mathematics and Economics, 2009, Vol. 44, pp. 182-198.
     
     if (vine@trees == 0) {
-        # Nothing to iterate for.
         return(list(vine = vine, evals = list()))
     }
 
@@ -125,7 +123,7 @@ iterDVine <- function (vine, data, evalCopula, selectCopula, truncVine) {
     }
     
     if (is.function(truncVine)) {
-        # Check if the first tree is required or return the vine without trees.
+        # Truncate? If true, returns the vine without trees. 
         fullModel <- vine
         fullModel@trees <- 1
         if (truncVine(smallModel, fullModel, data)) {
@@ -165,7 +163,7 @@ iterDVine <- function (vine, data, evalCopula, selectCopula, truncVine) {
 
         if (is.function(truncVine)) {
             # Check if the last expanded tree is required or if the vine
-            # can be truncated on the previous tree.
+            # should be truncated on the previous tree.            
             fullModel <- vine
             fullModel@trees <- j
             if (truncVine(smallModel, fullModel, data)) {

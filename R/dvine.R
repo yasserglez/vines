@@ -27,11 +27,10 @@ dCVineDVine <- function (vine, u) {
         # The product of the uniform marginal densities.
         rep(1, nrow(u))
     } else {
-        # Called by vineIter to evaluate the density of each copula.
-        evalCopulaDensity <- function (vine, j, i, x, y) {
+        evalCopula <- function (vine, j, i, x, y) {
             dcopula(vine@copulas[[j, i]], cbind(x, y))
         }
-        iterResult <- vineIter(vine, u, evalCopula = evalCopulaDensity)
+        iterResult <- vineIter(vine, u, evalCopula = evalCopula)
         apply(matrix(unlist(iterResult$evals), nrow(u)), 1, prod)
     }
 }

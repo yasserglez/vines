@@ -35,55 +35,53 @@ showVineFitML <- function (object) {
 setMethod("show", "vineFitML", showVineFitML)
 
 
-# Function called by vineIter to evaluate the log-likelihood of each copula.
-evalCopulaLogLik <- function (vine, j, i, x, y) {
-    copula <- vine@copulas[[j, i]]
-    loglikCopula(copula@parameters, cbind(x, y), copula)
-}
-
 vineLogLik <- function (vine, data) {
-    vineIterResult <- vineIter(vine, data, evalCopula = evalCopulaLogLik)
+    evalCopula <- function (vine, j, i, x, y) {
+        copula <- vine@copulas[[j, i]]
+        loglikCopula(copula@parameters, cbind(x, y), copula)
+    }
+    vineIterResult <- vineIter(vine, data, evalCopula = evalCopula)
     sum(unlist(vineIterResult$evals))
 }
 
 
+# Function used by the AIC and BIC truncation methods to evaluate
+# only the log-likelihood of the copulas in the last tree.
+vineLogLikLastTree <- function (vine, data) {
+    evalCopula <- function (vine, j, i, x, y) {
+        if (j == vine@trees) {
+            copula <- vine@copulas[[j, i]]
+            loglikCopula(copula@parameters, cbind(x, y), copula)
+        } else {
+            0
+        }
+    }
+    vineIterResult <- vineIter(vine, data, evalCopula = evalCopula)
+    sum(unlist(vineIterResult$evals))
+}
+
+truncVineAIC <- function (smallModel, fullModel, data) {
+    p <- length(vineParameters(fullModel)) -
+            length(vineParameters(smallModel))
+    0 <= -2*vineLogLikLastTree(fullModel, data) + 2*p
+}
+
+truncVineBIC <- function (smallModel, fullModel, data) {
+    k <- log(nrow(data))
+    p <- length(vineParameters(fullModel)) -
+            length(vineParameters(smallModel))
+    0 <= -2*vineLogLikLastTree(fullModel, data) + k*p
+}
+
+
 vineFitML <- function (type, data, trees = ncol(data) - 1, truncMethod = "",
-        selectCopula = function (x, y) indepCopula(),
+        selectCopula = function (vine, j, i, x, y) indepCopula(),
         optimMethod = "Nelder-Mead", optimControl = list()) {
     if (nzchar(truncMethod)) {
         if (identical(truncMethod, "AIC")) {
-            previousAIC <- NA
-            truncVine <- function (smallModel, fullModel, data) {
-                # TODO: This implementation can be improved by calculating
-                # the information criterion only for the last tree.
-                if (is.finite(previousAIC)) {
-                    smallAIC <- previousAIC
-                } else {
-                    smallAIC <- -2*vineLogLik(smallModel, data) + 
-                            2*length(vineParameters(smallModel))
-                }
-                largeAIC <- -2*vineLogLik(fullModel, data) + 
-                        2*length(vineParameters(fullModel))
-                previousAIC <<- largeAIC
-                smallAIC <= largeAIC
-            }
+            truncVine <- truncVineAIC
         } else if (identical(truncMethod, "BIC")) {
-            previousBIC <- NA
-            truncVine <- function (smallModel, fullModel, data) {
-                # TODO: This implementation can be improved by calculating
-                # the information criterion only for the last tree.                
-                k <- log(nrow(data))
-                if (is.finite(previousBIC)) {
-                    smallBIC <- previousBIC
-                } else {
-                    smallBIC <- -2*vineLogLik(smallModel, data) +
-                            k*length(vineParameters(smallModel))
-                }
-                largeBIC <- -2*vineLogLik(fullModel, data) +
-                        k*length(vineParameters(fullModel))
-                previousBIC <<- largeBIC
-                smallBIC <= largeBIC
-            }
+            truncVine <- truncVineBIC
         } else {
             stop("invalid vine truncation method ", dQuote(truncMethod))
         }
@@ -96,17 +94,17 @@ vineFitML <- function (type, data, trees = ncol(data) - 1, truncMethod = "",
     # Section 7 of Aas, K., Czado, C., Frigessi, A. and Bakken, H. Pair-copula
     # constructions of multiple dependence. Insurance Mathematics and Economics,
     # 2009, Vol. 44, pp. 182-198.
-    selectCopulaWrapper <- function (vine, j, i, x, y) selectCopula(x, y)
     vine <- Vine(type, dimension = ncol(data), trees = trees,
             copulas = matrix(list(), ncol(data) - 1, ncol(data) - 1))
     dimnames(vine) <- colnames(data)
     vineIterResult <- vineIter(vine, data,
-            selectCopula = selectCopulaWrapper, truncVine = truncVine)
+            selectCopula = selectCopula, truncVine = truncVine)
     vine <- vineIterResult$vine
     startParams <- vineParameters(vine)
 
     if (nzchar(optimMethod) && length(startParams) > 0) {
-        # Execute the optimization method.
+        # Optimization method.
+
         lowerParams <- unlist(lapply(vine@copulas,
                     function (x) if (is.null(x)) numeric(0) else x@param.lowbnd))
         upperParams <- unlist(lapply(vine@copulas,
@@ -119,7 +117,7 @@ vineFitML <- function (type, data, trees = ncol(data) - 1, truncMethod = "",
             lower <- -Inf
             upper <- Inf
         }
-        
+
         logLik <- function (x, vine, data, lowerParams, upperParams) {
             if (all(is.finite(x) & x >= lowerParams & x <= upperParams)) {
                 vineParameters(vine) <- x
@@ -144,7 +142,8 @@ vineFitML <- function (type, data, trees = ncol(data) - 1, truncMethod = "",
                 startParams = startParams,
                 finalParams = optimResult$par)
     } else {
-        # Without parameters or optimization disabled.
+        # Optimization disabled or a vine without parameters.
+
         fit <- new("vineFitML", 
                 vine = vine,
                 observations = nrow(data), 
