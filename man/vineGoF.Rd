@@ -5,7 +5,7 @@
 \title{Vine Goodness-of-fit Tests}
 
 \description{
-Goodness-of-fit tests to verify whether the dependency structure of a data 
+Goodness-of-fit tests to verify whether the dependency structure of a sample 
 is appropriately modelled by a pair-copula construction.
 }
 
@@ -54,7 +54,7 @@ copula <- normalCopula(c(-0.25, -0.21, 0.34, 0.51, -0.07, -0.18),
                        dispstr = "un", dim = 4)
 data <- rcopula(copula, 100)
 
-selectCopula <- function (x, y) {
+selectCopula <- function (vine, j, i, x, y) {
     data <- cbind(x, y)
     fit <- fitCopula(normalCopula(0), data, method = "itau")
     fit@copula

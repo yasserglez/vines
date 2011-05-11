@@ -35,16 +35,16 @@ rvine(vine, n)
 
 \details{
 The implementation of the \code{dvine} function for \code{\linkS4class{CVine}} 
-and \code{\linkS4class{DVine}} is based on the Algorithms 3 and 4 from
+and \code{\linkS4class{DVine}} is based on Algorithms 3 and 4 from
 Aas et al. (2009).
   
-The \code{pvine} function is currently evaluated through the numerical 
-integration of the density function. This is slow even for small dimensions.
-See the documentation of the \code{\link{cubature}} package for information
+The \code{pvine} function is evaluated through the numerical integration of 
+the density function. This is slow even for small dimensions. See the 
+documentation of the \code{\link{cubature}} package for information
 about the algorithm used.
   
 The implementation of the \code{rvine} function for \code{\linkS4class{CVine}} 
-and \code{\linkS4class{DVine}} is based on the Algorithms 1 and 2 from
+and \code{\linkS4class{DVine}} is based on Algorithms 1 and 2 from
 Aas et al. (2009).
 }
 

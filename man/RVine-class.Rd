@@ -8,6 +8,7 @@
 
 \description{
 Extends the \code{\linkS4class{Vine}} class to represent the Regular vines.
+Currently general regular vines are not implemented.
 }
 
 \section{Slots}{

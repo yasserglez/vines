@@ -21,7 +21,7 @@ package. It is a virtual class, no objects may be created from it.
     Dimension of the vine.}
   \item{\code{dimensionNames}:}{Object of class \code{character}.
     Names of the dimensions of the vine. It should be an empty character
-    vector or it should have one element for each dimension of the vine.}
+    vector or a vector with one element for each dimension of the vine.}
   \item{\code{copulas}:}{Object of class \code{matrix}. This matrix contains
     the \code{\linkS4class{copula}} objects for each copula in the pair-copula
     decomposition. The indexes of this matrix follow the notation used for the 
@@ -29,8 +29,8 @@ package. It is a virtual class, no objects may be created from it.
   \item{\code{trees}:}{Object of class \code{numeric}.
     Number of dependency trees of the vine. It should be an integer between
     \code{0} and \code{dimension - 1} including both endpoints. If \code{trees}
-    is less than \code{dimension - 1} the rest of the trees will be composed
-    only by Independence copulas.}
+    is less than \code{dimension - 1} the rest of the trees will be assumed 
+    to be composed only by Independence copulas.}
 }
 }
 

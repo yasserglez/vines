@@ -29,8 +29,8 @@ h(copula, x, v)
 \description{
   This function should be defined for every copula used in the pair-copula
   constructions. It represents the conditional distribution of \code{x}
-  given \code{v} in terms of the copula when \code{x} and \code{v} are Uniform
-  and defined as the partial derivative of the distribution function of the 
+  given \code{v} in terms of the copula when \code{x} and \code{v} are Uniform.
+  It is defined as the partial derivative of the distribution function of the 
   copula with respect to the second argument.
   \deqn{h(x,v) = F(x|v) = \frac{\partial C(x,v)}{\partial v}}{}
 }
@@ -40,7 +40,7 @@ h(copula, x, v)
 
 \item{\code{signature(copula = "copula")}}{
   Default definition of the h-function for a bivariate copula. This method
-  is used if there are no definitions specific for a given copula. The
+  is used if there is not a definition specific for a given copula. The
   partial derivative is calculated numerically using the 
   \code{\link{numericDeriv}} function.
 }

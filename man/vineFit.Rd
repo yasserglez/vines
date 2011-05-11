@@ -25,26 +25,30 @@ vineFit(type, data, method = "ml", ...)
 
 \value{
 An object of class \code{\linkS4class{vineFit}} or a subclass with
-information specific to the used inference method. The \code{vine} slot
+information specific to the inference method used. The \code{vine} slot
 of this object will contain the fitted \code{\linkS4class{Vine}} object.
 }
 
 \details{
 
 The \code{"ml"} (Maximum Likelihood) method uses the sequential estimation 
-procedure outlined in Aas et al. (2009) to determine the family and initial 
-values for the parameters of each bivariate copula and then execute a 
-numerical maximization of the full log-likelihood of the vine. 
+procedure outlined in Aas et al. (2009) to determine the family and the 
+initial values for the parameters of each bivariate copula and then execute 
+a numerical maximization of the full log-likelihood of the vine. 
 Additional arguments for this method are:
 
 \describe{
-  \item{\code{selectCopula}}{Function called to select the bivariate copulas
-    in the pair-copula construction. This function receives a bivariate
-    sample and should return a \code{\linkS4class{copula}} object that fits
-    this sample. The default value is \code{function (x, y) indepCopula()}
-    meaning to use Independence copulas for all the bivariate copulas.}
+  \item{\code{selectCopula}}{Function executed to allow the user to select 
+    the bivariate copulas in the pair-copula construction. This function 
+    should expect five arguments: the vine object being constructed 
+    (\code{vine} argument), the indexes of the copula under selection in the
+    matrix of the \code{copulas} slot of the vine (arguments \code{j} and \code{i}) 
+    and a bivariate sample (arguments \code{x} and \code{y}) and should return a 
+    \code{\linkS4class{copula}} object. The default value is 
+    \code{function (vine, j, i, x, y) indepCopula()} meaning to use 
+    Independence copulas for all the bivariate copulas.}
   \item{\code{trees}}{Maximum number of dependency trees of the vine. The
-    \code{selectCopula} function will be executed for copulas in the first
+    \code{selectCopula} function will be executed for the copulas in the first
     \code{trees} trees of the vine and Independence copulas will be used
     for the rest of the trees. The default value is \code{ncol(data) - 1}
     meaning to capture dependence in all the trees of the vine.}
@@ -66,7 +70,7 @@ Additional arguments for this method are:
 data <- matrix(runif(5 * 100), ncol = 5, nrow = 100)
 colnames(data) <- c("A", "B", "C", "D", "E")
 
-selectCopula <- function (x, y) {
+selectCopula <- function (vine, j, i, x, y) {
     data <- cbind(x, y)
     fit <- fitCopula(normalCopula(0), data, method = "itau")
     fit@copula
@@ -93,7 +97,7 @@ Pair-copula constructions of multiple dependence.
 
 Brechmann, E. C. (2010) Truncated and simplified regular vines 
 and their applications. Diploma Thesis. \emph{Technische 
-Universitat Munchen}.
+Universitaet Muenchen}.
 
 Brechmann, E. C. and Czado, C. and Aas, K. (2010) Truncated regular 
 vines in high dimensions with application to financial data. 

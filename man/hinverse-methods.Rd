@@ -26,8 +26,7 @@ hinverse(copula, u, v)
 \description{
   This function should be defined for every copula used in the pair-copula
   constructions or evaluated numerically. It represents the inverse of the 
-  h-function, or equivalently the inverse of the conditional distribution 
-  function.
+  h-function with respect to its first argument.
 }
 
 \section{Methods}{
@@ -35,7 +34,7 @@ hinverse(copula, u, v)
 
 \item{\code{signature(copula = "copula")}}{
   Default definition of the inverse of the h-function for a bivariate copula. 
-  This method is used if there are no definitions specific for a given copula. 
+  This method is used if there is not a definition specific for a given copula. 
   The inverse is calculated numerically using the \code{\link{uniroot}}
   function.
 }

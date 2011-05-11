@@ -24,7 +24,7 @@ vineOrder(type, data, method = "greedy", ...)
 }
 
 \value{
-An \code{integer} vector giving the indexes of the variables in order.
+An \code{integer} vector with the indexes of the variables in order.
 This vector can be used to reorder the variables of the \code{data} matrix.
 }
 
@@ -73,5 +73,5 @@ vineOrder("DVine", data, method = "greedy",
 \references{
 Brechmann, E. C. (2010) Truncated and simplified regular vines 
 and their applications. Diploma Thesis. \emph{Technische 
-Universitat Munchen}.
+Universitaet Muenchen}.
 }

@@ -8,10 +8,9 @@
 \title{Class for the Results of Vine Inference}
 
 \description{
-This is the base class of all classes giving information about vine inference.
-Objects of this class (or subclasses containing information about specific
-inference methods) are created as results of calls to the \code{\link{vineFit}}
-function.
+This is the base class of all classes containing information about vine inference.
+Objects of this class (or subclasses) are created as results of calls to the 
+\code{\link{vineFit}} function.
 }
 
 \section{Slots}{

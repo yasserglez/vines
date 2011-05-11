@@ -8,10 +8,9 @@
 \title{Class for the Results of Vine Goodness-of-fit Tests}
 
 \description{
-This is the base class of all classes giving information about vine 
-goodness-of-fit tests. Objects of this class (or subclasses containing 
-information about specific goodness-of-fit methods) are created as results 
-of calls to the \code{\link{vineGoF}} function.
+This is the base class of all classes containing information about vine 
+goodness-of-fit tests. Objects of this class (or subclasses) are created 
+as results of calls to the \code{\link{vineGoF}} function.
 }
 
 \section{Slots}{
