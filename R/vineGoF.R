@@ -39,12 +39,12 @@ vineGoFPIT <- function (vine, data, statistic = "Breymann") {
         S <- rowSums(qnorm(Z) ^ 2)
         adResult <- ad.test(S, pchisq, df = n)
         new("vineGoF",
-                method = "PIT and the Breymann et al. (2003) statistic",
-                pvalue = adResult$p.value,
-                statistic = adResult$statistic)
+            method = "PIT and the Breymann et al. (2003) statistic",
+            pvalue = adResult$p.value,
+            statistic = adResult$statistic)
     } else {
         stop("invalid statistic ", dQuote(statistic),
-                " for the goodness-of-fit method based on the PIT")
+             " for the goodness-of-fit method based on the PIT")
     }
 }
 

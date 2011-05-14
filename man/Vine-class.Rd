@@ -1,4 +1,5 @@
 \name{Vine-class}
+
 \docType{class}
 
 \alias{Vine-class}
@@ -9,7 +10,7 @@
 \title{Base Vine Class}
 
 \description{
-This is the base class of all the classes implementing vine models in the 
+This is the base class of all classes implementing vine models in the 
 package. It is a virtual class, no objects may be created from it.
 }
 
