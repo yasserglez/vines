@@ -8,26 +8,26 @@
 \title{Class for the Results of Vine Inference}
 
 \description{
-This is the base class of all classes containing information about vine inference.
-Objects of this class (or subclasses) are created as results of calls to the 
+Base class of all classes providing information about vine inference. 
+Objects of this class (or subclasses) are created by calls to the 
 \code{\link{vineFit}} function.
 }
 
 \section{Slots}{
 \describe{
-  \item{\code{vine}:}{Object of class \code{\linkS4class{Vine}}.
-    Fitted vine.}
-  \item{\code{observations}:}{Object of class \code{numeric}.
-    Number of observations in the sample.}
-  \item{\code{method}:}{Object of class \code{character}.
-    Inference method.}
+  \item{\code{vine}:}{Object of class \code{\linkS4class{Vine}}. Fitted vine.}
+  
+  \item{\code{observations}:}{Object of class \code{numeric}. Number of 
+    observations in the sample.}
+    
+  \item{\code{method}:}{Object of class \code{character}. Inference method.}
 }
 }
 
 \section{Methods}{
 \describe{
-  \item{show}{\code{signature(object = "vineFit")}:
-    Print the result of the vine inference.}
+  \item{show}{\code{signature(object = "vineFit")}: Print the result of 
+    the vine inference.}
 }
 }
 

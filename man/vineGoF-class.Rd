@@ -8,27 +8,28 @@
 \title{Class for the Results of Vine Goodness-of-fit Tests}
 
 \description{
-This is the base class of all classes containing information about vine 
-goodness-of-fit tests. Objects of this class (or subclasses) are created 
-as results of calls to the \code{\link{vineGoF}} function.
+Base class of all classes containing information about vine goodness-of-fit 
+tests. Objects of this class (or subclasses) are created by calls to the 
+\code{\link{vineGoF}} function.
 }
 
 \section{Slots}{
-  \describe{
-    \item{\code{method}:}{Object of class \code{character}.
-      Goodness-of-fit method.}
-    \item{\code{statistic}:}{Object of class \code{numeric}.
-      Value of the test statistic.}
-    \item{\code{pvalue}:}{Object of class \code{numeric}.
-      Corresponding p-value.}
-  }
+\describe{
+  \item{\code{method}:}{Object of class \code{character}.
+    Goodness-of-fit method.}
+
+  \item{\code{statistic}:}{Object of class \code{numeric}. Value of the
+    test statistic.}
+
+  \item{\code{pvalue}:}{Object of class \code{numeric}. P-value.}
+}
 }
 
 \section{Methods}{
-  \describe{
-    \item{show}{\code{signature(object = "vineGoF")}:
-      Print the result of the goodness-of-fit test.}
-  }
+\describe{
+  \item{show}{\code{signature(object = "vineGoF")}: Print the result of
+    the goodness-of-fit test.}
+}
 }
 
 \keyword{classes}

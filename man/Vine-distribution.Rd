@@ -16,8 +16,7 @@
 \title{Vine Distribution Functions}
 
 \description{
-Density evaluation, distribution function evaluation, and random number 
-generation.
+Density evaluation, distribution function evaluation, and random number generation.
 }
 
 \usage{
@@ -27,32 +26,33 @@ rvine(vine, n)
 }
 
 \arguments{
-\item{vine}{A \code{\linkS4class{Vine}} object.}
-\item{u}{A vector of the same dimension of the vine or a matrix with one 
-  column for each dimension of the vine.}
-\item{n}{Number of observations to be generated.}
+  \item{vine}{a \code{\linkS4class{Vine}} object.}
+
+  \item{u}{a vector of the same dimension of the vine or a matrix with one column
+    for each variable of the vine.}
+
+  \item{n}{number of observations.}
 }
 
 \details{
-The implementation of the \code{dvine} function for \code{\linkS4class{CVine}} 
-and \code{\linkS4class{DVine}} is based on Algorithms 3 and 4 from
-Aas et al. (2009).
-  
+The implementation of the \code{dvine} function for \code{\linkS4class{CVine}}
+and \code{\linkS4class{DVine}} objects is based on the Algorithms 3 and 4 
+of (Aas et al. 2009), respectively.
+
 The \code{pvine} function is evaluated through the numerical integration of 
-the density function. This is slow even for small dimensions. See the 
-documentation of the \code{\link{cubature}} package for information
-about the algorithm used.
+the density function (using the \code{\link{cubature}} package). This is a 
+computationally demanding procedure, even for small dimensions.
   
 The implementation of the \code{rvine} function for \code{\linkS4class{CVine}} 
-and \code{\linkS4class{DVine}} is based on Algorithms 1 and 2 from
-Aas et al. (2009).
+and \code{\linkS4class{DVine}} objects is based on the Algorithms 1 and 2 
+of (Aas et al. 2009), respectively.
 }
 
 \value{
-\code{dnorm} returns a vector with the evaluation of the density. 
+\code{dnorm} returns a vector with the evaluation of the density.
 \code{pnorm} returns a vector with the evaluation of the distribution 
-function. \code{rvine} returns a matrix with one column for each dimension
-of the vine and each row corresponding to a simulation of the vine.
+function. \code{rvine} returns a matrix with one column for each variable
+of the vine and one row for each observation.
 }
 
 \references{

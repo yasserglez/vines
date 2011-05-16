@@ -8,12 +8,11 @@
 \title{Multivariate Dependence Modeling with Vines}
 
 \description{
-Vines are graphical models for pair-copula constructions
-that allows building high-dimensional distributions from bivariate
-copulas and marginal density functions. This package contains S4
-classes for vines (currently Canonical vines and D-vines) and
-methods for inference, goodness-of-fit tests, density evaluation,
-distribution function evaluation and simulation.
+Vines are graphical models for pair-copula constructions that allows 
+building high-dimensional distributions using bivariate copulas and marginal 
+density functions. This package contains S4 classes for vines (C-vines and 
+D-vines) and methods for inference, goodness-of-fit tests, density evaluation, 
+distribution function evaluation, and simulation.
 }
 
 \references{

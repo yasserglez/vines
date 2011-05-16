@@ -9,10 +9,10 @@
 \title{Vine Probability Integral Transform Methods}
 
 \description{
-Probability Integral Transform (PIT) of Rosenblatt (1952) for vine models. 
+Probability Integral Transform (PIT) of (Rosenblatt, 1952) for vine models. 
 The PIT converts a set of dependent variables into a new set of variables 
-which are independent and Uniform in \eqn{(0,1)}{(0,1)} under the hypothesis 
-that the data originate from a given multivariate distribution.
+which are independent and Uniform \eqn{(0,1)}{(0,1)} under the hypothesis 
+that the data follows a given multivariate distribution.
 }
 
 \usage{
@@ -20,27 +20,26 @@ vinePIT(vine, u)
 }
 
 \arguments{
-\item{vine}{A \code{\linkS4class{Vine}} object.}
-\item{u}{A vector of the same dimension of the vine or a matrix with one 
-  column for each dimension of the vine.}
+  \item{vine}{a \code{\linkS4class{Vine}} object.}
+
+  \item{u}{vector of the same number of variables of the vine or a matrix 
+    with one column for each variable of the vine.}
 }
 
 \value{
-A matrix with one column for each dimension of the vine and each row 
-corresponding to a transformed observation.
+A matrix with one column for each variable of the vine and one row for 
+each observation.
 }
 
 \section{Methods}{
 \describe{
-  \item{\code{signature(vine = "CVine")}}{
-    Implementation of the PIT algorithm for \code{\linkS4class{CVine}} objects. 
-    Based on the Algorithm 5 from Aas et al. (2009).
-  }
+  \item{\code{signature(vine = "CVine")}}{PIT algorithm for
+    \code{\linkS4class{CVine}} objects based on the Algorithm 5 of
+    (Aas et al., 2009).}
 
-  \item{\code{signature(vine = "DVine")}}{
-    Implementation of the PIT algorithm for \code{\linkS4class{DVine}} objects. 
-    Based on the Algorithm 6 from Aas et al. (2009).
-  }
+  \item{\code{signature(vine = "DVine")}}{PIT algorithm for
+    \code{\linkS4class{DVine}} objects based on the Algorithm 6 of
+    (Aas et al., 2009).}
 }}
 
 \references{

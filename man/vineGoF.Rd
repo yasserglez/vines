@@ -5,8 +5,8 @@
 \title{Vine Goodness-of-fit Tests}
 
 \description{
-Goodness-of-fit tests to verify whether the dependency structure of a sample 
-is appropriately modelled by a pair-copula construction.
+Goodness-of-fit tests to verify whether the dependence structure of a sample
+is appropriately modeled by vine model.
 }
 
 \usage{
@@ -14,38 +14,38 @@ vineGoF(vine, data, method = "PIT", ...)
 }
 
 \arguments{
-\item{vine}{A \code{\linkS4class{Vine}} object.}
-\item{data}{Data matrix of pseudo-observations.}
-\item{method}{Goodness-of-fit method. Supported values are: 
-  \code{"PIT"} (Probability Integral Transform).}
-\item{...}{Additional arguments for the goodness-of-fit method.}
+  \item{vine}{a \code{\linkS4class{Vine}} object.}
+  
+  \item{data}{data matrix of pseudo-observations.}
+  
+  \item{method}{goodness-of-fit method. Supported values are: 
+    \code{"PIT"} (Probability Integral Transform).}
+    
+  \item{...}{additional arguments for the goodness-of-fit method.}
 }
 
 \value{
-An object of class \code{\linkS4class{vineGoF}} or a subclass with
-information specific to the used goodness-of-fit method. The \code{statistic}
-slot of this object will contain the value of the statistic and \code{pvalue}
-the corresponding p-value.
+A \code{\linkS4class{vineGoF}} or a subclass with specific information about 
+the goodness-of-fit method used. The \code{statistic} slot of this object 
+contains the value of the statistic and \code{pvalue} the p-value.
 }
 
 \details{
 The \code{"PIT"} (Probability Integral Transform) method uses the 
 \code{\link{vinePIT}} function to transform the data into variables which 
-are independent and Uniform in \eqn{(0,1)}{(0,1)} and then verify whether the 
-resulting variables really are independent and Uniform in \eqn{(0,1)}{(0,1)}.
-The additional parameter \code{statistic} specifies the test to be applied 
-for the latter.
+are independent and Uniform \eqn{(0,1)}{(0,1)} and then use a hypothesis 
+test to verify whether the resulting variables are independent and Uniform 
+\eqn{(0,1)}{(0,1)}. The additional parameter \code{statistic} specifies 
+the test to be applied for this purpose.
 
 \describe{
   \item{\code{statistic}}{Statistic used to verify if the transformed variables
-    are really independent and Uniform in \eqn{(0,1)}{(0,1)}. The default 
-    value is \code{"Breymann"} and supported methods are:
+    are independent and Uniform in \eqn{(0,1)}{(0,1)}. The default value is 
+    \code{"Breymann"} and supported methods are:
     \describe{
       \item{\code{"Breymann"}}{Test proposed in the Section 7.1 of 
-        Aas et al. (2009). See Breymann et al. (2003) for more information.
-      }
-    }
-  }
+      (Aas et al., 2009). See (Breymann et al., 2003) for more information.}
+    }}
 }
 }
 

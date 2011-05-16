@@ -5,9 +5,9 @@
 \title{Vine Inference}
 
 \description{
-Fit a vine model to multivariate data in the unit hypercube. The
-data can be pseudo-observations constructed from empirical or parametric
-marginal cumulative distribution functions.
+Estimate a vine model from multivariate data in the unit hypercube. Data can be 
+pseudo-observations constructed from empirical or parametric marginal cumulative 
+distribution functions.
 }
 
 \usage{
@@ -15,53 +15,63 @@ vineFit(type, data, method = "ml", ...)
 }
 
 \arguments{
-\item{type}{Type of vine. Supported values are: \code{"CVine"}
-  and \code{"DVine"}.}
-\item{data}{Data matrix of pseudo-observations.}
-\item{method}{Inference method. Supported values are:
-  \code{"ml"} (Maximum Likelihood).}
-\item{...}{Additional arguments for the inference method.}
+  \item{type}{type of vine. Supported values are: \code{"CVine"}
+    and \code{"DVine"}.}
+
+  \item{data}{data matrix of pseudo-observations.}
+
+  \item{method}{inference method. Supported values are:
+    \code{"ml"} (Maximum Likelihood).}
+    
+  \item{...}{additional arguments for the inference method.}
 }
 
 \value{
-An object of class \code{\linkS4class{vineFit}} or a subclass with
-information specific to the inference method used. The \code{vine} slot
-of this object will contain the fitted \code{\linkS4class{Vine}} object.
+A \code{\linkS4class{vineFit}} object or a subclass with specific 
+information about inference method used. The \code{vine} slot of this object 
+contains the fitted \code{\linkS4class{Vine}} object.
 }
 
 \details{
-
-The \code{"ml"} (Maximum Likelihood) method uses the sequential estimation 
-procedure outlined in Aas et al. (2009) to determine the family and the 
-initial values for the parameters of each bivariate copula and then execute 
-a numerical maximization of the full log-likelihood of the vine. 
-Additional arguments for this method are:
+The \code{"ml"} (Maximum Likelihood) method starts with the sequential estimation
+procedure described in (Aas et al., 2009) and then executes a numerical
+maximization of the full log-likelihood of the vine. The sequential procedure
+is used to determine the family and the initial values of the parameters of 
+each bivariate copula in the decomposition. Additional arguments for this 
+method are:
 
 \describe{
-  \item{\code{selectCopula}}{Function executed to allow the user to select 
-    the bivariate copulas in the pair-copula construction. This function 
-    should expect five arguments: the vine object being constructed 
-    (\code{vine} argument), the indexes of the copula under selection in the
-    matrix of the \code{copulas} slot of the vine (arguments \code{j} and \code{i}) 
-    and a bivariate sample (arguments \code{x} and \code{y}) and should return a 
-    \code{\linkS4class{copula}} object. The default value is 
-    \code{function (vine, j, i, x, y) indepCopula()} meaning to use 
-    Independence copulas for all the bivariate copulas.}
-  \item{\code{trees}}{Maximum number of dependency trees of the vine. The
-    \code{selectCopula} function will be executed for the copulas in the first
-    \code{trees} trees of the vine and Independence copulas will be used
-    for the rest of the trees. The default value is \code{ncol(data) - 1}
-    meaning to capture dependence in all the trees of the vine.}
-  \item{\code{truncMethod}}{Method to automatically truncate the vine if enough
-    dependence is capture in a given number of trees. Supported methods are 
-    \code{"AIC"} and \code{"BIC"}. See Brechmann et al. (2010) for information 
-    about these methods. The default value is \code{""} meaning no truncation.}
+  \item{\code{selectCopula}}{function provided by the user to select the
+    copulas in the pair-copula construction. This function should return 
+    a \code{\linkS4class{copula}} object and expect the following arguments.
+    \describe{
+      \item{\code{vine}}{vine object being constructed.}
+
+      \item{\code{j, i}}{indexes of the copula under selection in the matrix of the
+        \code{copulas} slot of the vine.}
+
+      \item{\code{x, y}}{bivariate sample.}
+    }
+    The default value is \code{function (vine, j, i, x, y) indepCopula()}
+    that assigns the independence copula to all the arcs of the vine.}
+
+  \item{\code{trees}}{maximum number of dependence trees of the vine. Independence
+    copulas will be used in all the arcs of the following trees. The final number
+    of dependence trees could be smaller because of the use of a truncation method. 
+    The default value is \code{ncol(data) - 1}.}
+
+  \item{\code{truncMethod}}{method used to automatically truncate the vine if
+    enough dependence is captured in a given number of trees. Supported methods
+    are \code{"AIC"} and \code{"BIC"}. See (Brechmann, 2010; Brechmann et al., 2010)
+    for information about these methods. The default value is \code{""} that
+    means no truncation.}
+  
   \item{\code{optimMethod}}{\code{\link{optim}} method used in the optimization
     of the log-likelihood function. If \code{""} is specified the optimization
-    is disabled and the vine with the initial parameters calculated using the
-    sequential estimation procedure is returned. The default value is
-    \code{"Nelder-Mead"}.}
-  \item{\code{optimControl}}{List of control parameters for \code{\link{optim}}.
+    is disabled and the vine calculated using the sequential estimation procedure 
+    is returned. The default value is \code{"Nelder-Mead"}.}
+
+  \item{\code{optimControl}}{list of control parameters for \code{\link{optim}}.
     The default value is \code{list()}.}
 }
 }

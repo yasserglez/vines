@@ -5,10 +5,10 @@
 \alias{CVine-class}
 \alias{show,CVine-method}
 
-\title{Class for Canonical Vines}
+\title{Class for C-vines}
 
 \description{
-Extends the \code{\linkS4class{RVine}} class to represent the Canonical vines.
+Extends the \code{\linkS4class{RVine}} class to represent C-vines.
 }
 
 \section{Slots}{
@@ -17,8 +17,8 @@ See \code{\linkS4class{RVine}} for information about the inherited slots.
 
 \section{Methods}{
 \describe{
-   \item{show}{\code{signature(object = "CVine")}: 
-    Print a text representation of the Canonical vine.}
+   \item{show}{\code{signature(object = "CVine")}: Print a text 
+     representation of the C-vine.}
 }
 }
 

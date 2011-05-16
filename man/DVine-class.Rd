@@ -8,7 +8,7 @@
 \title{Class for D-vines}
 
 \description{
-Extends the \code{\linkS4class{RVine}} class to represent the D-vines.
+Extends the \code{\linkS4class{RVine}} class to represent D-vines.
 }
 
 \section{Slots}{
@@ -17,8 +17,8 @@ See \code{\linkS4class{RVine}} for information about the inherited slots.
 
 \section{Methods}{
 \describe{
-   \item{show}{\code{signature(object = "DVine")}: 
-    Print a text representation of the D-vine.}
+   \item{show}{\code{signature(object = "DVine")}: Print a text 
+     representation of the D-vine.}
 }
 }
 

@@ -13,8 +13,9 @@ vineLogLik(vine, data)
 }
 
 \arguments{
-\item{vine}{A \code{\linkS4class{Vine}} object.}
-\item{data}{Data matrix of pseudo-observations.}
+  \item{vine}{a \code{\linkS4class{Vine}} object.}
+
+  \item{data}{data matrix of pseudo-observations.}
 }
 
 \examples{

@@ -7,7 +7,7 @@
 \title{Create Vine Objects}
 
 \description{
-  Functions to create \code{\linkS4class{Vine}} objects.
+Functions to create \code{\linkS4class{Vine}} objects.
 }
 
 \usage{
@@ -23,14 +23,13 @@ DVine(dimension = 2, trees = dimension - 1,
 }
 
 \arguments{
-\item{type}{Type of vine. Supported values are: \code{"CVine"} and 
-  \code{"DVine"}.}
-\item{dimension}{See the documentation of the corresponding 
-  \code{\linkS4class{Vine}} slot.} 
-\item{trees}{See the documentation of the corresponding 
-  \code{\linkS4class{Vine}} slot.} 
-\item{copulas}{See the documentation of the corresponding 
-  \code{\linkS4class{Vine}} slot.}
+  \item{type}{Type of vine. Supported values are: \code{"CVine"} and \code{"DVine"}.}
+
+  \item{dimension}{See the documentation of the \code{\linkS4class{Vine}} slot.}
+
+  \item{trees}{See the documentation of the \code{\linkS4class{Vine}} slot.}
+
+  \item{copulas}{See the documentation of the \code{\linkS4class{Vine}} slot.}
 }
 
 \seealso{

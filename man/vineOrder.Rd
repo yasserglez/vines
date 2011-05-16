@@ -2,12 +2,12 @@
 
 \alias{vineOrder}
 
-\title{Select an Order of the Variables of a Vine}
+\title{Select an Order of the Variables}
 
 \description{
-Select an order of the variables of a vine. The order of the
-variables determines the bivariate dependences that will be explicit
-modeled in the first tree of the vine.
+Select an order of the variables. The order of the variables determines the 
+bivariate dependencies that will be explicit modeled in the first tree of 
+the vine.
 }
 
 \usage{
@@ -15,50 +15,52 @@ vineOrder(type, data, method = "greedy", ...)
 }
 
 \arguments{
-\item{type}{Type of vine. Supported values are: 
-  \code{"CVine"} and \code{"DVine"}.}
-\item{data}{Data matrix of pseudo-observations.}
-\item{method}{Ordering method. Supported values are: 
-  \code{"random"}, \code{"greedy"}.}
-\item{...}{Additional arguments for the ordering method.}
+  \item{type}{type of vine. Supported values are: \code{"CVine"} and 
+    \code{"DVine"}.}
+
+  \item{data}{data matrix of pseudo-observations.}
+
+  \item{method}{ordering method. Supported values are: \code{"random"}, 
+    \code{"greedy"}.}
+
+  \item{...}{additional arguments for the order method.}
 }
 
 \value{
-An \code{integer} vector with the indexes of the variables in order.
-This vector can be used to reorder the variables of the \code{data} matrix.
+A vector with the ordered indexes of the variables. This vector can be used 
+to reorder the variables of the \code{data} matrix.
 }
 
 \details{
-The order of the variables of the first tree of a \code{"DVine"} determines 
-the structure of all the trees of the vine. This is not the case for the 
-\code{"CVine"} where you can select the root node of each tree in the vine, 
-but this is currently not implemented in the package.
+In D-vines, the order of the variables determines the structure of 
+all the trees of the vine. This is not the case for C-vines where 
+the root node of each tree can be selected.
 
 The \code{"random"} method returns a random permutation of the variables.
 
-The \code{"greedy"} method returns an order of the variables that tries to
-capture as much dependency as possible in the first tree of the vine. This
-is done by finding the order of the variables that defines the tree that
-maximizes a given dependency measure used as edge weights. For the 
-\code{"CVine"} this is done iteratively checking each variable as the 
-root node. For the \code{"DVine"} this is equivalent to solve the 
-\emph{Traveling Salesman Problem} (TSP) and it is done using the 
-\emph{Cheapest Insertion Algorithm} implemented by the \code{\link{solve_TSP}} 
-function from the \pkg{TSP} package. See Brechmann, E. C. (2010) for 
-details. Additional parameters for this method are:
+The \code{"greedy"} method returns an order of the variables that intends to
+capture as much dependence as possible in the first tree of the vine. The
+method find the order of the variables that defines a tree that maximizes 
+a given dependence measure used as edge weights. For C-vines, it is determined 
+iteratively checking each variable as root node. For D-vines, it is equivalent 
+to solve the \emph{Traveling Salesman Problem} (TSP), see (Brechmann, 2010) 
+for details. The TSP is solved using the \emph{Cheapest Insertion Algorithm} 
+implemented by the \code{\link{solve_TSP}} function of the \pkg{TSP} package.
+The following are additional parameters for this method.
 
 \describe{
-  \item{\code{according}}{Dependence measure. The default value is 
+  \item{\code{according}}{dependence measure. The default value is 
     \code{"kendall"} and supported values are:
     \describe{
-      \item{\code{"kendall"}}{Absolute value of Kendall's \eqn{\tau}{tau}.}
-      \item{\code{"spearman"}}{Absolute value of Spearman's \eqn{\rho}{rho}.}
-      \item{\code{"pearson"}}{Absolute value of Pearson's product moment
+      \item{\code{"kendall"}}{absolute value of Kendall's \eqn{\tau}{tau}.}
+      
+      \item{\code{"spearman"}}{absolute value of Spearman's \eqn{\rho}{rho}.}
+      
+      \item{\code{"pearson"}}{absolute value of Pearson's product moment
         correlation coefficient.}
-      \item{\code{"df"}}{Smaller degrees of freedom of a bivariate
-        Student's t copula.}
-    }
-  }
+        
+      \item{\code{"df"}}{smaller degrees of freedom of a bivariate t copula.}
+    }}
 }
 }
 
