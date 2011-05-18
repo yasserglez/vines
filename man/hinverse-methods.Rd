@@ -20,9 +20,7 @@ hinverse(copula, u, v)
 \arguments{
   \item{copula}{A bivariate \code{\linkS4class{copula}} object.}
 
-  \item{u}{\code{numeric} vector.}
-
-  \item{v}{\code{numeric} vector.}
+  \item{u, v}{Numeric vectors with values in \eqn{[0,1]}.}
 }
 
 \description{
@@ -33,36 +31,36 @@ in the pair-copula constructions or evaluated numerically.
 
 \section{Methods}{
 \describe{
-  \item{\code{signature(copula = "copula")}}{Default definition of the 
-    \eqn{h^{-1}} function for a bivariate copula. This method is used if there 
-    is not a definition specific for a given copula. The inverse is calculated 
-    numerically using the \code{\link{uniroot}} function.}
+  \item{\code{signature(copula = "copula")}}{
+    Default definition of the \eqn{h^{-1}} function for a bivariate copula. 
+    This method is used if there is not a definition specific for a given copula. 
+    The inverse is calculated numerically using the \code{\link{uniroot}} function.}
 
-  \item{\code{signature(copula = "indepCopula")}}{The \eqn{h^{-1}} function of 
-    the Independence copula.
+  \item{\code{signature(copula = "indepCopula")}}{
+    The \eqn{h^{-1}} function of the Independence copula.
     \deqn{h^{-1}(u, v) = u}}
 
-  \item{\code{signature(copula = "normalCopula")}}{The \eqn{h^{-1}} function of
-    the normal copula.
+  \item{\code{signature(copula = "normalCopula")}}{
+    The \eqn{h^{-1}} function of the normal copula.
     \deqn{h^{-1}(u, v; \rho) = \Phi \left( \Phi^{-1}(u) \sqrt{1-\rho^2} +
                                            \rho\ \Phi^{-1}(v) \right)}{}}
 
-  \item{\code{signature(copula = "tCopula")}}{The \eqn{h^{-1}} function of the t 
-    copula.
+  \item{\code{signature(copula = "tCopula")}}{
+    The \eqn{h^{-1}} function of the t copula.
     \deqn{h^{-1}(u, v; \rho, \nu) = 
       t_{\nu} \left( t^{-1}_{\nu+1}(u)\
                      \sqrt{\frac{(\nu+(t^{-1}_{\nu}(v))^2)(1-\rho^2)}{\nu+1}} +
                      \rho\ t^{-1}_{\nu}(v)
               \right)}}
 
-  \item{\code{signature(copula = "claytonCopula")}}{The \eqn{h^{-1}} function of
-    the Clayton copula.
+  \item{\code{signature(copula = "claytonCopula")}}{
+    The \eqn{h^{-1}} function of the Clayton copula.
     \deqn{h^{-1}(u, v; \theta) = 
       \left( \left( u\ v^{\theta+1}\right)^{-\frac{\theta}{\theta+1}} + 
                     1 - v^{-\theta} \right)^{-1/\theta}}}  
 
-  \item{\code{signature(copula = "frankCopula")}}{The \eqn{h^{-1}} function of
-    the Frank copula.
+  \item{\code{signature(copula = "frankCopula")}}{
+    The \eqn{h^{-1}} function of the Frank copula.
     \deqn{h^{-1}(u, v; \theta) = 
       -\log \left( 1 - \frac{1-e^{-\theta}}
                             {(u^{-1} - 1) e^{-\theta v} + 1} \right) / \theta}}

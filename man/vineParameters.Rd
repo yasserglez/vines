@@ -15,9 +15,9 @@ vineParameters(vine) <- value
 }
 
 \arguments{
-  \item{vine}{a \code{\linkS4class{Vine}} object.}
+  \item{vine}{A \code{\linkS4class{Vine}} object.}
 
-  \item{value}{vector with the parameters of the copulas in the pair-copula 
+  \item{value}{Vector with the parameters of the copulas in the pair-copula 
     construction. This vector is the result of the concatenation of the 
     \code{parameters} slots of the \code{\linkS4class{copula}} objects in the 
     \code{copulas} slot of the \code{\linkS4class{Vine}} object (by rows).}

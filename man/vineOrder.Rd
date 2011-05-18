@@ -15,20 +15,19 @@ vineOrder(type, data, method = "greedy", ...)
 }
 
 \arguments{
-  \item{type}{type of vine. Supported values are: \code{"CVine"} and 
-    \code{"DVine"}.}
+  \item{type}{Type of vine. Supported values: \code{"CVine"} and \code{"DVine"}.}
 
-  \item{data}{data matrix of pseudo-observations.}
+  \item{data}{Data matrix of pseudo-observations.}
 
-  \item{method}{ordering method. Supported values are: \code{"random"}, 
+  \item{method}{Ordering method. Supported values: \code{"random"}, 
     \code{"greedy"}.}
 
-  \item{...}{additional arguments for the order method.}
+  \item{...}{Additional arguments for the order method.}
 }
 
 \value{
-A vector with the ordered indexes of the variables. This vector can be used 
-to reorder the variables of the \code{data} matrix.
+A vector with the ordered indexes of the variables. This vector should be 
+used to reorder the variables of the \code{data} matrix.
 }
 
 \details{
@@ -49,17 +48,17 @@ implemented by the \code{\link{solve_TSP}} function of the \pkg{TSP} package.
 The following are additional parameters for this method.
 
 \describe{
-  \item{\code{according}}{dependence measure. The default value is 
+  \item{\code{according}}{Dependence measure. The default value is 
     \code{"kendall"} and supported values are:
     \describe{
-      \item{\code{"kendall"}}{absolute value of Kendall's \eqn{\tau}{tau}.}
+      \item{\code{"kendall"}}{Absolute value of Kendall's \eqn{\tau}{tau}.}
       
-      \item{\code{"spearman"}}{absolute value of Spearman's \eqn{\rho}{rho}.}
+      \item{\code{"spearman"}}{Absolute value of Spearman's \eqn{\rho}{rho}.}
       
-      \item{\code{"pearson"}}{absolute value of Pearson's product moment
+      \item{\code{"pearson"}}{Absolute value of Pearson's product moment
         correlation coefficient.}
         
-      \item{\code{"df"}}{smaller degrees of freedom of a bivariate t copula.}
+      \item{\code{"df"}}{Smaller degrees of freedom of a bivariate t copula.}
     }}
 }
 }

@@ -26,8 +26,8 @@ Objects of this class (or subclasses) are created by calls to the
 
 \section{Methods}{
 \describe{
-  \item{show}{\code{signature(object = "vineFit")}: Print the result of 
-    the vine inference.}
+  \item{show}{\code{signature(object = "vineFit")}: 
+    Print the result of the vine inference.}
 }
 }
 

@@ -34,8 +34,8 @@ See \code{\linkS4class{vineFit}} for information about inherited slots.
 
 \section{Methods}{
 \describe{
-  \item{show}{\code{signature(object = "vineFitML")}: Print information 
-    about the fitted vine.}
+  \item{show}{\code{signature(object = "vineFitML")}: 
+    Print information about the fitted vine.}
 }
 }
 

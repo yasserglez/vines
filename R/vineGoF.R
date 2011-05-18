@@ -1,4 +1,4 @@
-# vines: R package for Multivariate Dependence Modeling with Vines
+# vines: Multivariate Dependence Modeling with Vines
 # Copyright (C) 2010, 2011 Yasser González-Fernández <ygf@icmf.inf.cu>
 # Copyright (C) 2010, 2011 Marta Soto <mrosa@icmf.inf.cu>
 #

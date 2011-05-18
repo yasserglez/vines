@@ -26,12 +26,12 @@ rvine(vine, n)
 }
 
 \arguments{
-  \item{vine}{a \code{\linkS4class{Vine}} object.}
+  \item{vine}{A \code{\linkS4class{Vine}} object.}
 
-  \item{u}{a vector of the same dimension of the vine or a matrix with one column
+  \item{u}{Vector of the same dimension of the vine or a matrix with one column
     for each variable of the vine.}
 
-  \item{n}{number of observations.}
+  \item{n}{Number of observations.}
 }
 
 \details{

@@ -15,15 +15,14 @@ vineFit(type, data, method = "ml", ...)
 }
 
 \arguments{
-  \item{type}{type of vine. Supported values are: \code{"CVine"}
-    and \code{"DVine"}.}
+  \item{type}{Type of vine. Supported values: \code{"CVine"} and \code{"DVine"}.}
 
-  \item{data}{data matrix of pseudo-observations.}
+  \item{data}{Data matrix of pseudo-observations.}
 
-  \item{method}{inference method. Supported values are:
+  \item{method}{Inference method. Supported values: 
     \code{"ml"} (Maximum Likelihood).}
     
-  \item{...}{additional arguments for the inference method.}
+  \item{...}{Additional arguments for the inference method.}
 }
 
 \value{
@@ -41,26 +40,26 @@ each bivariate copula in the decomposition. Additional arguments for this
 method are:
 
 \describe{
-  \item{\code{selectCopula}}{function provided by the user to select the
+  \item{\code{selectCopula}}{Function provided by the user to select the
     copulas in the pair-copula construction. This function should return 
     a \code{\linkS4class{copula}} object and expect the following arguments.
     \describe{
-      \item{\code{vine}}{vine object being constructed.}
+      \item{\code{vine}}{Vine object being constructed.}
 
-      \item{\code{j, i}}{indexes of the copula under selection in the matrix of the
+      \item{\code{j, i}}{Indexes of the copula under selection in the matrix of the
         \code{copulas} slot of the vine.}
 
-      \item{\code{x, y}}{bivariate sample.}
+      \item{\code{x, y}}{Bivariate sample.}
     }
     The default value is \code{function (vine, j, i, x, y) indepCopula()}
     that assigns the independence copula to all the arcs of the vine.}
 
-  \item{\code{trees}}{maximum number of dependence trees of the vine. Independence
+  \item{\code{trees}}{Maximum number of dependence trees of the vine. Independence
     copulas will be used in all the arcs of the following trees. The final number
     of dependence trees could be smaller because of the use of a truncation method. 
     The default value is \code{ncol(data) - 1}.}
 
-  \item{\code{truncMethod}}{method used to automatically truncate the vine if
+  \item{\code{truncMethod}}{Method used to automatically truncate the vine if
     enough dependence is captured in a given number of trees. Supported methods
     are \code{"AIC"} and \code{"BIC"}. See (Brechmann, 2010; Brechmann et al., 2010)
     for information about these methods. The default value is \code{""} that
@@ -71,7 +70,7 @@ method are:
     is disabled and the vine calculated using the sequential estimation procedure 
     is returned. The default value is \code{"Nelder-Mead"}.}
 
-  \item{\code{optimControl}}{list of control parameters for \code{\link{optim}}.
+  \item{\code{optimControl}}{List of control parameters for \code{\link{optim}}.
     The default value is \code{list()}.}
 }
 }

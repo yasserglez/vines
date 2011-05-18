@@ -23,7 +23,7 @@ DVine(dimension = 2, trees = dimension - 1,
 }
 
 \arguments{
-  \item{type}{Type of vine. Supported values are: \code{"CVine"} and \code{"DVine"}.}
+  \item{type}{Type of vine. Supported values: \code{"CVine"} and \code{"DVine"}.}
 
   \item{dimension}{See the documentation of the \code{\linkS4class{Vine}} slot.}
 

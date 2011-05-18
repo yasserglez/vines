@@ -40,14 +40,14 @@ It is a virtual class, no objects may be created from it.
 
 \section{Methods}{
 \describe{
-  \item{show}{\code{signature(object = "Vine")}: Print a text representation 
-    of the vine.}
+  \item{show}{\code{signature(object = "Vine")}: 
+    Print a text representation of the vine.}
 
-  \item{dimnames}{\code{signature(x = "Vine")}: Retrieve the names of the 
-    variables of the vine.}
+  \item{dimnames}{\code{signature(x = "Vine")}: 
+    Retrieve the names of the variables of the vine.}
 
-  \item{dimnames<-}{\code{signature(x = "Vine")}: Set the names of the 
-    variables of the vine.}
+  \item{dimnames<-}{\code{signature(x = "Vine")}: 
+    Set the names of the variables of the vine.}
 }
 }
 

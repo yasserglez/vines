@@ -20,10 +20,10 @@ vinePIT(vine, u)
 }
 
 \arguments{
-  \item{vine}{a \code{\linkS4class{Vine}} object.}
+  \item{vine}{A \code{\linkS4class{Vine}} object.}
 
-  \item{u}{vector of the same number of variables of the vine or a matrix 
-    with one column for each variable of the vine.}
+  \item{u}{Vector with one component for each variable of the vine or 
+    a matrix with one column for each variable of the vine.}
 }
 
 \value{

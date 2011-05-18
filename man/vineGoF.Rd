@@ -14,14 +14,14 @@ vineGoF(vine, data, method = "PIT", ...)
 }
 
 \arguments{
-  \item{vine}{a \code{\linkS4class{Vine}} object.}
+  \item{vine}{A \code{\linkS4class{Vine}} object.}
   
-  \item{data}{data matrix of pseudo-observations.}
+  \item{data}{Data matrix of pseudo-observations.}
   
-  \item{method}{goodness-of-fit method. Supported values are: 
+  \item{method}{Goodness-of-fit method. Supported values: 
     \code{"PIT"} (Probability Integral Transform).}
     
-  \item{...}{additional arguments for the goodness-of-fit method.}
+  \item{...}{Additional arguments for the goodness-of-fit method.}
 }
 
 \value{
