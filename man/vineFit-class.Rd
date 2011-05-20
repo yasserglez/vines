@@ -9,7 +9,7 @@
 
 \description{
 Base class of all classes providing information about vine inference. 
-Objects of this class (or subclasses) are created by calls to the 
+Objects of this class (or subclasses) are created by calling the 
 \code{\link{vineFit}} function.
 }
 

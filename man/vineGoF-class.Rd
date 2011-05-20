@@ -9,7 +9,7 @@
 
 \description{
 Base class of all classes containing information about vine goodness-of-fit 
-tests. Objects of this class (or subclasses) are created by calls to the 
+tests. Objects of this class (or subclasses) are created by calling the 
 \code{\link{vineGoF}} function.
 }
 
