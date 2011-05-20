@@ -23,7 +23,9 @@ h(copula, x, v)
 \arguments{
   \item{copula}{A bivariate \code{\linkS4class{copula}} object.}
   
-  \item{u, v}{Numeric vectors with values in \eqn{[0,1]}.}
+  \item{x}{Numeric vector with values in \eqn{[0,1]}.}
+
+  \item{v}{Numeric vector with values in \eqn{[0,1]}.}
 }
 
 \description{
