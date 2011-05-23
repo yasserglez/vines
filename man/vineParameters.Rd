@@ -10,7 +10,7 @@ Retrieve or set the parameters of a \code{\linkS4class{Vine}}.
 }
 
 \usage{
-value <- vineParameters(vine)
+vineParameters(vine)
 vineParameters(vine) <- value
 }
 
