@@ -38,7 +38,7 @@ hinverseCopula <- function (copula, u, v) {
                             copula = copula, u = u[i], v = v[i])$root
                 }
             })
-    ifelse(r0, eps, ifelse(r1, 1 - eps, r))
+    ifelse(r0, eps, ifelse(r1, 1-eps, r))
 }
 
 setMethod("hinverse", "copula", hinverseCopula)

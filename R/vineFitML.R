@@ -46,7 +46,7 @@ vineLogLik <- function (vine, data) {
 
 
 # Function used by the AIC and BIC truncation methods to evaluate
-# only the log-likelihood of the copulas in the last tree.
+# the log-likelihood of the copulas in the last tree.
 vineLogLikLastTree <- function (vine, data) {
     evalCopula <- function (vine, j, i, x, y) {
         if (j == vine@trees) {

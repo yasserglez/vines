@@ -73,6 +73,6 @@ vineOrder("DVine", data, method = "greedy",
 
 \references{
 Brechmann, E. C. (2010) Truncated and simplified regular vines 
-and their applications. Diploma Thesis. \emph{Technische 
+and their applications. Diploma thesis. \emph{Technische 
 Universität München}.
 }

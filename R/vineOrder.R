@@ -71,7 +71,7 @@ vineOrder <- function (type, data, method = "greedy", ...) {
     } else if (identical(method, "random")) {
         vineOrderRandom(type, data)
     } else {
-        stop("invalid ordering method ", dQuote(method), 
+        stop("invalid ordering method ", dQuote(method),
                 " for ", dQuote(type))
     }
 }
