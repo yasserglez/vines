@@ -32,9 +32,9 @@ h(copula, x, v)
 The \eqn{h} function represents the conditional distribution of \code{x} given 
 \code{v} in terms of the copula when \code{x} and \code{v} are Uniform. It
 should be defined for every copula used in pair-copula constructions.  
-It is defined as the partial derivative of the distribution function of the 
-copula with respect to the second argument.
-\deqn{h(x,v) = F(x|v) = \frac{\partial C(x,v)}{\partial v}}
+It is defined as the partial derivative of the distribution function 
+of the copula with respect to the second argument
+\eqn{h(x,v) = F(x|v) = \frac{\partial C(x,v)}{\partial v}}{}.
 }
 
 \section{Methods}{
@@ -47,46 +47,46 @@ copula with respect to the second argument.
 
   \item{\code{signature(copula = "indepCopula")}}{
     The \eqn{h} function of the independence copula.
-    \deqn{h(x, v) = x}}
+    \deqn{h(x, v) = x}{}}
 
   \item{\code{signature(copula = "normalCopula")}}{
     The \eqn{h} function of the normal copula. 
     \deqn{h(x, v; \rho) = 
       \Phi \left( \frac{\Phi^{-1}(x) - \rho\ \Phi^{-1}(v)}
-                       {\sqrt{1-\rho^2}} \right)}}
+                       {\sqrt{1-\rho^2}} \right)}{}}
    
   \item{\code{signature(copula = "tCopula")}}{
     The \eqn{h} function of the t copula.
     \deqn{h(x, v; \rho, \nu) = 
       t_{\nu+1} \left( \frac{t^{-1}_{\nu}(x) - \rho\ t^{-1}_{\nu}(v)}
                             {\sqrt{\frac{(\nu+(t^{-1}_{\nu}(v))^2)(1-\rho^2)}
-                                        {\nu+1}}} \right)}}
+                                        {\nu+1}}} \right)}{}}
 
   \item{\code{signature(copula = "claytonCopula")}}{
     The \eqn{h} function of the Clayton copula.
-    \deqn{h(x, v; \theta) = v^{-\theta-1}(x^{-\theta}+v^{-\theta}-1)^{-1-1/\theta}}}
+    \deqn{h(x, v; \theta) = v^{-\theta-1}(x^{-\theta}+v^{-\theta}-1)^{-1-1/\theta}}{}}
 
   \item{\code{signature(copula = "gumbelCopula")}}{
     The \eqn{h} function of the Gumbel copula.
     \deqn{h(x, v; \theta) = C(x, v; \theta)\ \frac{1}{v}\ (-\log v)^{\theta-1}
-                            \left((-\log x)^{\theta} + (-\log v)^{\theta} \right)^{1/\theta-1}}}
+                            \left((-\log x)^{\theta} + (-\log v)^{\theta} \right)^{1/\theta-1}}{}}
 
   \item{\code{signature(copula = "fgmCopula")}}{
     The \eqn{h} function of the Farlie-Gumbel-Morgenstern copula.
     \deqn{h(x, v; \theta) =
-      (1 + \theta \ (-1 + 2v) \ (-1 + x)) \ x}}
+      (1 + \theta \ (-1 + 2v) \ (-1 + x)) \ x}{}}
 
   \item{\code{signature(copula = "frankCopula")}}{
     The \eqn{h} function of the Frank copula.
     \deqn{h(x, v; \theta) = 
       \frac{e^{-\theta v}}
-           {\frac{1 - e^{-\theta}}{1 - e^{-\theta x}} + e^{-\theta v} - 1}}}
+           {\frac{1 - e^{-\theta}}{1 - e^{-\theta x}} + e^{-\theta v} - 1}}{}}
 
   \item{\code{signature(copula = "galambosCopula")}}{
     The \eqn{h} function of the Galambos copula.
     \deqn{h(x, v; \theta) = 
       \frac{C(x, v; \theta)}{v} 
-      \left( 1 - \left[ 1 + \left(\frac{-\log v}{-\log x}\right)^{\theta} \right]^{-1-1/\theta} \right)}}
+      \left( 1 - \left[ 1 + \left(\frac{-\log v}{-\log x}\right)^{\theta} \right]^{-1-1/\theta} \right)}{}}
 }
 }
 

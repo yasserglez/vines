@@ -7,7 +7,7 @@
 \title{Class for Regular Vines}
 
 \description{
-Extends the \code{\linkS4class{Vine}} class to represent the Regular vines.
+Extends the \code{\linkS4class{Vine}} class to represent regular vines.
 }
 
 \section{Slots}{

@@ -40,7 +40,7 @@ in the pair-copula constructions or evaluated numerically.
 
   \item{\code{signature(copula = "indepCopula")}}{
     The \eqn{h^{-1}} function of the Independence copula.
-    \deqn{h^{-1}(u, v) = u}}
+    \deqn{h^{-1}(u, v) = u}{}}
 
   \item{\code{signature(copula = "normalCopula")}}{
     The \eqn{h^{-1}} function of the normal copula.
@@ -53,19 +53,19 @@ in the pair-copula constructions or evaluated numerically.
       t_{\nu} \left( t^{-1}_{\nu+1}(u)\
                      \sqrt{\frac{(\nu+(t^{-1}_{\nu}(v))^2)(1-\rho^2)}{\nu+1}} +
                      \rho\ t^{-1}_{\nu}(v)
-              \right)}}
+              \right)}{}}
 
   \item{\code{signature(copula = "claytonCopula")}}{
     The \eqn{h^{-1}} function of the Clayton copula.
     \deqn{h^{-1}(u, v; \theta) = 
       \left( \left( u\ v^{\theta+1}\right)^{-\frac{\theta}{\theta+1}} + 
-                    1 - v^{-\theta} \right)^{-1/\theta}}}  
+                    1 - v^{-\theta} \right)^{-1/\theta}}{}}  
 
   \item{\code{signature(copula = "frankCopula")}}{
     The \eqn{h^{-1}} function of the Frank copula.
     \deqn{h^{-1}(u, v; \theta) = 
       -\log \left( 1 - \frac{1-e^{-\theta}}
-                            {(u^{-1} - 1) e^{-\theta v} + 1} \right) / \theta}}
+                            {(u^{-1} - 1) e^{-\theta v} + 1} \right) / \theta}{}}
 }
 }
 

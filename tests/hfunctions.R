@@ -1,11 +1,8 @@
-# Tests for the h functions.
-
 library(vines)
 
 N <- 10 # Number of values of each variable.
 P <- 5 # Number of values of each parameter.
 T <- 0.01 # Tolerance checking for equality.
-
 
 X <- seq(from = 0.25, to = 0.75, length = N)
 V <- seq(from = 0.25, to = 0.75, length = N)
@@ -68,25 +65,25 @@ for (copula in copulas) {
     # Check h(0, v) == 0.
     u <- h(copula, rep(0, N), V)
     stopifnot(isTRUE(all.equal(u, rep(0, N), T)))
-    
+
     # Check h(1, v) == 1.
     u <- h(copula, rep(1, N), V)
     stopifnot(isTRUE(all.equal(u, rep(1, N), T)))
-    
+
     # Check for finite return values in [0,1].
     u <- h(copula, XV[ , 1], XV[ , 2])
     stopifnot(all(is.finite(u)))
     stopifnot(all(u >= 0 & u <= 1))
-    
+
     # Check for finite return values in [0,1].
     x <- hinverse(copula, u, XV[ , 2])
     stopifnot(all(is.finite(x)))
     stopifnot(all(x >= 0 & x <= 1))
-    
+
     # Check hinverse(0, v) == 0.
     x <- hinverse(copula, rep(0, N), V)
     stopifnot(isTRUE(all.equal(x, rep(0, N), T)))
-    
+
     # Check hinverse(1, v) == 1.
     x <- hinverse(copula, rep(1, N), V)
     stopifnot(isTRUE(all.equal(x, rep(1, N), T)))

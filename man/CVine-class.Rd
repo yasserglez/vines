@@ -18,7 +18,7 @@ See \code{\linkS4class{RVine}} for information about the inherited slots.
 \section{Methods}{
 \describe{
    \item{show}{\code{signature(object = "CVine")}: 
-     Print a text representation of the C-vine.}
+     Print a textual representation of the C-vine.}
 }
 }
 
