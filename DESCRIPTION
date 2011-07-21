@@ -4,9 +4,8 @@ Package: vines
 Title: Multivariate Dependence Modeling with Vines
 Version: 1.0.2
 Date: 2011-07-19
-Author: Yasser González-Fernández <ygf@icmf.inf.cu> and
- Marta Soto <mrosa@icmf.inf.cu>
-Maintainer: Yasser González-Fernández <ygf@icmf.inf.cu>
+Author: Yasser González-Fernández <ygf@icimaf.cu> and Marta Soto <mrosa@icimaf.cu>
+Maintainer: Yasser González-Fernández <ygf@icimaf.cu>
 Description: Vines are graphical models for pair-copula constructions that
  allow building high-dimensional distributions using bivariate copulas and
  marginal density functions. This package contains S4 classes for vines
