@@ -12,7 +12,7 @@ copulas <- c(
         lapply(seq(from = -1, to = 1, length = P), 
                 function (rho) normalCopula(rho)),
         apply(merge(seq(from = -1, to = 1, length = P),
-                        seq(from = 1, to = 30, length = P)), 1,
+                        as.integer(seq(from = 1, to = 30, length = P))), 1,
                 function (p) tCopula(p[1], df = p[2], df.fixed = TRUE)),
         lapply(seq(from = .Machine$double.eps, to = 3, length = P),
                 function (theta) claytonCopula(theta)),

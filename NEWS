@@ -1,3 +1,9 @@
+Changes in version 1.0.4:
+
+  * Fixed an error in the script that tests the implementation of the
+    h-functions related with the evaluation of the pcopula function
+    of the t-copula for non-integer degrees of freedom.
+
 Changes in version 1.0.3:
 
   * The file with the full text of the GNU GPL was removed from the package.
