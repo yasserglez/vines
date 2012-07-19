@@ -15,6 +15,7 @@ Description: Vines are graphical models for pair-copula constructions that
 	simulation.
 License: GPL (>= 3)
 LazyLoad: yes
+URL: https://github.com/ygf/vines
 Depends: methods, copula, ADGofTest, cubature, TSP
 Collate: h.R hinverse.R Vine.R show.R dimnames.R vineParameters.R vineIter.R
 	vineFit.R vineFitML.R vinePIT.R vineGoF.R vineOrder.R dvine.R pvine.R
