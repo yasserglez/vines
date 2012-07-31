@@ -1,3 +1,11 @@
+Changes in version 1.0.5:
+
+  * Fixed an error because of the message slot of copula objects
+    being renamed to fullname.
+  * Changes to match the new names and signatures of {d,p,r}Copula.
+  * Added the URL of the github repository of the package.
+  * Fixed errors in the inst/CITATION file.
+
 Changes in version 1.0.4:
 
   * Fixed an error in the script that tests the implementation of the
