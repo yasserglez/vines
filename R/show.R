@@ -26,7 +26,7 @@ toStringCopula <- function (x, ...) {
     } else {
         parameters <- ""
     }
-    paste(sub('[[:space:]]+$', '', x@message), parameters, sep = "")
+    paste(sub('[[:space:]]+$', '', x@fullname), parameters, sep = "")
 }
 
 setMethod("toString", "copula", toStringCopula)
