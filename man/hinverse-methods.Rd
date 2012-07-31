@@ -11,7 +11,7 @@
 \alias{hinverse,claytonCopula-method}
 \alias{hinverse,frankCopula-method}
 
-\title{Methods for the Inverse of the h functions}
+\title{Methods for the Inverse of the h-functions}
 
 \usage{
 hinverse(copula, u, v)
@@ -35,8 +35,9 @@ in the pair-copula constructions or evaluated numerically.
 \describe{
   \item{\code{signature(copula = "copula")}}{
     Default definition of the \eqn{h^{-1}} function for a bivariate copula. 
-    This method is used if there is not a definition specific for a given copula. 
-    The inverse is calculated numerically using the \code{\link{uniroot}} function.}
+    This method is used if there is not a definition specific for a given 
+    copula. The inverse is calculated numerically using the \code{\link{uniroot}} 
+    function.}
 
   \item{\code{signature(copula = "indepCopula")}}{
     The \eqn{h^{-1}} function of the Independence copula.

@@ -14,7 +14,7 @@
 \alias{h,frankCopula-method}
 \alias{h,galambosCopula-method}
 
-\title{Methods for the h functions}
+\title{Methods for the h-functions}
 
 \usage{
 h(copula, x, v)
