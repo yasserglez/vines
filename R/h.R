@@ -27,7 +27,7 @@ hCopula <- function (copula, x, v) {
     assign("copula", copula, env)
     assign("x", pmax(pmin(x, 1 - eps), eps), env)
     assign("v", pmax(pmin(v, 1 - eps), eps), env)
-    d <- numericDeriv(quote(pcopula(copula, cbind(x, v))), "v", env)
+    d <- numericDeriv(quote(pCopula(cbind(x, v), copula)), "v", env)
     r <- diag(attr(d, "gradient"))
     pmax(pmin(r, 1 - eps), eps)
 }

@@ -27,7 +27,7 @@ dCVineDVine <- function (vine, u) {
         rep(1, nrow(u)) # The product of the uniform marginal densities.
     } else {
         evalCopula <- function (vine, j, i, x, y) {
-            dcopula(vine@copulas[[j, i]], cbind(x, y))
+            dCopula(cbind(x, y), vine@copulas[[j, i]])
         }
         iterResult <- vineIter(vine, u, evalCopula = evalCopula)
         apply(matrix(unlist(iterResult$evals), nrow(u)), 1, prod)

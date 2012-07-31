@@ -52,7 +52,7 @@ the test to be applied for this purpose.
 \examples{
 copula <- normalCopula(c(-0.25, -0.21, 0.34, 0.51, -0.07, -0.18), 
                        dispstr = "un", dim = 4)
-data <- rcopula(copula, 100)
+data <- rCopula(100, copula)
 
 selectCopula <- function (vine, j, i, x, y) {
     data <- cbind(x, y)
