@@ -1,3 +1,10 @@
+Changes in version 1.0.6:
+
+  * Reduced the running time of the tests.
+  * Only integer values of the degrees of freedom parameter of the t-copula
+    are now used in the test scripts, in order to avoid errors related with
+    the mvtnorm package only accepting integer values.
+
 Changes in version 1.0.5:
 
   * Fixed an error because of the message slot of copula objects
