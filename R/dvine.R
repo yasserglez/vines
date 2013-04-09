@@ -1,5 +1,5 @@
 # vines: Multivariate Dependence Modeling with Vines
-# Copyright (C) 2010-2012 Yasser González Fernández <ygonzalezfernandez@gmail.com>
+# Copyright (C) 2010-2012 Yasser Gonzalez-Fernandez <ygonzalezfernandez@gmail.com>
 # Copyright (C) 2010-2012 Marta Rosa Soto Ortiz <mrosa@icimaf.cu>
 #
 # This program is free software: you can redistribute it and/or modify it under
