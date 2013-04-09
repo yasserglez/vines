@@ -22,15 +22,15 @@ setGeneric("dvine",
 
 dCVineDVine <- function (vine, u) {
     if (is.vector(u)) u <- matrix(u, nrow = 1)
-    
+
     if (vine@trees == 0) {
         rep(1, nrow(u)) # The product of the uniform marginal densities.
     } else {
         evalCopula <- function (vine, j, i, x, y) {
-            dCopula(cbind(x, y), vine@copulas[[j, i]])
+            dCopula(cbind(x, y), vine@copulas[[j, i]], log = TRUE)
         }
         iterResult <- vineIter(vine, u, evalCopula = evalCopula)
-        apply(matrix(unlist(iterResult$evals), nrow(u)), 1, prod)
+        exp(apply(matrix(unlist(iterResult$evals), nrow(u)), 1, sum))
     }
 }
 
