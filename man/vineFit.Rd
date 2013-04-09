@@ -106,7 +106,7 @@ Pair-copula constructions of multiple dependence.
 
 Brechmann, E. C. (2010) Truncated and simplified regular vines 
 and their applications. Diploma thesis. \emph{Technische 
-Universität München}.
+Universitaet Muenchen}.
 
 Brechmann, E. C. and Czado, C. and Aas, K. (2010) Truncated regular 
 vines in high dimensions with application to financial data. 

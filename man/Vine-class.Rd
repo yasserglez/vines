@@ -18,18 +18,18 @@ It is a virtual class, no objects may be created from it.
 \describe{
   \item{\code{type}:}{Object of class \code{"character"}. Descriptive name of 
     the type of vine: Canonical vine or D-vine.}
-    
+
   \item{\code{dimension}:}{Object of class \code{"numeric"}. Dimension of the vine.}
-  
+
   \item{\code{dimensionNames}:}{Object of class \code{"character"}. Names of the 
     variables of the vine. It is either an empty character vector or a vector
     with one element for each variable of the vine.}
-    
+
   \item{\code{copulas}:}{Object of class \code{"matrix"}. It contains the 
     \code{\linkS4class{copula}} objects for each copula in the pair-copula
     decomposition. The indexes of the matrix follow the notation used for the 
     subscripts of \eqn{\Theta}{theta} in (Aas et al., 2009).}
-    
+
   \item{\code{trees}:}{Object of class \code{"numeric"}. Number of dependence 
     trees of the vine. It should be an integer between \code{0} and 
     \code{dimension - 1}, including both endpoints. Functions acting on

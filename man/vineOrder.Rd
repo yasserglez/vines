@@ -52,12 +52,12 @@ The following are additional parameters for this method.
     \code{"kendall"} and supported values are:
     \describe{
       \item{\code{"kendall"}}{Absolute value of Kendall's \eqn{\tau}{tau}.}
-      
+
       \item{\code{"spearman"}}{Absolute value of Spearman's \eqn{\rho}{rho}.}
-      
+
       \item{\code{"pearson"}}{Absolute value of Pearson's product moment
         correlation coefficient.}
-        
+
       \item{\code{"df"}}{Smaller degrees of freedom of a bivariate t copula.}
     }}
 }
@@ -74,5 +74,5 @@ vineOrder("DVine", data, method = "greedy",
 \references{
 Brechmann, E. C. (2010) Truncated and simplified regular vines 
 and their applications. Diploma thesis. \emph{Technische 
-Universität München}.
+Universitaet Muenchen}.
 }

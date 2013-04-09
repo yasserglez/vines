@@ -16,10 +16,10 @@ Objects of this class (or subclasses) are created by calling the
 \section{Slots}{
 \describe{
   \item{\code{vine}:}{Object of class \code{\linkS4class{Vine}}. Fitted vine.}
-  
+
   \item{\code{observations}:}{Object of class \code{numeric}. Number of 
     observations in the sample.}
-    
+
   \item{\code{method}:}{Object of class \code{character}. Inference method.}
 }
 }

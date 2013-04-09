@@ -15,12 +15,12 @@ vineGoF(vine, data, method = "PIT", ...)
 
 \arguments{
   \item{vine}{A \code{\linkS4class{Vine}} object.}
-  
+
   \item{data}{Data matrix of pseudo-observations.}
-  
+
   \item{method}{Goodness-of-fit method. Supported values: 
     \code{"PIT"} (Probability Integral Transform).}
-    
+
   \item{...}{Additional arguments for the goodness-of-fit method.}
 }
 
@@ -33,15 +33,15 @@ contains the value of the statistic and \code{pvalue} the p-value.
 \details{
 The \code{"PIT"} (Probability Integral Transform) method uses the 
 \code{\link{vinePIT}} function to transform the data into variables which 
-are independent and Uniform \eqn{(0,1)}{(0,1)} and then use a hypothesis 
-test to verify whether the resulting variables are independent and Uniform 
-\eqn{(0,1)}{(0,1)}. The additional parameter \code{statistic} specifies 
+are independent and Uniform(0,1) and then use a hypothesis 
+test to verify whether the resulting variables are independent and 
+Uniform(0,1). The additional parameter \code{statistic} specifies 
 the test to be applied for this purpose.
 
 \describe{
   \item{\code{statistic}}{Statistic used to verify if the transformed variables
-    are independent and Uniform in \eqn{(0,1)}{(0,1)}. The default value is 
-    \code{"Breymann"} and supported methods are:
+    are independent and Uniform(0,1). The default value is \code{"Breymann"} 
+    and supported methods are:
     \describe{
       \item{\code{"Breymann"}}{Test proposed in the Section 7.1 of 
       (Aas et al., 2009). See (Breymann et al., 2003) for more information.}

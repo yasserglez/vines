@@ -28,7 +28,7 @@ hinverse(copula, u, v)
 \description{
 The \eqn{h^{-1}} function represents the inverse of the \eqn{h} function with 
 respect to its first argument. It should be defined for every copula used 
-in the pair-copula constructions or evaluated numerically.
+in a pair-copula construction or evaluated numerically.
 }
 
 \section{Methods}{

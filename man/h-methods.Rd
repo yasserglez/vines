@@ -29,12 +29,11 @@ h(copula, x, v)
 }
 
 \description{
-The \eqn{h} function represents the conditional distribution of \code{x} given 
-\code{v} in terms of the copula when \code{x} and \code{v} are Uniform. It
-should be defined for every copula used in pair-copula constructions.  
-It is defined as the partial derivative of the distribution function 
-of the copula with respect to the second argument
-\eqn{h(x,v) = F(x|v) = \frac{\partial C(x,v)}{\partial v}}{}.
+The \eqn{h} function represents the conditional distribution function of a 
+bivariate copula and it should be defined for every copula used in
+a pair-copula construction. It is defined as the partial derivative of the 
+distribution function of the copula with respect to the second argument
+\eqn{h(x,v) = F(x|v) = \partial C(x,v) / \partial v}.
 }
 
 \section{Methods}{
