@@ -1,3 +1,8 @@
+Changes in version 1.0.7:
+
+  * Improved the numerical stability of the evaluation of the vine PDF.
+  * Minor corrections in the documentation.
+
 Changes in version 1.0.6:
 
   * Reduced the running time of the tests.
