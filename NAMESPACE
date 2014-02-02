@@ -1,10 +1,10 @@
 useDynLib(vines, .registration = TRUE, .fixes = "C_")
 
 import(methods)
-import(copula)
-import(ADGofTest)
-import(cubature)
-import(TSP)
+importFrom(copula, dCopula, pCopula)
+importFrom(ADGofTest, ad.test)
+importFrom(cubature, adaptIntegrate)
+importFrom(TSP, as.TSP, insert_dummy, solve_TSP, cut_tour)
 
 
 exportClasses(Vine, RVine, CVine, DVine)
