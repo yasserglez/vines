@@ -1,6 +1,6 @@
 useDynLib(vines, .registration = TRUE, .fixes = "C_")
 
-
+import(methods)
 import(copula)
 import(ADGofTest)
 import(cubature)
