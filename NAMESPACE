@@ -1,7 +1,7 @@
 useDynLib(vines, .registration = TRUE, .fixes = "C_")
 
 import(methods)
-importFrom(copula, dCopula, pCopula)
+importFrom(copula, dCopula, pCopula, loglikCopula)
 importFrom(ADGofTest, ad.test)
 importFrom(cubature, adaptIntegrate)
 importFrom(TSP, as.TSP, insert_dummy, solve_TSP, cut_tour)
