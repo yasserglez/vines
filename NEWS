@@ -1,3 +1,7 @@
+Changes in version 1.0.9 (February 2, 2014):
+
+  * Fixed incorrect call to all.equal in tests/hfunctions.R.
+
 Changes in version 1.0.8 (May 14, 2013):
 
   * Fixed a missing documentation warning.
