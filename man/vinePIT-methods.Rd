@@ -9,10 +9,10 @@
 \title{Vine Probability Integral Transform Methods}
 
 \description{
-Probability Integral Transform (PIT) of (Rosenblatt, 1952) for vine models. 
+Probability integral transform (PIT) of (Rosenblatt, 1952) for vine models. 
 The PIT converts a set of dependent variables into a new set of variables 
-which are independent and Uniform(0,1) under the hypothesis that the data 
-follows a given multivariate distribution.
+which are independent and uniformly distributed in \eqn{(0,1)} under the 
+hypothesis that the data follows a given multivariate distribution.
 }
 
 \usage{

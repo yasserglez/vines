@@ -28,15 +28,15 @@ hinverse(copula, u, v)
 \description{
 The \eqn{h^{-1}} function represents the inverse of the \eqn{h} function with 
 respect to its first argument. It should be defined for every copula used 
-in a pair-copula construction or evaluated numerically.
+in a pair-copula construction (or it will be evaluated numerically).
 }
 
 \section{Methods}{
 \describe{
   \item{\code{signature(copula = "copula")}}{
     Default definition of the \eqn{h^{-1}} function for a bivariate copula. 
-    This method is used if there is not a definition specific for a given 
-    copula. The inverse is calculated numerically using the \code{\link{uniroot}} 
+    This method is used if no particular definition is given for a copula.
+    The inverse is calculated numerically using the \code{\link{uniroot}} 
     function.}
 
   \item{\code{signature(copula = "indepCopula")}}{

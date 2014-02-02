@@ -32,7 +32,7 @@ h(copula, x, v)
 The \eqn{h} function represents the conditional distribution function of a 
 bivariate copula and it should be defined for every copula used in
 a pair-copula construction. It is defined as the partial derivative of the 
-distribution function of the copula with respect to the second argument
+distribution function of the copula w.r.t. the second argument
 \eqn{h(x,v) = F(x|v) = \partial C(x,v) / \partial v}.
 }
 
@@ -40,7 +40,7 @@ distribution function of the copula with respect to the second argument
 \describe{
   \item{\code{signature(copula = "copula")}}{
     Default definition of the \eqn{h} function for a bivariate copula. 
-    This method is used if there is not a definition specific for a given copula. 
+    This method is used if no particular definition is given for a copula.
     The partial derivative is calculated numerically using the 
     \code{\link{numericDeriv}} function.}
 

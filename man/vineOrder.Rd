@@ -39,11 +39,11 @@ The \code{"random"} method returns a random permutation of the variables.
 
 The \code{"greedy"} method returns an order of the variables that intends to
 capture as much dependence as possible in the first tree of the vine. The
-method find the order of the variables that defines a tree that maximizes 
+method finds the order of the variables that defines a tree that maximizes 
 a given dependence measure used as edge weights. For C-vines, it is determined 
 iteratively checking each variable as root node. For D-vines, it is equivalent 
-to solve the \emph{Traveling Salesman Problem} (TSP), see (Brechmann, 2010) 
-for details. The TSP is solved using the \emph{Cheapest Insertion Algorithm} 
+to solve the traveling salesman problem (TSP), see (Brechmann, 2010) 
+for details. The TSP is solved using the cheapest insertion algorithm
 implemented by the \code{\link{solve_TSP}} function of the \pkg{TSP} package.
 The following are additional parameters for this method.
 
