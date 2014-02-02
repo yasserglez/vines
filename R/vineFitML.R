@@ -16,14 +16,14 @@
 # this program. If not, see <http://www.gnu.org/licenses/>.
 
 setClass("vineFitML",
-        contains = "vineFit",
-        representation = representation(
-                optimMethod = "character",
-                optimConv = "numeric",
-                startParams = "numeric",
-                finalParams = "numeric"),
-        prototype = prototype(
-                method = "ml"))
+    contains = "vineFit",
+    representation = representation(
+        optimMethod = "character",
+        optimConv = "numeric",
+        startParams = "numeric",
+        finalParams = "numeric"),
+    prototype = prototype(
+            method = "ml"))
 
 
 showVineFitML <- function (object) {

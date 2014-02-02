@@ -16,8 +16,8 @@
 # this program. If not, see <http://www.gnu.org/licenses/>.
 
 setGeneric("rvine",
-        function (vine, n) standardGeneric("rvine"),
-        signature = "vine")
+    function (vine, n) standardGeneric("rvine"),
+    signature = "vine")
 
 
 rCVine <- function (vine, n) {

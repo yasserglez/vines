@@ -16,10 +16,10 @@
 # this program. If not, see <http://www.gnu.org/licenses/>.
 
 setClass("vineGoF",
-        representation = representation(
-                method = "character",
-                pvalue = "numeric",
-                statistic = "numeric"))
+    representation = representation(
+        method = "character",
+        pvalue = "numeric",
+        statistic = "numeric"))
 
 
 showGofVine <- function (object) {

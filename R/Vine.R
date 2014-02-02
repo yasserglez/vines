@@ -16,30 +16,30 @@
 # this program. If not, see <http://www.gnu.org/licenses/>.
 
 setClass("Vine",
-        contains = "VIRTUAL",
-        representation = representation(
-                type = "character",
-                dimension = "numeric",
-                dimensionNames = "character",
-                copulas = "matrix",
-                trees = "numeric"),
-        prototype = prototype(
-                type = "Vine"))
+    contains = "VIRTUAL",
+    representation = representation(
+        type = "character",
+        dimension = "numeric",
+        dimensionNames = "character",
+        copulas = "matrix",
+        trees = "numeric"),
+    prototype = prototype(
+        type = "Vine"))
 
 setClass("RVine",
-        contains = "Vine",
-        prototype = prototype(
-                type = "Regular vine"))
+    contains = "Vine",
+    prototype = prototype(
+        type = "Regular vine"))
 
 setClass("CVine", 
-        contains = "RVine",
-        prototype = prototype(
-                type = "Canonical vine"))
+    contains = "RVine",
+    prototype = prototype(
+        type = "Canonical vine"))
 
 setClass("DVine",
-        contain = "RVine",
-        prototype = prototype(
-                type = "D-vine"))
+    contain = "RVine",
+    prototype = prototype(
+        type = "D-vine"))
 
 
 Vine <- function (type, dimension = 2, trees = dimension - 1,

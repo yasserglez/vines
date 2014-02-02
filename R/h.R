@@ -16,13 +16,13 @@
 # this program. If not, see <http://www.gnu.org/licenses/>.
 
 setGeneric("h", 
-        function (copula, x, v) standardGeneric("h"),
-        signature = "copula")
+    function (copula, x, v) standardGeneric("h"),
+    signature = "copula")
 
 
 hCopula <- function (copula, x, v) {
     eps <- .Machine$double.eps^0.5
-    
+
     env <- new.env()
     assign("copula", copula, env)
     assign("x", pmax(pmin(x, 1 - eps), eps), env)

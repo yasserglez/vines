@@ -16,10 +16,10 @@
 # this program. If not, see <http://www.gnu.org/licenses/>.
 
 setClass("vineFit",
-        representation = representation(
-                vine = "Vine",
-                observations = "numeric",
-                method = "character"))
+    representation = representation(
+        vine = "Vine",
+        observations = "numeric",
+        method = "character"))
 
 
 showVineFit <- function (object) {

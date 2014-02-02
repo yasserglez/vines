@@ -16,8 +16,8 @@
 # this program. If not, see <http://www.gnu.org/licenses/>.
 
 setGeneric("hinverse", 
-        function (copula, u, v) standardGeneric("hinverse"),
-        signature = "copula")
+    function (copula, u, v) standardGeneric("hinverse"),
+    signature = "copula")
 
 
 hinverseCopula <- function (copula, u, v) {

@@ -16,10 +16,10 @@
 # this program. If not, see <http://www.gnu.org/licenses/>.
 
 setGeneric("vineIter",
-        function (vine, data, evalCopula = NULL,
-                  selectCopula = NULL, truncVine = NULL)
-            standardGeneric("vineIter"),
-        signature = "vine")
+    function (vine, data, evalCopula = NULL,
+        selectCopula = NULL, truncVine = NULL)
+    standardGeneric("vineIter"),
+    signature = "vine")
 
 
 iterCVine <- function (vine, data, evalCopula, selectCopula, truncVine) {

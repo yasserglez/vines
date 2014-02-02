@@ -16,8 +16,8 @@
 # this program. If not, see <http://www.gnu.org/licenses/>.
 
 setGeneric("pvine",
-        function (vine, u) standardGeneric("pvine"),
-        signature = "vine")
+    function (vine, u) standardGeneric("pvine"),
+    signature = "vine")
 
 
 pCVineDVine <- function (vine, u) {

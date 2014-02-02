@@ -16,8 +16,8 @@
 # this program. If not, see <http://www.gnu.org/licenses/>.
 
 setGeneric("vinePIT",
-        function (vine, u) standardGeneric("vinePIT"),
-        signature = "vine")
+    function (vine, u) standardGeneric("vinePIT"),
+    signature = "vine")
 
 
 CVinePIT <- function (vine, u) {
@@ -50,22 +50,22 @@ setMethod("vinePIT", "CVine", CVinePIT)
 
 DVinePIT <- function (vine, u) {
     if (is.vector(u)) u <- matrix(u, nrow = 1)
-    
+
     if (vine@trees == 0) {
         return(u)
     }  
-    
+
     T <- nrow(u)
     d <- vine@dimension
     v <- matrix(NA, d, max(2 * d - 4, d))
     z <- matrix(NA, T, d)
-    
+
     z[ , 1] <- u[ , 1]
     z[ , 2] <- h(vine@copulas[[1, 1]], u[ , 2], u[ , 1])
-    
+
     # Stop if there are only 2 variables.
     if (d == 2) return(z)  
-    
+
     for (t in seq(length = T)) {
         v[2, 1] <- u[t, 2]
         if (vine@trees >= 2) v[2, 2] <- h(vine@copulas[[1, 1]], u[t, 1], u[t, 2])
@@ -91,7 +91,7 @@ DVinePIT <- function (vine, u) {
             if (vine@trees >= i) v[i, 2*i-2] <- h(vine@copulas[[i-1, 1]], v[i-1, 2*i-4], v[i, 2*i-3])
         }
     }
-    
+
     z
 }
 
