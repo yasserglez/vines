@@ -56,7 +56,7 @@ data <- rCopula(100, copula)
 
 selectCopula <- function (vine, j, i, x, y) {
     data <- cbind(x, y)
-    fit <- fitCopula(normalCopula(0), data, method = "itau")
+    fit <- fitCopula(normalCopula(), data, method = "itau")
     fit@copula
 }
 normalCVine <- vineFit("CVine", data, method = "ml",

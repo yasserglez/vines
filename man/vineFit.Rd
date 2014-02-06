@@ -81,7 +81,7 @@ colnames(data) <- c("A", "B", "C", "D", "E")
 
 selectCopula <- function (vine, j, i, x, y) {
     data <- cbind(x, y)
-    fit <- fitCopula(normalCopula(0), data, method = "itau")
+    fit <- fitCopula(normalCopula(), data, method = "itau")
     fit@copula
 }
 fit <- vineFit("DVine", data, method = "ml", 
