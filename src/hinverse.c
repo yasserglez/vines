@@ -152,7 +152,7 @@ SEXP hinverseFrankCopula(SEXP Theta, SEXP U, SEXP V) {
     eps = R_pow(DOUBLE_EPS, 0.15);
     theta = asReal(Theta);
 
-    if (abs(theta) <= eps) {
+    if (fabs(theta) <= eps) {
         return U;
     }
 

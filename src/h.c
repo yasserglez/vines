@@ -265,7 +265,7 @@ SEXP hFrankCopula(SEXP Theta, SEXP X, SEXP V) {
     eps = R_pow(DOUBLE_EPS, 0.5);
     theta = asReal(Theta);
 
-    if (abs(theta) <= eps) {
+    if (fabs(theta) <= eps) {
         return X;
     }
 
