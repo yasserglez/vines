@@ -1,3 +1,9 @@
+Changes in version 1.0.10 (February 6, 2014):
+
+  * Added missing loglikCopula to importFrom(copula, ...) in NAMESPACE.
+  * Updated the use of the Archimedean copula functions from the copula package 
+    (new use.indepC argument).
+
 Changes in version 1.0.9 (February 2, 2014):
 
   * Fixed incorrect call to all.equal in tests/hfunctions.R.
