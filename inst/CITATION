@@ -4,14 +4,16 @@ desc <- packageDescription("vines")
 year <- sub("^([[:digit:]]{4})-[[:digit:]]{2}-[[:digit:]]{2}$", "\\1", desc$Date)
 version <- desc$Version
 
-citEntry(entry = "manual",
-	title = "vines: Multivariate Dependence Modeling with Vines",
+citEntry(entry = "Manual",
+	title = "{vines}: Multivariate Dependence Modeling with Vines",
 	author = personList(person("Yasser", "Gonzalez-Fernandez"), person("Marta", "Soto")),
 	year = year,
 	note = paste("{R} package version", version),
 	url = "http://CRAN.R-project.org/package=vines",
-	textVersion = paste("Yasser Gonzalez-Fernandez and Marta Soto. (", year, ") ",
-        "vines: Multivariate Dependence Modeling with Vines. ",
+
+	textVersion = 
+	paste("Yasser Gonzalez-Fernandez and Marta Soto. (", year, ") ",
+	    "vines: Multivariate Dependence Modeling with Vines. ",
         paste("R package version", version), 
         ". URL http://CRAN.R-project.org/package=vines", 
         ".", sep = ""))
