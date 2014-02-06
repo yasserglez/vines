@@ -1,3 +1,8 @@
+Changes in version X.Y.Z ():
+
+  * Bug fix: abs(theta) was being used instead of fabs(theta) in the C code 
+    of the h-functions.  Thanks to Prof. Brian Ripley.  
+
 Changes in version 1.0.10 (February 6, 2014):
 
   * Added missing loglikCopula to importFrom(copula, ...) in NAMESPACE.
