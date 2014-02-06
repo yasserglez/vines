@@ -15,15 +15,15 @@ copulas <- c(
             seq(from = 1, to = 30, length = np)), 1,
         function (p) tCopula(p[1], df = as.integer(p[2]), df.fixed = TRUE)),
     lapply(seq(from = .Machine$double.eps^0.5, to = 3, length = np),
-        function (theta) claytonCopula(theta, use.indepC = FALSE)),
+        function (theta) claytonCopula(theta, use.indepC = "FALSE")),
     lapply(seq(from = 1, to = 5, length = np),
-        function (theta) gumbelCopula(theta, use.indepC = FALSE)),
+        function (theta) gumbelCopula(theta, use.indepC = "FALSE")),
     lapply(seq(from = -1, to = 1, length = np), 
         function (theta) fgmCopula(theta)),
     lapply(seq(from = 1, to = 5, length = np),
         function (theta) galambosCopula(theta)),       
     lapply(seq(from = -10, to = 10, length = np),
-        function (theta) frankCopula(theta, use.indepC = FALSE)),
+        function (theta) frankCopula(theta, use.indepC = "FALSE")),
     list(indepCopula()))
 
 for (copula in copulas) {
@@ -50,15 +50,15 @@ copulas <- c(
             seq(from = 1, to = 30, length = np)), 1,
         function (p) tCopula(p[1], df = as.integer(p[2]), df.fixed = TRUE)),
     lapply(seq(from = .Machine$double.eps^0.5, to = 100, length = np),
-        function (theta) claytonCopula(theta, use.indepC = FALSE)),
+        function (theta) claytonCopula(theta, use.indepC = "FALSE")),
     lapply(seq(from = 1, to = 100, length = np),
-        function (theta) gumbelCopula(theta, use.indepC = FALSE)),
+        function (theta) gumbelCopula(theta, use.indepC = "FALSE")),
     lapply(seq(from = -1, to = 1, length = np),
         function (theta) fgmCopula(theta)),
     lapply(seq(from = 1, to = 25, length = np),
         function (theta) galambosCopula(theta)),
     lapply(seq(from = -100, to = 100, length = np),
-        function (theta) frankCopula(theta, use.indepC = FALSE)),       
+        function (theta) frankCopula(theta, use.indepC = "FALSE")),       
     list(indepCopula()))
 
 for (copula in copulas) {
