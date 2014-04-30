@@ -35,10 +35,21 @@ showVineFitML <- function (object) {
 setMethod("show", "vineFitML", showVineFitML)
 
 
+loglikCopulaWrapper <- function(param, x, copula, ...) {
+    if (is(copula, "normalCopula") || is(copula, "tCopula")) {
+        # Return a finite value for rho in {-1, 1} for numerical stability 
+        # during the vineLogLik and  vineLogLikLastTree calls.
+        eps <- .Machine$double.eps^0.5
+        param[1] <- max(min(param[1], 1 - eps), -1 + eps)
+    }
+
+    loglikCopula(param, x, copula, ...)
+}
+
 vineLogLik <- function (vine, data) {
     evalCopula <- function (vine, j, i, x, y) {
         copula <- vine@copulas[[j, i]]
-        loglikCopula(copula@parameters, cbind(x, y), copula)
+        loglikCopulaWrapper(copula@parameters, cbind(x, y), copula)
     }
     vineIterResult <- vineIter(vine, data, evalCopula = evalCopula)
     sum(unlist(vineIterResult$evals))
@@ -47,11 +58,12 @@ vineLogLik <- function (vine, data) {
 
 # Function used by the AIC and BIC truncation methods to evaluate
 # the log-likelihood of the copulas in the last tree.
+
 vineLogLikLastTree <- function (vine, data) {
     evalCopula <- function (vine, j, i, x, y) {
         if (j == vine@trees) {
             copula <- vine@copulas[[j, i]]
-            loglikCopula(copula@parameters, cbind(x, y), copula)
+            loglikCopulaWrapper(copula@parameters, cbind(x, y), copula)
         } else {
             0
         }

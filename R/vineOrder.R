@@ -33,6 +33,8 @@ vineOrderGreedy <- function (type, data, according = "kendall") {
                 y <- data[ , j]
                 copula <- tCopula(0)
                 rho <- calibKendallsTau(copula, cor(x, y, method = "kendall"))
+                eps <- .Machine$double.eps^0.5
+                rho <- max(min(rho, 1 - eps), -1 + eps)
                 L <- function (df) loglikCopula(c(rho, df), cbind(x, y), copula)
                 df <- optimize(L, c(1, 30), maximum = TRUE)$maximum
                 weights[currentRoot, j] <- df
