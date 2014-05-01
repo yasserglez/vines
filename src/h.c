@@ -37,7 +37,7 @@ SEXP hNormalCopula(SEXP Rho, SEXP X, SEXP V) {
     double eps;
     double rho;
     double *x, *v, *u;
-    double vi, ui;
+    double vi, ui, num;
     SEXP U;
 
     PROTECT(U = allocVector(REALSXP, LENGTH(X)));
@@ -48,16 +48,16 @@ SEXP hNormalCopula(SEXP Rho, SEXP X, SEXP V) {
     u = REAL(U);
 
     for (int i = 0; i < LENGTH(X); i++) {
-        if (x[i] <= eps || (rho == 1 && x[i] == v[i] && x[i] != 1)) {
+        if (x[i] <= eps || (rho >= 1 - eps && fabs(x[i] - v[i]) <= eps && x[i] < 1 - eps)) {
             u[i] = eps;
-        } else if (1 - x[i] <= eps || (rho == -1 && 1 - (x[i] + v[i]) <= eps)) {
+        } else if (1 - x[i] <= eps || (rho <= -1 + eps && x[i] + v[i] >= 1 - eps)) {
             u[i] = 1 - eps;
         } else {
-            vi = (v[i] <= eps) ? eps : ((v[i] >= 1 - eps) ? 1 - eps : v[i]);
-            ui = pnorm((qnorm(x[i], 0, 1, TRUE, FALSE) -
-                        rho*qnorm(vi, 0, 1, TRUE, FALSE)) /
-                       sqrt(1 - rho * rho), 0, 1, TRUE, FALSE);
-            u[i] = (ui <= eps) ? eps : ((ui >= 1 - eps) ? 1 - eps : ui);
+			vi = (v[i] <= eps) ? eps : ((v[i] >= 1 - eps) ? 1 - eps : v[i]);
+			num = qnorm(x[i], 0, 1, TRUE, FALSE) - rho*qnorm(vi, 0, 1, TRUE, FALSE);
+			ui = pnorm(num / sqrt(1 - rho*rho), 0, 1, TRUE, FALSE);
+			if (!isfinite(ui)) ui = (num < 0) ? 0 : 1;
+			u[i] = (ui <= eps) ? eps : ((ui >= 1 - eps) ? 1 - eps : ui);
         }
     }
 
@@ -82,9 +82,9 @@ SEXP hTCopula(SEXP Rho, SEXP Df, SEXP X, SEXP V) {
     u = REAL(U);
 
     for (int i = 0; i < LENGTH(X); i++) {
-        if (x[i] <= eps || (rho == 1 && x[i] == v[i] && x[i] != 1)) {
+        if (x[i] <= eps || (rho >= 1 - eps && fabs(x[i] - v[i]) <= eps && x[i] < 1 - eps)) {
             u[i] = eps;
-        } else if (1 - x[i] <= eps || (rho == -1 && 1 - (x[i] + v[i]) <= eps)) {
+        } else if (1 - x[i] <= eps || (rho <= -1 + eps && x[i] + v[i] >= 1 - eps)) {
             u[i] = 1 - eps;
         } else {
             vi = (v[i] <= eps) ? eps : ((v[i] >= 1 - eps) ? 1 - eps : v[i]);

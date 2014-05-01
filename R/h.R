@@ -42,7 +42,8 @@ hIndepCopula <- function (copula, x, v) {
 setMethod("h", "indepCopula", hIndepCopula)
 
 hNormalCopula <- function (copula, x, v) {
-    rho <- copula@parameters
+    eps <- .Machine$double.eps^0.5
+    rho <- max(min(copula@parameters, 1 - eps), -1 + eps)
     .Call(C_hNormalCopula, rho, x, v)
 }
 
@@ -50,7 +51,8 @@ setMethod("h", "normalCopula", hNormalCopula)
 
 
 hTCopula <- function (copula, x, v) {
-    rho <- copula@parameters
+    eps <- .Machine$double.eps^0.5
+    rho <- max(min(copula@parameters[1], 1 - eps), -1 + eps)
     df <- if (copula@df.fixed) copula@df else copula@parameters[2]
     .Call(C_hTCopula, rho, df, x, v)
 }

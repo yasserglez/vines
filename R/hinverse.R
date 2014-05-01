@@ -52,7 +52,8 @@ setMethod("hinverse", "indepCopula", hinverseIndepCopula)
 
 
 hinverseNormalCopula <- function (copula, u, v) {
-    rho <- copula@parameters
+    eps <- .Machine$double.eps^0.5
+    rho <- max(min(copula@parameters, 1 - eps), -1 + eps)
     .Call(C_hinverseNormalCopula, rho, u, v)
 }
 
@@ -60,7 +61,8 @@ setMethod("hinverse", "normalCopula", hinverseNormalCopula)
 
 
 hinverseTCopula <- function (copula, u, v) {
-    rho <- copula@parameters
+    eps <- .Machine$double.eps^0.5
+    rho <- max(min(copula@parameters[1], 1 - eps), -1 + eps)
     df <- if (copula@df.fixed) copula@df else copula@parameters[2]
     .Call(C_hinverseTCopula, rho, df, u, v)
 }
