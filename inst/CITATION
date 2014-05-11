@@ -10,10 +10,9 @@ citEntry(entry = "Manual",
 	year = year,
 	note = paste("{R} package version", version),
 	url = "http://CRAN.R-project.org/package=vines",
-
 	textVersion = 
-	paste("Yasser Gonzalez-Fernandez and Marta Soto. (", year, ") ",
-	    "vines: Multivariate Dependence Modeling with Vines. ",
-        paste("R package version", version), 
-        ". URL http://CRAN.R-project.org/package=vines", 
-        ".", sep = ""))
+		paste("Yasser Gonzalez-Fernandez and Marta Soto. (", year, ") ",
+		    "vines: Multivariate Dependence Modeling with Vines. ",
+	        paste("R package version", version), 
+	        ". URL http://CRAN.R-project.org/package=vines", ".", 
+	        sep = ""))
