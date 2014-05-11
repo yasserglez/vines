@@ -1,3 +1,8 @@
+Changes in version 1.1.0 (May 10, 2014):
+
+  * Improved numerical stability of the h-functions of the normal and t copulas.
+  * Package license set to GPL (>= 2).
+
 Changes in version 1.0.11 (March 4, 2014):
 
   * Bug fix: abs(theta) was being used instead of fabs(theta) in the C code 
