@@ -1,3 +1,7 @@
+Changes in version 1.1.1 (January 19, 2015):
+
+  * Make CITATION readable without having the package installed.
+
 Changes in version 1.1.0 (May 10, 2014):
 
   * Improved numerical stability of the h-functions of the normal and t copulas.
@@ -5,13 +9,13 @@ Changes in version 1.1.0 (May 10, 2014):
 
 Changes in version 1.0.11 (March 4, 2014):
 
-  * Bug fix: abs(theta) was being used instead of fabs(theta) in the C code 
-    of the h-functions.  Thanks to Prof. Brian Ripley.  
+  * Bug fix: abs(theta) was being used instead of fabs(theta) in the C code
+    of the h-functions. Thanks to Prof. Brian Ripley.
 
 Changes in version 1.0.10 (February 6, 2014):
 
   * Added missing loglikCopula to importFrom(copula, ...) in NAMESPACE.
-  * Updated the use of the Archimedean copula functions from the copula package 
+  * Updated the use of the Archimedean copula functions from the copula package
     (new use.indepC argument).
 
 Changes in version 1.0.9 (February 2, 2014):
