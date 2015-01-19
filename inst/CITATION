@@ -1,8 +1,7 @@
-citHeader("To cite package 'vines' in publications use:")
+citHeader("To cite vines in publications use:")
 
-desc <- packageDescription("vines")
-year <- sub("^([[:digit:]]{4})-[[:digit:]]{2}-[[:digit:]]{2}$", "\\1", desc$Date)
-version <- desc$Version
+year <- sub("^([[:digit:]]{4})-[[:digit:]]{2}-[[:digit:]]{2}$", "\\1", meta$Date)
+version <- meta$Version
 
 citEntry(entry = "Manual",
 	title = "{vines}: Multivariate Dependence Modeling with Vines",
@@ -10,9 +9,9 @@ citEntry(entry = "Manual",
 	year = year,
 	note = paste("{R} package version", version),
 	url = "http://CRAN.R-project.org/package=vines",
-	textVersion = 
+	textVersion =
 		paste("Yasser Gonzalez-Fernandez and Marta Soto. (", year, ") ",
 		    "vines: Multivariate Dependence Modeling with Vines. ",
-	        paste("R package version", version), 
-	        ". URL http://CRAN.R-project.org/package=vines", ".", 
+	        paste("R package version", version),
+	        ". URL http://CRAN.R-project.org/package=vines", ".",
 	        sep = ""))
