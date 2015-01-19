@@ -2,14 +2,14 @@ library("vines")
 
 n <- 7 # Number of values of each variable.
 np <- 5 # Number of values of each parameter.
-tol <- 0.01 # Differences smaller than tol are not considered.
+tol <- 0.01 # Ignore differences smaller than tol.
 
 X <- seq(from = 0.25, to = 0.75, length = n)
 V <- seq(from = 0.25, to = 0.75, length = n)
 XV <- merge(X, V)
 
 copulas <- c(
-    lapply(seq(from = -1, to = 1, length = np), 
+    lapply(seq(from = -1, to = 1, length = np),
         function (rho) normalCopula(rho)),
     apply(merge(seq(from = -1, to = 1, length = np),
             seq(from = 1, to = 30, length = np)), 1,
@@ -18,10 +18,10 @@ copulas <- c(
         function (theta) claytonCopula(theta, use.indepC = "FALSE")),
     lapply(seq(from = 1, to = 5, length = np),
         function (theta) gumbelCopula(theta, use.indepC = "FALSE")),
-    lapply(seq(from = -1, to = 1, length = np), 
+    lapply(seq(from = -1, to = 1, length = np),
         function (theta) fgmCopula(theta)),
     lapply(seq(from = 1, to = 5, length = np),
-        function (theta) galambosCopula(theta)),       
+        function (theta) galambosCopula(theta)),
     lapply(seq(from = -10, to = 10, length = np),
         function (theta) frankCopula(theta, use.indepC = "FALSE")),
     list(indepCopula()))
@@ -44,7 +44,7 @@ V <- seq(from = 0, to = 1, length = n)
 XV <- merge(X, V)
 
 copulas <- c(
-    lapply(seq(from = -1, to = 1, length = np), 
+    lapply(seq(from = -1, to = 1, length = np),
         function (rho) normalCopula(rho)),
     apply(merge(seq(from = -1, to = 1, length = np),
             seq(from = 1, to = 30, length = np)), 1,
@@ -58,7 +58,7 @@ copulas <- c(
     lapply(seq(from = 1, to = 25, length = np),
         function (theta) galambosCopula(theta)),
     lapply(seq(from = -100, to = 100, length = np),
-        function (theta) frankCopula(theta, use.indepC = "FALSE")),       
+        function (theta) frankCopula(theta, use.indepC = "FALSE")),
     list(indepCopula()))
 
 for (copula in copulas) {

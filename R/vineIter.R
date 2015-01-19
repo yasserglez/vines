@@ -1,6 +1,6 @@
 # vines: Multivariate Dependence Modeling with Vines
-# Copyright (C) 2011-2014 Yasser Gonzalez-Fernandez <ygonzalezfernandez@gmail.com>
-# Copyright (C) 2011-2014 Marta Soto <mrosa@icimaf.cu>
+# Copyright (C) 2011-2015 Yasser Gonzalez-Fernandez <ygonzalezfernandez@gmail.com>
+# Copyright (C) 2011-2015 Marta Soto <mrosa@icimaf.cu>
 #
 # This program is free software: you can redistribute it and/or modify it under
 # the terms of the GNU General Public License as published by the Free Software
@@ -48,7 +48,7 @@ iterCVine <- function (vine, data, evalCopula, selectCopula, truncVine) {
             smallModel <- vine
             smallModel@trees <- j-1
         }
-        
+
         for (i in seq(length = d-j)) {
             x <- v[ , j, 1]
             y <- v[ , j, i+1]
@@ -59,7 +59,7 @@ iterCVine <- function (vine, data, evalCopula, selectCopula, truncVine) {
                 evals <- c(evals, list(evalCopula(vine, j, i, x, y)))
             }
         }
-        
+
         if (is.function(truncVine)) {
             # Check if the last expanded tree is required or if the vine
             # should be truncated on the previous tree.
@@ -89,7 +89,7 @@ iterDVine <- function (vine, data, evalCopula, selectCopula, truncVine) {
     # Algorithm 4 of Aas, K., Czado, C., Frigessi, A. & Bakken, H.
     # Pair-copula constructions of multiple dependence. Insurance
     # Mathematics and Economics, 2009, Vol. 44, pp. 182-198.
-    
+
     if (vine@trees == 0) {
         return(list(vine = vine, evals = list()))
     }
@@ -101,12 +101,12 @@ iterDVine <- function (vine, data, evalCopula, selectCopula, truncVine) {
     evals <- list()
     d <- vine@dimension
     v <- array(NA, c(nrow(data), d, max(2*d-4, d)))
-    
+
     if (is.function(truncVine)) {
         # Save the vine without trees.
         smallModel <- vine
         smallModel@trees <- 0
-    }    
+    }
 
     for (i in seq(length = d)) {
         v[ , 1, i] <- data[ , i]
@@ -121,9 +121,9 @@ iterDVine <- function (vine, data, evalCopula, selectCopula, truncVine) {
             evals <- c(evals, list(evalCopula(vine, 1, i, x, y)))
         }
     }
-    
+
     if (is.function(truncVine)) {
-        # Truncate? If true, return the vine without trees. 
+        # Truncate? If true, return the vine without trees.
         fullModel <- vine
         fullModel@trees <- 1
         if (truncVine(smallModel, fullModel, data)) {
@@ -163,14 +163,14 @@ iterDVine <- function (vine, data, evalCopula, selectCopula, truncVine) {
 
         if (is.function(truncVine)) {
             # Check if the last expanded tree is required or if the vine
-            # should be truncated on the previous tree.            
+            # should be truncated on the previous tree.
             fullModel <- vine
             fullModel@trees <- j
             if (truncVine(smallModel, fullModel, data)) {
                 return(list(vine = smallModel, evals = evals))
             }
         }
-        
+
         if (j == vine@trees || j == d-1) {
             vine@trees <- j
             return(list(vine = vine, evals = evals))

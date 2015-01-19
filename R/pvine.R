@@ -1,6 +1,6 @@
 # vines: Multivariate Dependence Modeling with Vines
-# Copyright (C) 2011-2014 Yasser Gonzalez-Fernandez <ygonzalezfernandez@gmail.com>
-# Copyright (C) 2011-2014 Marta Soto <mrosa@icimaf.cu>
+# Copyright (C) 2011-2015 Yasser Gonzalez-Fernandez <ygonzalezfernandez@gmail.com>
+# Copyright (C) 2011-2015 Marta Soto <mrosa@icimaf.cu>
 #
 # This program is free software: you can redistribute it and/or modify it under
 # the terms of the GNU General Public License as published by the Free Software
@@ -22,7 +22,7 @@ setGeneric("pvine",
 
 pCVineDVine <- function (vine, u) {
     if (is.vector(u)) u <- matrix(u, nrow = 1)
-    
+
     pdf <- function (x) dvine(vine, x)
     lower <- rep(0, vine@dimension)
     cdf <- function (x) {

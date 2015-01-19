@@ -1,6 +1,6 @@
 # vines: Multivariate Dependence Modeling with Vines
-# Copyright (C) 2011-2014 Yasser Gonzalez-Fernandez <ygonzalezfernandez@gmail.com>
-# Copyright (C) 2011-2014 Marta Soto <mrosa@icimaf.cu>
+# Copyright (C) 2011-2015 Yasser Gonzalez-Fernandez <ygonzalezfernandez@gmail.com>
+# Copyright (C) 2011-2015 Marta Soto <mrosa@icimaf.cu>
 #
 # This program is free software: you can redistribute it and/or modify it under
 # the terms of the GNU General Public License as published by the Free Software
@@ -53,7 +53,7 @@ DVinePIT <- function (vine, u) {
 
     if (vine@trees == 0) {
         return(u)
-    }  
+    }
 
     T <- nrow(u)
     d <- vine@dimension
@@ -64,7 +64,7 @@ DVinePIT <- function (vine, u) {
     z[ , 2] <- h(vine@copulas[[1, 1]], u[ , 2], u[ , 1])
 
     # Stop if there are only 2 variables.
-    if (d == 2) return(z)  
+    if (d == 2) return(z)
 
     for (t in seq(length = T)) {
         v[2, 1] <- u[t, 2]

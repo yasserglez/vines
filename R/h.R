@@ -1,6 +1,6 @@
 # vines: Multivariate Dependence Modeling with Vines
-# Copyright (C) 2011-2014 Yasser Gonzalez-Fernandez <ygonzalezfernandez@gmail.com>
-# Copyright (C) 2011-2014 Marta Soto <mrosa@icimaf.cu>
+# Copyright (C) 2011-2015 Yasser Gonzalez-Fernandez <ygonzalezfernandez@gmail.com>
+# Copyright (C) 2011-2015 Marta Soto <mrosa@icimaf.cu>
 #
 # This program is free software: you can redistribute it and/or modify it under
 # the terms of the GNU General Public License as published by the Free Software
@@ -15,7 +15,7 @@
 # You should have received a copy of the GNU General Public License along with
 # this program. If not, see <http://www.gnu.org/licenses/>.
 
-setGeneric("h", 
+setGeneric("h",
     function (copula, x, v) standardGeneric("h"),
     signature = "copula")
 

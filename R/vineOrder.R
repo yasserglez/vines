@@ -1,6 +1,6 @@
 # vines: Multivariate Dependence Modeling with Vines
-# Copyright (C) 2011-2014 Yasser Gonzalez-Fernandez <ygonzalezfernandez@gmail.com>
-# Copyright (C) 2011-2014 Marta Soto <mrosa@icimaf.cu>
+# Copyright (C) 2011-2015 Yasser Gonzalez-Fernandez <ygonzalezfernandez@gmail.com>
+# Copyright (C) 2011-2015 Marta Soto <mrosa@icimaf.cu>
 #
 # This program is free software: you can redistribute it and/or modify it under
 # the terms of the GNU General Public License as published by the Free Software
@@ -19,8 +19,8 @@ vineOrderGreedy <- function (type, data, according = "kendall") {
     n <- ncol(data)
 
     if (according %in% c("pearson", "kendall", "spearman")) {
-        # Calculate the value of the given measure of association between 
-        # each pair of variables and couple the variables with the largest 
+        # Calculate the value of the given measure of association between
+        # each pair of variables and couple the variables with the largest
         # absolute values.
         weights <- 1 - abs(cor(data, method = according))
     } else if (according %in% c("df")) {

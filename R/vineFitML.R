@@ -1,6 +1,6 @@
 # vines: Multivariate Dependence Modeling with Vines
-# Copyright (C) 2011-2014 Yasser Gonzalez-Fernandez <ygonzalezfernandez@gmail.com>
-# Copyright (C) 2011-2014 Marta Soto <mrosa@icimaf.cu>
+# Copyright (C) 2011-2015 Yasser Gonzalez-Fernandez <ygonzalezfernandez@gmail.com>
+# Copyright (C) 2011-2015 Marta Soto <mrosa@icimaf.cu>
 #
 # This program is free software: you can redistribute it and/or modify it under
 # the terms of the GNU General Public License as published by the Free Software
@@ -37,7 +37,7 @@ setMethod("show", "vineFitML", showVineFitML)
 
 loglikCopulaWrapper <- function(param, x, copula, ...) {
     if (is(copula, "normalCopula") || is(copula, "tCopula")) {
-        # Return a finite value for rho in {-1, 1} for numerical stability 
+        # Return a finite value for rho in {-1, 1} for numerical stability
         # during the vineLogLik and  vineLogLikLastTree calls.
         eps <- .Machine$double.eps^0.5
         param[1] <- max(min(param[1], 1 - eps), -1 + eps)
@@ -146,7 +146,7 @@ vineFitML <- function (type, data, trees = ncol(data) - 1, truncMethod = "",
 
         vineParameters(vine) <- optimResult$par
 
-        fit <- new("vineFitML", 
+        fit <- new("vineFitML",
                 vine = vine,
                 observations = nrow(data),
                 optimMethod = optimMethod,
@@ -156,9 +156,9 @@ vineFitML <- function (type, data, trees = ncol(data) - 1, truncMethod = "",
     } else {
         # Optimization disabled or a vine without parameters.
 
-        fit <- new("vineFitML", 
+        fit <- new("vineFitML",
                 vine = vine,
-                observations = nrow(data), 
+                observations = nrow(data),
                 optimMethod = optimMethod,
                 optimConv = 0,
                 startParams = startParams,

@@ -1,6 +1,6 @@
 # vines: Multivariate Dependence Modeling with Vines
-# Copyright (C) 2011-2014 Yasser Gonzalez-Fernandez <ygonzalezfernandez@gmail.com>
-# Copyright (C) 2011-2014 Marta Soto <mrosa@icimaf.cu>
+# Copyright (C) 2011-2015 Yasser Gonzalez-Fernandez <ygonzalezfernandez@gmail.com>
+# Copyright (C) 2011-2015 Marta Soto <mrosa@icimaf.cu>
 #
 # This program is free software: you can redistribute it and/or modify it under
 # the terms of the GNU General Public License as published by the Free Software
@@ -49,7 +49,7 @@ showCVine <- function (object) {
     } else {
         dimNames <- as.character(seq(length = object@dimension))
     }
-    
+
     for (j in seq(length = object@trees)) {
         cat("\n")
         for (i in seq(length = object@dimension - j)) {
@@ -57,9 +57,9 @@ showCVine <- function (object) {
             conditioning <- paste(dimNames[seq(length = j - 1)], collapse = ",")
             copulaLabel <- paste(conditioned,
                     if (j > 1) paste("|", conditioning, sep = "")
-                            else character(0), 
+                            else character(0),
                     sep = "")
-            
+
             cat(copulaLabel, ": ", toString(object@copulas[[j, i]]), "\n", sep = "")
         }
     }
@@ -75,7 +75,7 @@ showDVine <- function (object) {
     } else {
         dimNames <- as.character(seq(length = object@dimension))
     }
-    
+
     for (j in seq(length = object@trees)) {
         cat("\n")
         for (i in seq(length = object@dimension - j)) {
@@ -83,9 +83,9 @@ showDVine <- function (object) {
             conditioning <- paste(dimNames[seq(from = i + 1, to = i + j - 1)], collapse = ",")
             copulaLabel <- paste(conditioned,
                     if (j > 1) paste("|", conditioning, sep = "")
-                            else character(0), 
+                            else character(0),
                     sep = "")
-            
+
             cat(copulaLabel, ": ", toString(object@copulas[[j, i]]), "\n", sep = "")
         }
     }
