@@ -115,12 +115,19 @@ vineFitML <- function (type, data, trees = ncol(data) - 1, truncMethod = "",
     startParams <- vineParameters(vine)
 
     if (nzchar(optimMethod) && length(startParams) > 0) {
-        # Optimization method.
+        # Optimization enabled.
 
-        lowerParams <- unlist(lapply(vine@copulas,
-                    function (x) if (is.null(x)) numeric(0) else x@param.lowbnd))
-        upperParams <- unlist(lapply(vine@copulas,
-                    function (x) if (is.null(x)) numeric(0) else x@param.upbnd))
+        # Bounds must match the order returned by vineParameters.
+        lowerParams <- numeric(0)
+        upperParams <- numeric(0)
+        for (j in seq(nrow(vine@copulas))) {
+            for (i in seq(ncol(vine@copulas))) {
+                if (is(vine@copulas[[j,i]], "copula")) {
+                    lowerParams <- c(lowerParams, vine@copulas[[j,i]]@param.lowbnd)
+                    upperParams <- c(upperParams, vine@copulas[[j,i]]@param.upbnd)
+                }
+            }
+        }
 
         if (identical(optimMethod, "L-BFGS-B")) {
             lower <- lowerParams
