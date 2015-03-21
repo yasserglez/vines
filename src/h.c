@@ -53,11 +53,11 @@ SEXP hNormalCopula(SEXP Rho, SEXP X, SEXP V) {
         } else if (1 - x[i] <= eps || (rho <= -1 + eps && x[i] + v[i] >= 1 - eps)) {
             u[i] = 1 - eps;
         } else {
-			vi = (v[i] <= eps) ? eps : ((v[i] >= 1 - eps) ? 1 - eps : v[i]);
-			num = qnorm(x[i], 0, 1, TRUE, FALSE) - rho*qnorm(vi, 0, 1, TRUE, FALSE);
-			ui = pnorm(num / sqrt(1 - rho*rho), 0, 1, TRUE, FALSE);
-			if (!isfinite(ui)) ui = (num < 0) ? 0 : 1;
-			u[i] = (ui <= eps) ? eps : ((ui >= 1 - eps) ? 1 - eps : ui);
+	    vi = (v[i] <= eps) ? eps : ((v[i] >= 1 - eps) ? 1 - eps : v[i]);
+	    num = qnorm(x[i], 0, 1, TRUE, FALSE) - rho*qnorm(vi, 0, 1, TRUE, FALSE);
+	    ui = pnorm(num / sqrt(1 - rho*rho), 0, 1, TRUE, FALSE);
+	    if (!isfinite(ui)) ui = (num < 0) ? 0 : 1;
+	    u[i] = (ui <= eps) ? eps : ((ui >= 1 - eps) ? 1 - eps : ui);
         }
     }
 

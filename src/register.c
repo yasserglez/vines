@@ -42,5 +42,5 @@ R_CallMethodDef callMethods[] = {
 };
 
 void R_init_vines(DllInfo *info) {
-	R_registerRoutines(info, NULL, callMethods, NULL, NULL);
+    R_registerRoutines(info, NULL, callMethods, NULL, NULL);
 }
