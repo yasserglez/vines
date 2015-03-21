@@ -38,7 +38,7 @@ setMethod("show", "vineFitML", showVineFitML)
 loglikCopulaWrapper <- function(param, x, copula, ...) {
     if (is(copula, "normalCopula") || is(copula, "tCopula")) {
         # Return a finite value for rho in {-1, 1} for numerical stability
-        # during the vineLogLik and  vineLogLikLastTree calls.
+        # during the vineLogLik and vineLogLikLastTree calls.
         eps <- .Machine$double.eps^0.5
         param[1] <- max(min(param[1], 1 - eps), -1 + eps)
     }
@@ -98,7 +98,7 @@ vineFitML <- function (type, data, trees = ncol(data) - 1, truncMethod = "",
             stop("invalid vine truncation method ", dQuote(truncMethod))
         }
     } else {
-        truncVine = NULL
+        truncVine <- NULL
     }
 
     # Compute starting values for the parameters of the copulas in the

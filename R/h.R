@@ -22,7 +22,6 @@ setGeneric("h",
 
 hCopula <- function (copula, x, v) {
     eps <- .Machine$double.eps^0.5
-
     env <- new.env()
     assign("copula", copula, env)
     assign("x", pmax(pmin(x, 1 - eps), eps), env)

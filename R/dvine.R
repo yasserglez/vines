@@ -24,7 +24,8 @@ dCVineDVine <- function (vine, u) {
     if (is.vector(u)) u <- matrix(u, nrow = 1)
 
     if (vine@trees == 0) {
-        rep(1, nrow(u)) # The product of the uniform marginal densities.
+         # Product of the uniform marginal densities.
+        rep(1, nrow(u))
     } else {
         evalCopula <- function (vine, j, i, x, y) {
             dCopula(cbind(x, y), vine@copulas[[j, i]], log = TRUE)

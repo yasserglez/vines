@@ -41,9 +41,9 @@ rCVine <- function (vine, n) {
 
     result[ , 1] <- w[ , 1]
 
-    for (s in seq(length = n)) { # Loop over samples.
+    for (s in seq(length = n)) {  # Loop over samples.
         v[1, 1] <- result[s, 1]
-        for (i in seq(from = 2, to = d)) { # Loop over the variables.
+        for (i in seq(from = 2, to = d)) {  # Loop over the variables.
             v[i, 1] <- w[s, i]
             for (k in seq(from = min(vine@trees, i-1), to = 1)) {
                 v[i, 1] <- hinverse(vine@copulas[[k, i-k]], v[i, 1], v[k, k])
@@ -89,11 +89,11 @@ rDVine <- function (vine, n) {
     # Stop if there are only 2 variables.
     if (d == 2) return(result)
 
-    for (s in seq(length = n)) { # Loop over samples.
+    for (s in seq(length = n)) {  # Loop over samples.
         v[1, 1] <- result[s, 1]
         v[2, 1] <- result[s, 2]
         v[2, 2] <- h(vine@copulas[[1, 1]], v[1, 1], v[2, 1])
-        for (i in seq(from = 3, to = d)) { # Loop over the variables.
+        for (i in seq(from = 3, to = d)) {  # Loop over the variables.
             v[i, 1] <- w[s, i]
             if (vine@trees >= 2) {
                 for (k in seq(from = min(vine@trees, i-1), to = 2)) {
