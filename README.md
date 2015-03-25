@@ -1,4 +1,4 @@
-# Multivariate Dependence Modeling with Vines
+## Multivariate Dependence Modeling with Vines
 
 [![Build Status](https://travis-ci.org/yasserglez/vines.svg?branch=master)](https://travis-ci.org/yasserglez/vines)
 
