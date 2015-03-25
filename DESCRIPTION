@@ -1,7 +1,7 @@
 Type: Package
 Package: vines
 Title: Multivariate Dependence Modeling with Vines
-Version: 1.1.2
+Version: 1.1.3
 Authors@R: c(person("Yasser", "Gonzalez-Fernandez",
 	            role = c("aut", "cre"),
 		    email = "ygonzalezfernandez@gmail.com"),

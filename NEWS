@@ -1,3 +1,7 @@
+Changes in version 1.1.3 (March 25, 2015):
+
+  * Update the package description to comply with CRAN requirements.
+
 Changes in version 1.1.2 (March 21, 2015):
 
   * Fix order of the parameter bounds in vineFit. Thanks to Bastian Klein.
@@ -13,14 +17,14 @@ Changes in version 1.1.0 (May 10, 2014):
 
 Changes in version 1.0.11 (March 4, 2014):
 
-  * Bug fix: abs(theta) was being used instead of fabs(theta) in the C code
-    of the h-functions. Thanks to Prof. Brian Ripley.
+  * Bug fix: abs(theta) was being used instead of fabs(theta) in the C
+    code of the h-functions. Thanks to Prof. Brian Ripley.
 
 Changes in version 1.0.10 (February 6, 2014):
 
   * Added missing loglikCopula to importFrom(copula, ...) in NAMESPACE.
-  * Updated the use of the Archimedean copula functions from the copula package
-    (new use.indepC argument).
+  * Updated the use of the Archimedean copula functions from the
+    copula package (new use.indepC argument).
 
 Changes in version 1.0.9 (February 2, 2014):
 
@@ -38,9 +42,9 @@ Changes in version 1.0.7 (April 16, 2013):
 Changes in version 1.0.6 (November 2, 2012):
 
   * Reduced the running time of the tests.
-  * Only integer values of the degrees of freedom parameter of the t-copula
-    are now used in the test scripts, in order to avoid errors related with
-    the mvtnorm package only accepting integer values.
+  * Only integer values of the degrees of freedom parameter of the
+    t-copula are now used in the test scripts, in order to avoid errors
+    related with the mvtnorm package only accepting integer values.
 
 Changes in version 1.0.5 (July 31, 2012):
 
