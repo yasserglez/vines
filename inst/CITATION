@@ -1,6 +1,6 @@
 citHeader("To cite vines in publications use:")
 
-year <- sub("^([[:digit:]]{4})-[[:digit:]]{2}-[[:digit:]]{2}$", "\\1", meta$Date)
+year <- substr(meta$Date, 0, 4)
 version <- meta$Version
 
 citEntry(entry = "Manual",
