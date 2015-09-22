@@ -15,7 +15,7 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 
-SEXP hNormalCopula(SEXP Rho, SEXP X, SEXP V);
+SEXP hNormalCopula(SEXP Rho, SEXP X, SEXP V, SEXP Eps);
 SEXP hIndepCopula(SEXP X, SEXP V);
 SEXP hTCopula(SEXP Rho, SEXP Df, SEXP X, SEXP V);
 SEXP hClaytonCopula(SEXP Theta, SEXP X, SEXP V);

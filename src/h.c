@@ -32,7 +32,7 @@ SEXP hIndepCopula(SEXP X, SEXP V) {
  * Gaussian, Student's t, Clayton and Gumbel copulas.
  */
 
-SEXP hNormalCopula(SEXP Rho, SEXP X, SEXP V) {
+SEXP hNormalCopula(SEXP Rho, SEXP X, SEXP V, SEXP Eps) {
     double eps;
     double rho;
     double *x, *v, *u;
@@ -40,7 +40,7 @@ SEXP hNormalCopula(SEXP Rho, SEXP X, SEXP V) {
     SEXP U;
 
     PROTECT(U = allocVector(REALSXP, LENGTH(X)));
-    eps = R_pow(DOUBLE_EPS, 0.5);
+    eps = asReal(Eps);
     rho = asReal(Rho);
     x = REAL(X);
     v = REAL(V);

@@ -16,12 +16,14 @@
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 setGeneric("h",
-    function (copula, x, v) standardGeneric("h"),
+    function (copula, x, v, ...) 
+      standardGeneric("h"),
     signature = "copula")
 
 
-hCopula <- function (copula, x, v) {
-    eps <- .Machine$double.eps^0.5
+hCopula <- function (copula, x, v, 
+                     tolerance = .Machine$double.eps^0.5) {
+    eps <- tolerance
     env <- new.env()
     assign("copula", copula, env)
     assign("x", pmax(pmin(x, 1 - eps), eps), env)
@@ -34,14 +36,18 @@ hCopula <- function (copula, x, v) {
 setMethod("h", "copula", hCopula)
 
 
-hIndepCopula <- function (copula, x, v) {
+hIndepCopula <- function (copula, x, v, 
+                          tolerance = .Machine$double.eps^0.5)
+  # tolerance only added for consistency, not used. - JM 2015/09/22
+  {
     .Call(C_hIndepCopula, x, v)
 }
 
 setMethod("h", "indepCopula", hIndepCopula)
 
-hNormalCopula <- function (copula, x, v) {
-    eps <- .Machine$double.eps^0.5
+hNormalCopula <- function (copula, x, v,
+                           tolerance = .Machine$double.eps^0.5) {
+    eps <- tolerance
     rho <- max(min(copula@parameters, 1 - eps), -1 + eps)
     .Call(C_hNormalCopula, rho, x, v)
 }
