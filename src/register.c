@@ -25,16 +25,16 @@
 
 R_CallMethodDef callMethods[] = {
     { "hIndepCopula", (DL_FUNC) &hIndepCopula, 2 },
-    { "hNormalCopula", (DL_FUNC) &hNormalCopula, 3 },
+    { "hNormalCopula", (DL_FUNC) &hNormalCopula, 4 },
     { "hinverseNormalCopula", (DL_FUNC) &hinverseNormalCopula, 3 },
     { "hinverseIndepCopula", (DL_FUNC) &hinverseIndepCopula, 2 },
-    { "hTCopula", (DL_FUNC) &hTCopula, 4 },
+    { "hTCopula", (DL_FUNC) &hTCopula, 5 },
     { "hinverseTCopula", (DL_FUNC) &hinverseTCopula, 4 },
-    { "hClaytonCopula", (DL_FUNC) &hClaytonCopula, 3 },
+    { "hClaytonCopula", (DL_FUNC) &hClaytonCopula, 4 },
     { "hinverseClaytonCopula", (DL_FUNC) &hinverseClaytonCopula, 3 },
     { "hGumbelCopula", (DL_FUNC) &hGumbelCopula, 3 },
     { "hFGMCopula", (DL_FUNC) &hFGMCopula, 3 },
-    { "hGalambosCopula", (DL_FUNC) &hGalambosCopula, 3 },
+    { "hGalambosCopula", (DL_FUNC) &hGalambosCopula, 4 },
     { "hFrankCopula", (DL_FUNC) &hFrankCopula, 3 },
     { "hinverseFrankCopula", (DL_FUNC) &hinverseFrankCopula, 3 },
     { NULL, NULL, 0 }

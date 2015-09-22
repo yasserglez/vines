@@ -65,7 +65,7 @@ SEXP hNormalCopula(SEXP Rho, SEXP X, SEXP V, SEXP Eps) {
     return U;
 }
 
-SEXP hTCopula(SEXP Rho, SEXP Df, SEXP X, SEXP V) {
+SEXP hTCopula(SEXP Rho, SEXP Df, SEXP X, SEXP V, SEXP Eps) {
     double eps;
     double rho, df;
     double *x, *v, *u;
@@ -73,7 +73,7 @@ SEXP hTCopula(SEXP Rho, SEXP Df, SEXP X, SEXP V) {
     SEXP U;
 
     PROTECT(U = allocVector(REALSXP, LENGTH(X)));
-    eps = R_pow(DOUBLE_EPS, 0.5);
+    eps = asReal(Eps);
     rho = asReal(Rho);
     df = asReal(Df);
     x = REAL(X);
@@ -100,14 +100,14 @@ SEXP hTCopula(SEXP Rho, SEXP Df, SEXP X, SEXP V) {
     return U;
 }
 
-SEXP hClaytonCopula(SEXP Theta, SEXP X, SEXP V) {
+SEXP hClaytonCopula(SEXP Theta, SEXP X, SEXP V, SEXP Eps) {
     double eps;
     double theta;
     double *x, *v, *u;
     double vi, ui;
     SEXP U;
 
-    eps = R_pow(DOUBLE_EPS, 0.15);
+    eps = asReal(Eps);
     theta = asReal(Theta);
 
     if (theta <= eps) {
@@ -213,14 +213,14 @@ SEXP hFGMCopula(SEXP Theta, SEXP X, SEXP V) {
  * for the expression for the Galambos and Frank copulas.
  */
 
-SEXP hGalambosCopula(SEXP Theta, SEXP X, SEXP V) {
+SEXP hGalambosCopula(SEXP Theta, SEXP X, SEXP V, SEXP Eps) {
     double eps;
     double theta;
     double *x, *v, *u;
     double vi, ui, mlogxi, mlogvi, cdf;
     SEXP U;
 
-    eps = R_pow(DOUBLE_EPS, 0.5);
+    eps = asReal(Eps);
     theta = asReal(Theta);
 
     if (theta <= eps) {

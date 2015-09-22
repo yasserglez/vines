@@ -36,9 +36,7 @@ hCopula <- function (copula, x, v,
 setMethod("h", "copula", hCopula)
 
 
-hIndepCopula <- function (copula, x, v, 
-                          tolerance = .Machine$double.eps^0.5)
-  # tolerance only added for consistency, not used. - JM 2015/09/22
+hIndepCopula <- function (copula, x, v)
   {
     .Call(C_hIndepCopula, x, v)
 }
@@ -49,25 +47,27 @@ hNormalCopula <- function (copula, x, v,
                            tolerance = .Machine$double.eps^0.5) {
     eps <- tolerance
     rho <- max(min(copula@parameters, 1 - eps), -1 + eps)
-    .Call(C_hNormalCopula, rho, x, v)
+    .Call(C_hNormalCopula, rho, x, v, eps)
 }
 
 setMethod("h", "normalCopula", hNormalCopula)
 
 
-hTCopula <- function (copula, x, v) {
-    eps <- .Machine$double.eps^0.5
+hTCopula <- function (copula, x, v,
+                      tolerance = .Machine$double.eps^0.5) {
+    eps <- tolerance
     rho <- max(min(copula@parameters[1], 1 - eps), -1 + eps)
     df <- if (copula@df.fixed) copula@df else copula@parameters[2]
-    .Call(C_hTCopula, rho, df, x, v)
+    .Call(C_hTCopula, rho, df, x, v, eps)
 }
 
 setMethod("h", "tCopula", hTCopula)
 
 
-hClaytonCopula <- function (copula, x, v) {
+hClaytonCopula <- function (copula, x, v,
+                            tolerance = .Machine$double.eps^0.5) {
     theta <- min(copula@parameters, 100)
-    .Call(C_hClaytonCopula, theta, x, v)
+    .Call(C_hClaytonCopula, theta, x, v, tolerance)
 }
 
 setMethod("h", "claytonCopula", hClaytonCopula)
@@ -89,9 +89,10 @@ hFGMCopula <- function (copula, x, v) {
 setMethod("h", "fgmCopula", hFGMCopula)
 
 
-hGalambosCopula <- function (copula, x, v) {
+hGalambosCopula <- function (copula, x, v,
+                             tolerance = .Machine$double.eps^0.5) {
     theta <- min(copula@parameters, 25)
-    .Call(C_hGalambosCopula, theta, x, v)
+    .Call(C_hGalambosCopula, theta, x, v, tolerance)
 }
 
 setMethod("h", "galambosCopula", hGalambosCopula)
