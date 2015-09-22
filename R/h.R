@@ -65,7 +65,7 @@ setMethod("h", "tCopula", hTCopula)
 
 
 hClaytonCopula <- function (copula, x, v,
-                            tolerance = .Machine$double.eps^0.5) {
+                            tolerance = .Machine$double.eps^0.15) {
     theta <- min(copula@parameters, 100)
     .Call(C_hClaytonCopula, theta, x, v, tolerance)
 }
