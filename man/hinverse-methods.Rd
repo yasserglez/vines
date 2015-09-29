@@ -41,8 +41,8 @@ For the Clayton and Frank copula this tolerance is set to \code{eps = .Machine$d
 }
 
 \examples{
-X <- seq(from = 0, to = 1, length = n)
-V <- seq(from = 0, to = 1, length = n)
+X <- seq(from = 0, to = 1, length = 7)
+V <- seq(from = 0, to = 1, length = 7)
 XV <- merge(X, V)
 
 cop <- claytonCopula(0.01)

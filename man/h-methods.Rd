@@ -111,8 +111,8 @@ Multivariate dependence modeling using pair-copulas.
 \keyword{methods}
 
 \examples{
-X <- seq(from = 0, to = 1, length = n)
-V <- seq(from = 0, to = 1, length = n)
+X <- seq(from = 0, to = 1, length = 7)
+V <- seq(from = 0, to = 1, length = 7)
 XV <- merge(X, V)
 
 cop <- claytonCopula(0.01)
