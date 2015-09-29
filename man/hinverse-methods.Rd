@@ -33,11 +33,27 @@ in a pair-copula construction (or it will be evaluated numerically).
 }
 
 \details{
-All methods have an argument \code{tolerance} to set the
+All methods have an argument \code{eps} to set the
 minimum distance from 0 and 1 of the result. This tolerance
 is needed in order to avoid numeric anomalities that prevent the conditional distribution from being calculated correctly.
 
-For the Clayton copula this tolerance is set to \code{tolerance = .Machine$double.eps^0.15}. For all other methods, this is set to \code{tolerance = .Machine$double.eps^0.5}
+For the Clayton and Frank copula this tolerance is set to \code{eps = .Machine$double.eps^0.15}. For all other methods, this is set to \code{eps = .Machine$double.eps^0.5}
+}
+
+\examples{
+X <- seq(from = 0, to = 1, length = n)
+V <- seq(from = 0, to = 1, length = n)
+XV <- merge(X, V)
+
+cop <- claytonCopula(0.01)
+
+#Compare default value with smallest possible for eps
+res <- h(cop,XV$x, XV$y)
+res2 <- h(cop,XV$x, XV$y, eps=.Machine$double.eps^0.5)
+
+inv.res <- hinverse(cop, res, XV$y)
+inv.res2 <- hinverse(cop, res2, XV$y, eps=.Machine$double.eps^0.5)
+
 }
 
 \section{Methods}{

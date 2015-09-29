@@ -22,8 +22,7 @@ setGeneric("h",
 
 
 hCopula <- function (copula, x, v, 
-                     tolerance = .Machine$double.eps^0.5) {
-    eps <- tolerance
+                     eps = .Machine$double.eps^0.5) {
     env <- new.env()
     assign("copula", copula, env)
     assign("x", pmax(pmin(x, 1 - eps), eps), env)
@@ -36,7 +35,7 @@ hCopula <- function (copula, x, v,
 setMethod("h", "copula", hCopula)
 
 
-hIndepCopula <- function (copula, x, v, tolerance)
+hIndepCopula <- function (copula, x, v, eps)
   {
     .Call(C_hIndepCopula, x, v)
 }
@@ -44,8 +43,7 @@ hIndepCopula <- function (copula, x, v, tolerance)
 setMethod("h", "indepCopula", hIndepCopula)
 
 hNormalCopula <- function (copula, x, v,
-                           tolerance = .Machine$double.eps^0.5) {
-    eps <- tolerance
+                           eps = .Machine$double.eps^0.5) {
     rho <- max(min(copula@parameters, 1 - eps), -1 + eps)
     .Call(C_hNormalCopula, rho, x, v, eps)
 }
@@ -54,8 +52,7 @@ setMethod("h", "normalCopula", hNormalCopula)
 
 
 hTCopula <- function (copula, x, v,
-                      tolerance = .Machine$double.eps^0.5) {
-    eps <- tolerance
+                      eps = .Machine$double.eps^0.5) {
     rho <- max(min(copula@parameters[1], 1 - eps), -1 + eps)
     df <- if (copula@df.fixed) copula@df else copula@parameters[2]
     .Call(C_hTCopula, rho, df, x, v, eps)
@@ -65,47 +62,47 @@ setMethod("h", "tCopula", hTCopula)
 
 
 hClaytonCopula <- function (copula, x, v,
-                            tolerance = .Machine$double.eps^0.15) {
-  # tolerance significantly higher than in other cases. This is
+                            eps = .Machine$double.eps^0.15) {
+  # eps significantly higher than in other cases. This is
   # in concordance with the earlier versions.
     theta <- min(copula@parameters, 100)
-    .Call(C_hClaytonCopula, theta, x, v, tolerance)
+    .Call(C_hClaytonCopula, theta, x, v, eps)
 }
 
 setMethod("h", "claytonCopula", hClaytonCopula)
 
 
 hGumbelCopula <- function (copula, x, v,
-                           tolerance = .Machine$double.eps^0.5) {
+                           eps = .Machine$double.eps^0.5) {
     theta <- min(copula@parameters, 100)
-    .Call(C_hGumbelCopula, theta, x, v, tolerance)
+    .Call(C_hGumbelCopula, theta, x, v, eps)
 }
 
 setMethod("h", "gumbelCopula", hGumbelCopula)
 
 
 hFGMCopula <- function (copula, x, v,
-                        tolerance = .Machine$double.eps^0.5) {
+                        eps = .Machine$double.eps^0.5) {
     theta <- copula@parameters
-    .Call(C_hFGMCopula, theta, x, v, tolerance)
+    .Call(C_hFGMCopula, theta, x, v, eps)
 }
 
 setMethod("h", "fgmCopula", hFGMCopula)
 
 
 hGalambosCopula <- function (copula, x, v,
-                             tolerance = .Machine$double.eps^0.5) {
+                             eps = .Machine$double.eps^0.5) {
     theta <- min(copula@parameters, 25)
-    .Call(C_hGalambosCopula, theta, x, v, tolerance)
+    .Call(C_hGalambosCopula, theta, x, v, eps)
 }
 
 setMethod("h", "galambosCopula", hGalambosCopula)
 
 
 hFrankCopula <- function (copula, x, v,
-                          tolerance = .Machine$double.eps^0.5) {
+                          eps = .Machine$double.eps^0.5) {
     theta <- max(min(copula@parameters, 100), -100)
-    .Call(C_hFrankCopula, theta, x, v, tolerance)
+    .Call(C_hFrankCopula, theta, x, v, eps)
 }
 
 setMethod("h", "frankCopula", hFrankCopula)

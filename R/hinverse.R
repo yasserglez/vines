@@ -21,8 +21,7 @@ setGeneric("hinverse",
 
 
 hinverseCopula <- function (copula, u, v,
-                            tolerance = .Machine$double.eps^0.5) {
-    eps <- tolerance
+                            eps = .Machine$double.eps^0.5) {
     r0 <- u <= eps
     r1 <- abs(1 - u) <= eps
     skip <- r0 | r1
@@ -46,7 +45,7 @@ setMethod("hinverse", "copula", hinverseCopula)
 
 
 hinverseIndepCopula <- function (copula, u, v,
-                                 tolerance) {
+                                 eps) {
     .Call(C_hinverseIndepCopula, u, v)
 }
 
@@ -54,8 +53,7 @@ setMethod("hinverse", "indepCopula", hinverseIndepCopula)
 
 
 hinverseNormalCopula <- function (copula, u, v,
-                                  tolerance = .Machine$double.eps^0.5) {
-    eps <- tolerance
+                                  eps = .Machine$double.eps^0.5) {
     rho <- max(min(copula@parameters, 1 - eps), -1 + eps)
     .Call(C_hinverseNormalCopula, rho, u, v, eps)
 }
@@ -64,8 +62,7 @@ setMethod("hinverse", "normalCopula", hinverseNormalCopula)
 
 
 hinverseTCopula <- function (copula, u, v, 
-                             tolerance = .Machine$double.eps^0.5) {
-    eps <- tolerance
+                             eps = .Machine$double.eps^0.5) {
     rho <- max(min(copula@parameters[1], 1 - eps), -1 + eps)
     df <- if (copula@df.fixed) copula@df else copula@parameters[2]
     .Call(C_hinverseTCopula, rho, df, u, v, eps)
@@ -75,18 +72,18 @@ setMethod("hinverse", "tCopula", hinverseTCopula)
 
 
 hinverseClaytonCopula <- function (copula, u, v,
-                                   tolerance = .Machine$double.eps^0.15) {
+                                   eps = .Machine$double.eps^0.15) {
     theta <- min(copula@parameters, 100)
-    .Call(C_hinverseClaytonCopula, theta, u, v, tolerance)
+    .Call(C_hinverseClaytonCopula, theta, u, v, eps)
 }
 
 setMethod("hinverse", "claytonCopula", hinverseClaytonCopula)
 
 
 hinverseFrankCopula <- function (copula, u, v,
-                                 tolerance = .Machine$double.eps^0.15) {
+                                 eps = .Machine$double.eps^0.15) {
     theta <- max(min(copula@parameters, 100), -100)
-    .Call(C_hinverseFrankCopula, theta, u, v, tolerance)
+    .Call(C_hinverseFrankCopula, theta, u, v, eps)
 }
 
 setMethod("hinverse", "frankCopula", hinverseFrankCopula)
