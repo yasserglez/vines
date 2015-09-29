@@ -137,14 +137,14 @@ SEXP hClaytonCopula(SEXP Theta, SEXP X, SEXP V, SEXP Eps) {
     return U;
 }
 
-SEXP hGumbelCopula(SEXP Theta, SEXP X, SEXP V) {
+SEXP hGumbelCopula(SEXP Theta, SEXP X, SEXP V, SEXP Eps) {
     double eps;
     double theta;
     double *x, *v, *u;
     double vi, ui, tmp, mlogxi, mlogvi;
     SEXP U;
 
-    eps = R_pow(DOUBLE_EPS, 0.5);
+    eps = asReal(Eps);
     theta = asReal(Theta);
 
     if (theta <= eps) {
@@ -177,14 +177,14 @@ SEXP hGumbelCopula(SEXP Theta, SEXP X, SEXP V) {
     return U;
 }
 
-SEXP hFGMCopula(SEXP Theta, SEXP X, SEXP V) {
+SEXP hFGMCopula(SEXP Theta, SEXP X, SEXP V, SEXP Eps) {
     double eps;
     double theta;
     double *x, *v, *u;
     double ui;
     SEXP U;
 
-    eps = R_pow(DOUBLE_EPS, 0.5);
+    eps = asReal(Eps);
     theta = asReal(Theta);
 
     PROTECT(U = allocVector(REALSXP, LENGTH(X)));
@@ -254,14 +254,14 @@ SEXP hGalambosCopula(SEXP Theta, SEXP X, SEXP V, SEXP Eps) {
     return U;
 }
 
-SEXP hFrankCopula(SEXP Theta, SEXP X, SEXP V) {
+SEXP hFrankCopula(SEXP Theta, SEXP X, SEXP V, SEXP Eps) {
     double eps;
     double theta;
     double *x, *v, *u;
     double vi, ui;
     SEXP U;
 
-    eps = R_pow(DOUBLE_EPS, 0.5);
+    eps = asReal(Eps);
     theta = asReal(Theta);
 
     if (fabs(theta) <= eps) {

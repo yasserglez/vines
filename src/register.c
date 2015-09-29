@@ -26,17 +26,17 @@
 R_CallMethodDef callMethods[] = {
     { "hIndepCopula", (DL_FUNC) &hIndepCopula, 2 },
     { "hNormalCopula", (DL_FUNC) &hNormalCopula, 4 },
-    { "hinverseNormalCopula", (DL_FUNC) &hinverseNormalCopula, 3 },
+    { "hinverseNormalCopula", (DL_FUNC) &hinverseNormalCopula, 4 },
     { "hinverseIndepCopula", (DL_FUNC) &hinverseIndepCopula, 2 },
     { "hTCopula", (DL_FUNC) &hTCopula, 5 },
-    { "hinverseTCopula", (DL_FUNC) &hinverseTCopula, 4 },
+    { "hinverseTCopula", (DL_FUNC) &hinverseTCopula, 5 },
     { "hClaytonCopula", (DL_FUNC) &hClaytonCopula, 4 },
-    { "hinverseClaytonCopula", (DL_FUNC) &hinverseClaytonCopula, 3 },
-    { "hGumbelCopula", (DL_FUNC) &hGumbelCopula, 3 },
-    { "hFGMCopula", (DL_FUNC) &hFGMCopula, 3 },
+    { "hinverseClaytonCopula", (DL_FUNC) &hinverseClaytonCopula, 4 },
+    { "hGumbelCopula", (DL_FUNC) &hGumbelCopula, 4 },
+    { "hFGMCopula", (DL_FUNC) &hFGMCopula, 4 },
     { "hGalambosCopula", (DL_FUNC) &hGalambosCopula, 4 },
-    { "hFrankCopula", (DL_FUNC) &hFrankCopula, 3 },
-    { "hinverseFrankCopula", (DL_FUNC) &hinverseFrankCopula, 3 },
+    { "hFrankCopula", (DL_FUNC) &hFrankCopula, 4 },
+    { "hinverseFrankCopula", (DL_FUNC) &hinverseFrankCopula, 4 },
     { NULL, NULL, 0 }
 };
 
