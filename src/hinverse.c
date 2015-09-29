@@ -32,7 +32,7 @@ SEXP hinverseIndepCopula(SEXP U, SEXP V) {
  * Gaussian, Student's t, Clayton and Gumbel copulas.
  */
 
-SEXP hinverseNormalCopula(SEXP Rho, SEXP U, SEXP V) {
+SEXP hinverseNormalCopula(SEXP Rho, SEXP U, SEXP V, SEXP Eps) {
     double eps;
     double rho;
     double *u, *v, *x;
@@ -40,7 +40,7 @@ SEXP hinverseNormalCopula(SEXP Rho, SEXP U, SEXP V) {
     SEXP X;
 
     PROTECT(X = allocVector(REALSXP, LENGTH(U)));
-    eps = R_pow(DOUBLE_EPS, 0.5);
+    eps = asReal(Eps);
     rho = asReal(Rho);
     u = REAL(U);
     v = REAL(V);
@@ -64,7 +64,7 @@ SEXP hinverseNormalCopula(SEXP Rho, SEXP U, SEXP V) {
     return X;
 }
 
-SEXP hinverseTCopula(SEXP Rho, SEXP Df, SEXP U, SEXP V) {
+SEXP hinverseTCopula(SEXP Rho, SEXP Df, SEXP U, SEXP V, SEXP Eps) {
     double eps;
     double rho, df;
     double *u, *v, *x;
@@ -72,7 +72,7 @@ SEXP hinverseTCopula(SEXP Rho, SEXP Df, SEXP U, SEXP V) {
     SEXP X;
 
     PROTECT(X = allocVector(REALSXP, LENGTH(U)));
-    eps = R_pow(DOUBLE_EPS, 0.5);
+    eps = asReal(Eps);
     rho = asReal(Rho);
     df = asReal(Df);
     u = REAL(U);
@@ -99,14 +99,14 @@ SEXP hinverseTCopula(SEXP Rho, SEXP Df, SEXP U, SEXP V) {
     return X;
 }
 
-SEXP hinverseClaytonCopula(SEXP Theta, SEXP U, SEXP V) {
+SEXP hinverseClaytonCopula(SEXP Theta, SEXP U, SEXP V, SEXP Eps) {
     double eps;
     double theta;
     double *u, *v, *x;
     double vi, xi;
     SEXP X;
 
-    eps = R_pow(DOUBLE_EPS, 0.15);
+    eps = asReal(Eps);
     theta = asReal(Theta);
 
     if (theta <= eps) {
@@ -141,14 +141,14 @@ SEXP hinverseClaytonCopula(SEXP Theta, SEXP U, SEXP V) {
  * for the expression for the Frank copula.
  */
 
-SEXP hinverseFrankCopula(SEXP Theta, SEXP U, SEXP V) {
+SEXP hinverseFrankCopula(SEXP Theta, SEXP U, SEXP V, SEXP Eps) {
     double eps;
     double theta;
     double *u, *v, *x;
     double xi;
     SEXP X;
 
-    eps = R_pow(DOUBLE_EPS, 0.15);
+    eps = asReal(Eps);
     theta = asReal(Theta);
 
     if (fabs(theta) <= eps) {
