@@ -14,7 +14,7 @@
 \title{Methods for the Inverse of the h-functions}
 
 \usage{
-hinverse(copula, u, v)
+hinverse(copula, u, v, ...)
 }
 
 \arguments{
@@ -23,12 +23,21 @@ hinverse(copula, u, v)
   \item{u}{Numeric vector with values in \eqn{[0,1]}.}
 
   \item{v}{Numeric vector with values in \eqn{[0,1]}.}
+  \item{...}{Arguments passed to methods. See details.}
 }
 
 \description{
 The \eqn{h^{-1}} function represents the inverse of the \eqn{h} function with 
 respect to its first argument. It should be defined for every copula used 
 in a pair-copula construction (or it will be evaluated numerically).
+}
+
+\details{
+All methods have an argument \code{tolerance} to set the
+minimum distance from 0 and 1 of the result. This tolerance
+is needed in order to avoid numeric anomalities that prevent the conditional distribution from being calculated correctly.
+
+For the Clayton copula this tolerance is set to \code{tolerance = .Machine$double.eps^0.15}. For all other methods, this is set to \code{tolerance = .Machine$double.eps^0.5}
 }
 
 \section{Methods}{
