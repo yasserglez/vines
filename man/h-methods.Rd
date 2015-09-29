@@ -17,7 +17,7 @@
 \title{Methods for the h-functions}
 
 \usage{
-h(copula, x, v)
+h(copula, x, v, ...)
 }
 
 \arguments{
@@ -26,6 +26,7 @@ h(copula, x, v)
   \item{x}{Numeric vector with values in \eqn{[0,1]}.}
 
   \item{v}{Numeric vector with values in \eqn{[0,1]}.}
+  \item{...}{Arguments passed to methods. See details}
 }
 
 \description{
@@ -46,7 +47,7 @@ distribution function of the copula w.r.t. the second argument
 
   \item{\code{signature(copula = "indepCopula")}}{
     The \eqn{h} function of the independence copula.
-    \deqn{h(x, v) = x}{}}
+    \deqn{h(x, v) = x}{h(x, v) = x}}
 
   \item{\code{signature(copula = "normalCopula")}}{
     The \eqn{h} function of the normal copula. 
@@ -87,6 +88,14 @@ distribution function of the copula w.r.t. the second argument
       \frac{C(x, v; \theta)}{v} 
       \left( 1 - \left[ 1 + \left(\frac{-\log v}{-\log x}\right)^{\theta} \right]^{-1-1/\theta} \right)}{}}
 }
+}
+
+\details{
+All methods have an argument \code{tolerance} to set the
+minimum distance from 0 and 1 of the result. This tolerance
+is needed in order to avoid numeric anomalities that prevent the conditional distribution from being calculated correctly.
+
+For the Clayton copula this tolerance is set to \code{tolerance = .Machine$double.eps^0.15}. For all other methods, this is set to \code{tolerance = .Machine$double.eps^0.5}
 }
 
 \references{
