@@ -6,3 +6,4 @@ env:
   global:
     - WARNINGS_ARE_ERRORS=1
     - _R_CHECK_CRAN_INCOMING_=0
+    - NOT_CRAN=1
