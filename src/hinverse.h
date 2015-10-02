@@ -16,8 +16,8 @@
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 SEXP hinverseCopula(SEXP Copula, SEXP U, SEXP V);
-SEXP hinverseNormalCopula(SEXP Rho, SEXP U, SEXP V);
+SEXP hinverseNormalCopula(SEXP Rho, SEXP U, SEXP V, SEXP Eps);
 SEXP hinverseIndepCopula(SEXP U, SEXP V);
-SEXP hinverseTCopula(SEXP Rho, SEXP Df, SEXP U, SEXP V);
-SEXP hinverseClaytonCopula(SEXP THETA, SEXP U, SEXP V);
-SEXP hinverseFrankCopula(SEXP Theta, SEXP U, SEXP V);
+SEXP hinverseTCopula(SEXP Rho, SEXP Df, SEXP U, SEXP V, SEXP Eps);
+SEXP hinverseClaytonCopula(SEXP THETA, SEXP U, SEXP V, SEXP Eps);
+SEXP hinverseFrankCopula(SEXP Theta, SEXP U, SEXP V, SEXP Eps);

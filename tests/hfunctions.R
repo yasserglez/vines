@@ -29,12 +29,14 @@ copulas <- c(
 for (copula in copulas) {
     # Validate the h-function.
     u <- h(copula, XV[ , 1], XV[ , 2])
-    uu <- vines:::hCopula(copula, XV[ , 1], XV[ , 2])
+    uu <- vines:::hCopula(copula, XV[ , 1], XV[ , 2],
+                          eps = .Machine$double.eps^0.5)
     stopifnot(isTRUE(all.equal(u, uu, tolerance = tol)))
 
     # Validate the inverse of the h-function.
     x <- hinverse(copula, u, XV[ , 2])
-    xx <- vines:::hinverseCopula(copula, u, XV[ , 2])
+    xx <- vines:::hinverseCopula(copula, u, XV[ , 2],
+                                 eps = .Machine$double.eps^0.5)
     stopifnot(isTRUE(all.equal(x, xx, tolerance = tol)))
 }
 

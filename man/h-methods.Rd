@@ -17,21 +17,26 @@
 \title{Methods for the h-functions}
 
 \usage{
-h(copula, x, v)
+h(copula, x, v, eps)
 }
 
 \arguments{
   \item{copula}{A bivariate \code{\linkS4class{copula}} object.}
-  
+
   \item{x}{Numeric vector with values in \eqn{[0,1]}.}
 
   \item{v}{Numeric vector with values in \eqn{[0,1]}.}
+
+  \item{eps}{To avoid numerical problems for extreme values, the values of
+    \code{x}, \code{v} and return values close to \code{0} and \code{1} are
+    substituted by \code{eps} and \code{1 - eps}, respectively. The default
+    \code{eps} value for most of the copulas is \code{.Machine$double.eps^0.5}.}
 }
 
 \description{
-The \eqn{h} function represents the conditional distribution function of a 
+The \eqn{h} function represents the conditional distribution function of a
 bivariate copula and it should be defined for every copula used in
-a pair-copula construction. It is defined as the partial derivative of the 
+a pair-copula construction. It is defined as the partial derivative of the
 distribution function of the copula w.r.t. the second argument
 \eqn{h(x,v) = F(x|v) = \partial C(x,v) / \partial v}.
 }
@@ -39,9 +44,9 @@ distribution function of the copula w.r.t. the second argument
 \section{Methods}{
 \describe{
   \item{\code{signature(copula = "copula")}}{
-    Default definition of the \eqn{h} function for a bivariate copula. 
+    Default definition of the \eqn{h} function for a bivariate copula.
     This method is used if no particular definition is given for a copula.
-    The partial derivative is calculated numerically using the 
+    The partial derivative is calculated numerically using the
     \code{\link{numericDeriv}} function.}
 
   \item{\code{signature(copula = "indepCopula")}}{
@@ -49,14 +54,14 @@ distribution function of the copula w.r.t. the second argument
     \deqn{h(x, v) = x}{}}
 
   \item{\code{signature(copula = "normalCopula")}}{
-    The \eqn{h} function of the normal copula. 
-    \deqn{h(x, v; \rho) = 
+    The \eqn{h} function of the normal copula.
+    \deqn{h(x, v; \rho) =
       \Phi \left( \frac{\Phi^{-1}(x) - \rho\ \Phi^{-1}(v)}
                        {\sqrt{1-\rho^2}} \right)}{}}
-   
+
   \item{\code{signature(copula = "tCopula")}}{
     The \eqn{h} function of the t copula.
-    \deqn{h(x, v; \rho, \nu) = 
+    \deqn{h(x, v; \rho, \nu) =
       t_{\nu+1} \left( \frac{t^{-1}_{\nu}(x) - \rho\ t^{-1}_{\nu}(v)}
                             {\sqrt{\frac{(\nu+(t^{-1}_{\nu}(v))^2)(1-\rho^2)}
                                         {\nu+1}}} \right)}{}}
@@ -77,14 +82,14 @@ distribution function of the copula w.r.t. the second argument
 
   \item{\code{signature(copula = "frankCopula")}}{
     The \eqn{h} function of the Frank copula.
-    \deqn{h(x, v; \theta) = 
+    \deqn{h(x, v; \theta) =
       \frac{e^{-\theta v}}
            {\frac{1 - e^{-\theta}}{1 - e^{-\theta x}} + e^{-\theta v} - 1}}{}}
 
   \item{\code{signature(copula = "galambosCopula")}}{
     The \eqn{h} function of the Galambos copula.
-    \deqn{h(x, v; \theta) = 
-      \frac{C(x, v; \theta)}{v} 
+    \deqn{h(x, v; \theta) =
+      \frac{C(x, v; \theta)}{v}
       \left( 1 - \left[ 1 + \left(\frac{-\log v}{-\log x}\right)^{\theta} \right]^{-1-1/\theta} \right)}{}}
 }
 }
