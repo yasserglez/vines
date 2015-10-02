@@ -16,7 +16,7 @@
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 setGeneric("hinverse",
-    function (copula, u, v, ...) standardGeneric("hinverse"),
+    function (copula, u, v, eps) standardGeneric("hinverse"),
     signature = "copula")
 
 
@@ -61,7 +61,7 @@ hinverseNormalCopula <- function (copula, u, v,
 setMethod("hinverse", "normalCopula", hinverseNormalCopula)
 
 
-hinverseTCopula <- function (copula, u, v, 
+hinverseTCopula <- function (copula, u, v,
                              eps = .Machine$double.eps^0.5) {
     rho <- max(min(copula@parameters[1], 1 - eps), -1 + eps)
     df <- if (copula@df.fixed) copula@df else copula@parameters[2]
