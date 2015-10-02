@@ -14,7 +14,7 @@
 \title{Methods for the Inverse of the h-functions}
 
 \usage{
-hinverse(copula, u, v, ...)
+hinverse(copula, u, v, eps)
 }
 
 \arguments{
@@ -23,45 +23,25 @@ hinverse(copula, u, v, ...)
   \item{u}{Numeric vector with values in \eqn{[0,1]}.}
 
   \item{v}{Numeric vector with values in \eqn{[0,1]}.}
-  \item{...}{Arguments passed to methods. See details.}
+
+  \item{eps}{To avoid numerical problems for extreme values, the values of
+    \code{u}, \code{v} and return values close to \code{0} and \code{1} are
+    substituted by \code{eps} and \code{1 - eps}, respectively. The default
+    \code{eps} value for most of the copulas is \code{.Machine$double.eps^0.5}.}
 }
 
 \description{
-The \eqn{h^{-1}} function represents the inverse of the \eqn{h} function with 
-respect to its first argument. It should be defined for every copula used 
+The \eqn{h^{-1}} function represents the inverse of the \eqn{h} function with
+respect to its first argument. It should be defined for every copula used
 in a pair-copula construction (or it will be evaluated numerically).
-}
-
-\details{
-All methods have an argument \code{eps} to set the
-minimum distance from 0 and 1 of the result. This tolerance
-is needed in order to avoid numeric anomalities that prevent the conditional distribution from being calculated correctly.
-
-For the Clayton and Frank copula this tolerance is set to \code{eps = .Machine$double.eps^0.15}. For all other methods, this is set to \code{eps = .Machine$double.eps^0.5}
-}
-
-\examples{
-X <- seq(from = 0, to = 1, length = 7)
-V <- seq(from = 0, to = 1, length = 7)
-XV <- merge(X, V)
-
-cop <- claytonCopula(0.01)
-
-#Compare default value with smallest possible for eps
-res <- h(cop,XV$x, XV$y)
-res2 <- h(cop,XV$x, XV$y, eps=.Machine$double.eps^0.5)
-
-inv.res <- hinverse(cop, res, XV$y)
-inv.res2 <- hinverse(cop, res2, XV$y, eps=.Machine$double.eps^0.5)
-
 }
 
 \section{Methods}{
 \describe{
   \item{\code{signature(copula = "copula")}}{
-    Default definition of the \eqn{h^{-1}} function for a bivariate copula. 
+    Default definition of the \eqn{h^{-1}} function for a bivariate copula.
     This method is used if no particular definition is given for a copula.
-    The inverse is calculated numerically using the \code{\link{uniroot}} 
+    The inverse is calculated numerically using the \code{\link{uniroot}}
     function.}
 
   \item{\code{signature(copula = "indepCopula")}}{
@@ -75,7 +55,7 @@ inv.res2 <- hinverse(cop, res2, XV$y, eps=.Machine$double.eps^0.5)
 
   \item{\code{signature(copula = "tCopula")}}{
     The \eqn{h^{-1}} function of the t copula.
-    \deqn{h^{-1}(u, v; \rho, \nu) = 
+    \deqn{h^{-1}(u, v; \rho, \nu) =
       t_{\nu} \left( t^{-1}_{\nu+1}(u)\
                      \sqrt{\frac{(\nu+(t^{-1}_{\nu}(v))^2)(1-\rho^2)}{\nu+1}} +
                      \rho\ t^{-1}_{\nu}(v)
@@ -83,13 +63,13 @@ inv.res2 <- hinverse(cop, res2, XV$y, eps=.Machine$double.eps^0.5)
 
   \item{\code{signature(copula = "claytonCopula")}}{
     The \eqn{h^{-1}} function of the Clayton copula.
-    \deqn{h^{-1}(u, v; \theta) = 
-      \left( \left( u\ v^{\theta+1}\right)^{-\frac{\theta}{\theta+1}} + 
-                    1 - v^{-\theta} \right)^{-1/\theta}}{}}  
+    \deqn{h^{-1}(u, v; \theta) =
+      \left( \left( u\ v^{\theta+1}\right)^{-\frac{\theta}{\theta+1}} +
+                    1 - v^{-\theta} \right)^{-1/\theta}}{}}
 
   \item{\code{signature(copula = "frankCopula")}}{
     The \eqn{h^{-1}} function of the Frank copula.
-    \deqn{h^{-1}(u, v; \theta) = 
+    \deqn{h^{-1}(u, v; \theta) =
       -\log \left( 1 - \frac{1-e^{-\theta}}
                             {(u^{-1} - 1) e^{-\theta v} + 1} \right) / \theta}{}}
 }
