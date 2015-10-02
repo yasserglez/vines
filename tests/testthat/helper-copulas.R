@@ -1,14 +1,8 @@
 # Arguments and copula parameters used by test-h.R and test-hinverse.R.
 
+n <- 20  # Number of values of each variable.
+np <- 10  # Number of values of each parameter.
 tol <- 0.01  # Ignore differences smaller than tol.
-
-n <- 10  # Number of values of each variable.
-np <- 5  # Number of values of each parameter.
-if (Sys.getenv("NOT_CRAN") != "") {
-    # Be more ambitious if not running on CRAN.
-    n <- 2 * n
-    np <- 2 * np
-}
 
 X <- seq(from = 0, to = 1, length = n)
 V <- seq(from = 0, to = 1, length = n)
