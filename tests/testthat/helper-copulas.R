@@ -22,15 +22,15 @@ copulas <- list(
     t = apply(merge(seq(from = -1, to = 1, length = np),
                     seq(from = 1, to = 30, length = np)), 1,
               function (p) tCopula(p[1], df = as.integer(p[2]), df.fixed = TRUE)),
-    clayton = lapply(seq(from = .Machine$double.eps^0.5, to = 50, length = np),
+    clayton = lapply(seq(from = .Machine$double.eps^0.25, to = 75, length = np),
                      function (theta) claytonCopula(theta, use.indepC = "FALSE")),
-    gumbel = lapply(seq(from = 1, to = 50, length = np),
+    gumbel = lapply(seq(from = 1, to = 100, length = np),
                     function (theta) gumbelCopula(theta, use.indepC = "FALSE")),
     fgm = lapply(seq(from = -1, to = 1, length = np),
                  function (theta) fgmCopula(theta)),
     galambos = lapply(seq(from = 1, to = 25, length = np),
                       function (theta) galambosCopula(theta)),
-    frank = lapply(seq(from = -50, to = 50, length = np),
+    frank = lapply(seq(from = -45, to = 45, length = np),
                    function (theta) frankCopula(theta, use.indepC = "FALSE"))
 )
 

@@ -68,16 +68,16 @@ hinverseTCopula <- function (copula, u, v, eps) {
 setMethod("hinverse", "tCopula", hinverseTCopula)
 
 
-hinverseClaytonCopula <- function (copula, u, v, eps = .Machine$double.eps^0.15) {
-    theta <- min(copula@parameters, 100)
+hinverseClaytonCopula <- function (copula, u, v, eps = .Machine$double.eps^0.25) {
+    theta <- min(copula@parameters, 75)
     .Call(C_hinverseClaytonCopula, theta, u, v, eps)
 }
 
 setMethod("hinverse", "claytonCopula", hinverseClaytonCopula)
 
 
-hinverseFrankCopula <- function (copula, u, v, eps = .Machine$double.eps^0.15) {
-    theta <- max(min(copula@parameters, 100), -100)
+hinverseFrankCopula <- function (copula, u, v, eps) {
+    theta <- max(min(copula@parameters, 45), -45)
     .Call(C_hinverseFrankCopula, theta, u, v, eps)
 }
 

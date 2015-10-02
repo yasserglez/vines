@@ -58,8 +58,8 @@ hTCopula <- function (copula, x, v, eps) {
 setMethod("h", "tCopula", hTCopula)
 
 
-hClaytonCopula <- function (copula, x, v, eps = .Machine$double.eps^0.15) {
-    theta <- min(copula@parameters, 100)
+hClaytonCopula <- function (copula, x, v, eps = .Machine$double.eps^0.25) {
+    theta <- min(copula@parameters, 75)
     .Call(C_hClaytonCopula, theta, x, v, eps)
 }
 
@@ -91,7 +91,7 @@ setMethod("h", "galambosCopula", hGalambosCopula)
 
 
 hFrankCopula <- function (copula, x, v, eps) {
-    theta <- max(min(copula@parameters, 100), -100)
+    theta <- max(min(copula@parameters, 45), -45)
     .Call(C_hFrankCopula, theta, x, v, eps)
 }
 
