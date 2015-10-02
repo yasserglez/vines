@@ -16,12 +16,12 @@
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 setGeneric("h",
-    function (copula, x, v, eps) standardGeneric("h"),
+    function (copula, x, v, eps = .Machine$double.eps^0.5)
+        standardGeneric("h"),
     signature = "copula")
 
 
-hCopula <- function (copula, x, v,
-                     eps = .Machine$double.eps^0.5) {
+hCopula <- function (copula, x, v, eps) {
     env <- new.env()
     assign("copula", copula, env)
     assign("x", pmax(pmin(x, 1 - eps), eps), env)
@@ -41,8 +41,7 @@ hIndepCopula <- function (copula, x, v, eps)
 
 setMethod("h", "indepCopula", hIndepCopula)
 
-hNormalCopula <- function (copula, x, v,
-                           eps = .Machine$double.eps^0.5) {
+hNormalCopula <- function (copula, x, v, eps) {
     rho <- max(min(copula@parameters, 1 - eps), -1 + eps)
     .Call(C_hNormalCopula, rho, x, v, eps)
 }
@@ -50,8 +49,7 @@ hNormalCopula <- function (copula, x, v,
 setMethod("h", "normalCopula", hNormalCopula)
 
 
-hTCopula <- function (copula, x, v,
-                      eps = .Machine$double.eps^0.5) {
+hTCopula <- function (copula, x, v, eps) {
     rho <- max(min(copula@parameters[1], 1 - eps), -1 + eps)
     df <- if (copula@df.fixed) copula@df else copula@parameters[2]
     .Call(C_hTCopula, rho, df, x, v, eps)
@@ -60,10 +58,7 @@ hTCopula <- function (copula, x, v,
 setMethod("h", "tCopula", hTCopula)
 
 
-hClaytonCopula <- function (copula, x, v,
-                            eps = .Machine$double.eps^0.15) {
-  # eps significantly higher than in other cases. This is
-  # in concordance with the earlier versions.
+hClaytonCopula <- function (copula, x, v, eps = .Machine$double.eps^0.15) {
     theta <- min(copula@parameters, 100)
     .Call(C_hClaytonCopula, theta, x, v, eps)
 }
@@ -71,8 +66,7 @@ hClaytonCopula <- function (copula, x, v,
 setMethod("h", "claytonCopula", hClaytonCopula)
 
 
-hGumbelCopula <- function (copula, x, v,
-                           eps = .Machine$double.eps^0.5) {
+hGumbelCopula <- function (copula, x, v, eps) {
     theta <- min(copula@parameters, 100)
     .Call(C_hGumbelCopula, theta, x, v, eps)
 }
@@ -80,8 +74,7 @@ hGumbelCopula <- function (copula, x, v,
 setMethod("h", "gumbelCopula", hGumbelCopula)
 
 
-hFGMCopula <- function (copula, x, v,
-                        eps = .Machine$double.eps^0.5) {
+hFGMCopula <- function (copula, x, v, eps) {
     theta <- copula@parameters
     .Call(C_hFGMCopula, theta, x, v, eps)
 }
@@ -89,8 +82,7 @@ hFGMCopula <- function (copula, x, v,
 setMethod("h", "fgmCopula", hFGMCopula)
 
 
-hGalambosCopula <- function (copula, x, v,
-                             eps = .Machine$double.eps^0.5) {
+hGalambosCopula <- function (copula, x, v, eps) {
     theta <- min(copula@parameters, 25)
     .Call(C_hGalambosCopula, theta, x, v, eps)
 }
@@ -98,8 +90,7 @@ hGalambosCopula <- function (copula, x, v,
 setMethod("h", "galambosCopula", hGalambosCopula)
 
 
-hFrankCopula <- function (copula, x, v,
-                          eps = .Machine$double.eps^0.5) {
+hFrankCopula <- function (copula, x, v, eps) {
     theta <- max(min(copula@parameters, 100), -100)
     .Call(C_hFrankCopula, theta, x, v, eps)
 }
