@@ -21,6 +21,7 @@ License: GPL (>= 2)
 URL: https://github.com/yasserglez/vines
 Depends: methods, copula
 Imports: ADGofTest, cubature, TSP
+Suggests: testthat
 Collate: h.R hinverse.R Vine.R show.R dimnames.R vineParameters.R
     vineIter.R vineFit.R vineFitML.R vinePIT.R vineGoF.R vineOrder.R
     dvine.R pvine.R rvine.R
