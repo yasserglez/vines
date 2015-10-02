@@ -3,14 +3,14 @@ Package: vines
 Title: Multivariate Dependence Modeling with Vines
 Version: 1.1.4
 Authors@R: c(person("Yasser", "Gonzalez-Fernandez",
-	            role = c("aut", "cre"),
-		    email = "ygonzalezfernandez@gmail.com"),
+                    role = c("aut", "cre"),
+                    email = "ygonzalezfernandez@gmail.com"),
              person("Marta", "Soto",
-	            role = "aut",
-		    email = "mrosa@icimaf.cu"),
-		         person("Joris", "Meys",
-		         role = "ctb",
-		         email = "Joris.Meys@UGent.be"))
+                    role = "aut",
+                    email = "mrosa@icimaf.cu"),
+             person("Joris", "Meys",
+                    role = "ctb",
+                    email = "Joris.Meys@UGent.be"))
 Description: Implementation of the vine graphical model for building
     high-dimensional probability distributions as a factorization of
     bivariate copulas and marginal density functions. This package
