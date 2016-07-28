@@ -1,3 +1,8 @@
+Changes in version 1.1.5 (July 28, 2016):
+
+  * Fix bug introduced by changes in the copulaedas package.
+    Thanks to Martin Maechler for providing a patch.
+
 Changes in version 1.1.4 (October 7, 2015):
 
   * New eps argument in the h() and hinverse() methods. It allows to
