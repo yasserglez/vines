@@ -51,7 +51,7 @@ setMethod("h", "normalCopula", hNormalCopula)
 
 hTCopula <- function (copula, x, v, eps) {
     rho <- max(min(copula@parameters[1], 1 - eps), -1 + eps)
-    df <- if(.hasSLot(copula, "df")) copula@df else copula@parameters[2]
+    df <- if(.hasSlot(copula, "df")) copula@df else copula@parameters[2]
     .Call(C_hTCopula, rho, df, x, v, eps)
 }
 
