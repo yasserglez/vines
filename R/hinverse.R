@@ -61,7 +61,7 @@ setMethod("hinverse", "normalCopula", hinverseNormalCopula)
 
 hinverseTCopula <- function (copula, u, v, eps) {
     rho <- max(min(copula@parameters[1], 1 - eps), -1 + eps)
-    df <- if (copula@df.fixed) copula@df else copula@parameters[2]
+    df <- if(.hasSlot(copula, "df")) copula@df else copula@parameters[2]
     .Call(C_hinverseTCopula, rho, df, u, v, eps)
 }
 
