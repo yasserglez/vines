@@ -1,6 +1,6 @@
 useDynLib(vines, .registration = TRUE, .fixes = "C_")
 
-import(methods)
+importFrom(methods, .hasSLot)
 importFrom(stats, cor, numericDeriv, optim, optimize, pchisq, qnorm, runif, uniroot)
 importFrom(copula, dCopula, pCopula, loglikCopula, indepCopula, tCopula, calibKendallsTau)
 importFrom(ADGofTest, ad.test)
