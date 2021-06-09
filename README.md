@@ -1,7 +1,6 @@
 Multivariate Dependence Modeling with Vines
 -------------------------------------------
 
-[![Build Status](https://travis-ci.org/yasserglez/vines.svg?branch=master)](https://travis-ci.org/yasserglez/vines)
 [![CRAN Version](http://www.r-pkg.org/badges/version/vines)](http://cran.r-project.org/package=vines)
 [![CRAN Downloads](http://cranlogs.r-pkg.org/badges/vines?color=brightgreen)](http://cran.r-project.org/package=vines)
 
