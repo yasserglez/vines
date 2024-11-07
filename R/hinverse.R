@@ -28,7 +28,7 @@ hinverseCopula <- function (copula, u, v, eps) {
     u <- pmax(pmin(u, 1-eps), eps)
     v <- pmax(pmin(v, 1-eps), eps)
     f <- function (x, u, v, copula) h(copula, x, v) - u
-    r <- sapply(seq(along = u),
+    r <- sapply(seq(along.with = u),
             function (i) {
                 if (skip[i]) {
                     NA
