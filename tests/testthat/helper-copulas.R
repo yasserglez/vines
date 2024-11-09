@@ -34,7 +34,8 @@ test_that_for_each_copula <- function(desc, code) {
         for (copula in copulas[[copula_name]]) {
             env <- parent.frame()
             assign("copula", copula, env)
-            testthat:::test_code(new_desc, substitute(code), env = env)
+            eval(substitute(testthat::test_that(new_desc, code)))
+
         }
     }
 }
